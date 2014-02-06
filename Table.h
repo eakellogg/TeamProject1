@@ -12,7 +12,7 @@ using namespace std;
 class Table {
 	string tableName;
 	vector< vector<string> > data;
-	vector<string> types;
+	vector<string> types; // column types
 	vector<string> columnTitles;
 
 public:
