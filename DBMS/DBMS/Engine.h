@@ -16,9 +16,9 @@ class Engine {
 	vector<Table*> tables;
 
 public:
-	/*********************************************************************************
+/*********************************************************************************
 	constructor
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	//constructor
@@ -26,18 +26,18 @@ public:
 	{	}
 
 
-	/*********************************************************************************
+/*********************************************************************************
 	non-modifying functions / accessor methods
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	//we can remove this section if we find we don't need it
 	vector<Table*> getTables() { return tables; }
 
 
-	/*********************************************************************************
+/*********************************************************************************
 	modifying functions
-	*********************************************************************************/
+*********************************************************************************/
 
 	// create a table with the row types and column titles given
 	void createTable(string tableName, vector<string> rowTypes, vector<string> columnTitles) {
@@ -59,9 +59,9 @@ public:
 
 
 	// insert a row into the table with the proper name
-	void insertInto(string tableName, string key, vector<Attribute*> row, vector<string> rowTypes) {
+	void insertInto(string tableName, string key, vector<Attribute*> row, vector<string> columnTypes) {
 		Table* tempTable = findTable(tableName);
-		tempTable->addRow(key, row, rowTypes);
+		tempTable->addRow(key, row, columnTypes);
 	}
 
 
@@ -69,25 +69,25 @@ public:
 	// update a row in the table with the proper name
 	//pair <name, literal>
 	// not done yet
-	/*	void update(string tableName, vector<string> conditions, vector<string> columnNames) {
-	int pos = 0; //!!!!!!!!!!!!!! REALLY NEED TO FIND THIS METHOD
-	Table* tempTable = findTable(tableName);
-	tempTable->updateRow(row, rowTypes, pos);
+/*	void update(string tableName, vector<string> conditions, vector<string> columnNames) {
+		int pos = 0; //!!!!!!!!!!!!!! REALLY NEED TO FIND THIS METHOD
+		Table* tempTable = findTable(tableName);
+		tempTable->updateRow(row, rowTypes, pos);
 	}
-	*/
+*/
 
 	// delete a row in the table with the proper name
 	//same condition problem as update
-	/*
+/*
 	void deleteFrom(string tableName, int pos) {
-	Table* tempTable = findTable(tableName);
-	tempTable->deleteRow(pos);
+		Table* tempTable = findTable(tableName);
+		tempTable->deleteRow(pos);
 	}
-	*/
+*/
 
-	/*********************************************************************************
+/*********************************************************************************
 	helper functions
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	// search database for a table with matching name

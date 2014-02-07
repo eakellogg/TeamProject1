@@ -19,9 +19,9 @@ class Table {
 	vector<string> columnTitles;
 	vector<Attribute*> currentRow;
 public:
-	/*********************************************************************************
+/*********************************************************************************
 	constructor
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	Table(string tableName, vector<string> columnTypes, vector<string> columnTitles)
@@ -29,9 +29,9 @@ public:
 	{	}
 
 
-	/*********************************************************************************
+/*********************************************************************************
 	non-modifying functions / accessor methods
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	string getTableName() { return tableName; }
@@ -45,9 +45,9 @@ public:
 	vector<Attribute*> getCurrentRow() { return currentRow; };
 
 
-	/*********************************************************************************
+/*********************************************************************************
 	modifying functions
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	// add a row to the table
@@ -59,16 +59,16 @@ public:
 		throw "types do not match";
 	}
 
-	/*
+/*
 	// update an already existing row
 	void updateRow(vector<string> newRow, vector<string> rowTypes, int pos) { // need diff. than pos
-	if (checkMatchingTypes(rowTypes)) {
-	data[pos] = newRow;
-	return;
+		if (checkMatchingTypes(rowTypes)) {
+			data[pos] = newRow;
+			return;
+		}
+		throw "types do not match";
 	}
-	throw "types do not match";
-	}
-	*/
+*/
 
 	// delete a row from the table
 	void deleteRow(string key) {
@@ -94,32 +94,20 @@ public:
 
 	// find and return a specific item in a specific row in the table
 	Attribute* getItem(string key, string columnName) {
-		vector<Attribute*> currentRow = data.at(key);
+		try {
+			currentRow = data.at(key);
+		}
+		catch (out_of_range) {
+			throw "key does not exist";
+		}
 
 		// search the temporary row for correct item based on column name
-		for (int i = 0; i < columnTitles.size(); i++) {
-			if (columnName == columnTitles[i]) {
+		for (int i = 0; i < (columnTitles.size() - 1); i++) {
+			if (columnTitles[i] == columnName) {
 				return currentRow[i];
 			}
 		}
 		throw "column does not exist";
-	}
-
-
-	/*********************************************************************************
-	helper functions
-	*********************************************************************************/
-
-
-	// check to make sure the types of the table's rows and the passed types are equivalent
-	bool checkMatchingTypes(vector<string> rowTypes) {
-		// check every type of the row in question and compare with table's row types
-		for (int i = 0; i < columnTypes.size(); i++) {
-			if (rowTypes[i] != columnTypes[i]) {
-				return false; // incorrect type was found in the process of adding
-			}
-		}
-		return true;
 	}
 
 
@@ -131,5 +119,22 @@ public:
 			}
 		}
 		throw "variable does not exist";
+	}
+
+
+/*********************************************************************************
+	helper functions
+*********************************************************************************/
+
+
+	// check to make sure the types of the table's rows and the passed types are equivalent
+	bool checkMatchingTypes(vector<string> rowTypes) {
+		// check every type of the row in question and compare with table's row types
+		for (int i = 0; i < columnTypes.size(); i++) {
+			if (rowTypes[i] != columnTypes[i]) {
+				return false; // incorrect type was found in the process of adding
+			}
+		}
+		return true;
 	}
 };

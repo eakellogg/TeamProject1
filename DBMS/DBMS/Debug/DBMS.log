@@ -1,5 +1,9 @@
-﻿Build started 2/6/2014 11:27:08 PM.
+﻿Build started 2/7/2014 4:36:59 PM.
+     1>Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         DBMS.vcxproj -> C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\DBMS.lib
+     1>Done Building Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.02
+Time Elapsed 00:00:00.05
