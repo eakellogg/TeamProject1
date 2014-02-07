@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>H:\Group Project\TeamProject1\DBMS\DBMS;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Solevi\Documents\TeamProject1\DBMS\DBMS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

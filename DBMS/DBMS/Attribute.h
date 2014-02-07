@@ -2,8 +2,8 @@
 // extended by varchar, int
 class Attribute
 {
-	string type;
-	string value;
+	std::string type;
+	std::string value;
 
 
 };

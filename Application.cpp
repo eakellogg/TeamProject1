@@ -3,7 +3,9 @@
 
 int main()
 {
+
 	try {
+
 		Engine engine = Engine();
 		vector<string> rowTypes = vector<string>{"string", "string", "int"};
 		vector<string> badRowTypes = vector<string>{"string", "string", "string"};

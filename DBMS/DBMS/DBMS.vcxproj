@@ -67,8 +67,12 @@
     <ClInclude Include="..\..\Engine.h" />
     <ClInclude Include="..\..\Table.h" />
     <ClInclude Include="Attribute.h" />
+    <ClInclude Include="ConditionEval.h" />
+    <ClInclude Include="ConditionTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConditionEval.cpp" />
+    <ClCompile Include="ConditionTree.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,7 +15,7 @@ namespace TableTester
 		{
 			int a = 2;
 			int b = 3;
-			Assert::IsTrue(a > 5);
+			Assert::IsFalse(a > 5);
 		}
 
 	};

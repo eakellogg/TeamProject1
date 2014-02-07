@@ -1,13 +1,5 @@
-﻿Build started 2/6/2014 12:51:07 PM.
-     1>Project "H:\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
-         Source.cpp
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"H:\Group Project\TeamProject1\DBMS\Debug\DBMS.lib" /NOLOGO Debug\Source.obj
-         DBMS.vcxproj -> H:\Group Project\TeamProject1\DBMS\Debug\DBMS.lib
-     1>Done Building Project "H:\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" (Build target(s)).
+﻿Build started 2/6/2014 11:27:08 PM.
 
 Build succeeded.
 
-Time Elapsed 00:00:03.03
+Time Elapsed 00:00:00.02
