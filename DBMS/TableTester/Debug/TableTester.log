@@ -1,13 +1,22 @@
-﻿Build started 2/7/2014 4:36:59 PM.
+﻿Build started 2/8/2014 12:37:46 AM.
      1>Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\TableTester\TableTester.vcxproj" on node 3 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\TableTester.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /FC /errorReport:prompt unittest1.cpp
          unittest1.cpp
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(2): warning C4627: '#include <vector>': skipped when looking for precompiled header use
+                 Add directive to 'stdafx.h' or rebuild precompiled header
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(3): warning C4627: '#include <algorithm>': skipped when looking for precompiled header use
+                 Add directive to 'stdafx.h' or rebuild precompiled header
      1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(105): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(116): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(133): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(145): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(51): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(96): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(101): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(130): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(131): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(161): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(167): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.lib" /MACHINE:X86 /DLL Debug\stdafx.obj
          Debug\unittest1.obj
@@ -17,4 +26,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.52
+Time Elapsed 00:00:01.13

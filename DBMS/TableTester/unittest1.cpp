@@ -1,10 +1,13 @@
 #include <stdlib.h>
+#include <vector>
+#include <algorithm>
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "Engine.h"
 #include "Table.h"
 #include "Attribute.h"
 
+using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TableTester
@@ -174,6 +177,20 @@ namespace TableTester
 			engine.insertInto("students", student2[0]->getValue(), student2, columnTypes);
 			Assert::IsTrue(engine.getTables()[0]->getData().size() == 2); // added two students, make sure size is now 2
 		}
+
+		TEST_METHOD(Natural_Join_Test) {
+			// create information to put into table to prepare testing
+			Engine engine = Engine();
+			vector<string> columnTypesA = vector<string>{"string", "string", "string"};
+			vector<string> columnTitlesA = vector<string>{"name", "school", "state"};
+			vector<string> columnTypesB = vector<string>{"string", "string", "int"};
+			vector<string> columnTitlesB = vector<string>{"name", "school", "age"};
+
+			Table* tbla = new Table("testTableA", columnTypesA, columnTitlesA);
+			Table* tblb = new Table("testTableA", columnTypesB, columnTitlesB);
+			//Table* tblc = engine.naturalJoin(tbla, tblb);
+		}
+
 	};
 };
 		

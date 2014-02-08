@@ -137,4 +137,16 @@ public:
 		}
 		return true;
 	}
+
+
+	// return the type associated with a column name
+	string getTypeOfColumn(string columnName) {
+		// search all columns in the table by name
+		for (int i = 0; i < columnTitles.size(); i++) {
+			if (columnTitles[i] == columnName) { // if a match is found, return the corresponding type
+				return columnTypes[i];
+			}
+		}
+		throw "column does not exist";
+	}
 };

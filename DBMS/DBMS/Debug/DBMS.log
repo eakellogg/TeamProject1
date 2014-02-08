@@ -1,9 +1,28 @@
-﻿Build started 2/7/2014 4:36:59 PM.
+﻿Build started 2/8/2014 12:37:45 AM.
      1>Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt NaturalJoin.cpp
+         NaturalJoin.cpp
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(105): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(116): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(133): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(145): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(51): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(101): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(130): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(131): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(161): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(167): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(17): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(18): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(48): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(54): warning C4018: '<' : signed/unsigned mismatch
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\DBMS.lib" /NOLOGO Debug\NaturalJoin.obj
+         Debug\Source.obj
          DBMS.vcxproj -> C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\DBMS.lib
      1>Done Building Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.05
+Time Elapsed 00:00:00.82
