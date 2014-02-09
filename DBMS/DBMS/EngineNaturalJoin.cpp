@@ -15,8 +15,8 @@ static vector<string> getCommonColumn(Table* firstTable, Table* secondTable) {
 	vector<string> secondTableColumns = secondTable->getColumnTitles();
 	vector<string> sharedColumns;
 
-	for (unsigned int i = 0; i < firstTableColumns.size(); i++) { // iterate through all of first table columns
-		for (unsigned int j = 0; j < secondTableColumns.size(); j++) { // iterate through all of second table columns
+	for (int i = 0; i < firstTableColumns.size(); i++) { // iterate through all of first table columns
+		for (int j = 0; j < secondTableColumns.size(); j++) { // iterate through all of second table columns
 			if (firstTableColumns[i] == secondTableColumns[j]) { // if match is found between names, check type
 				if (firstTable->getColumnTypes()[i] == secondTable->getColumnTypes()[j]) { // if name and type match, the tables can be naturally joined
 					sharedColumns.push_back(firstTableColumns[i]);
@@ -31,7 +31,7 @@ static vector<string> getCommonColumn(Table* firstTable, Table* secondTable) {
 // verify that the data of both rows match in all necessary columns that are shared
 static bool checkMatchingData(Table* firstTable, Table* secondTable, vector<string> sharedColumns) {
 	// compare the current rows of both tables
-	for (unsigned int i = 0; i < sharedColumns.size(); i++) {
+	for (int i = 0; i < sharedColumns.size(); i++) {
 		// if the data of the current rows don't match on a particular column
 		if (firstTable->getVariable(sharedColumns[i])->getValue() != secondTable->getVariable(sharedColumns[i])->getValue()) {
 			return false;
@@ -46,15 +46,20 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 	vector<Attribute*> newRow;
 
 	// get all needed data from first table
-	for (unsigned int i = 0; i < firstTable->getColumnTitles().size(); i++) {
+	for (int i = 0; i < firstTable->getColumnTitles().size(); i++) {
 		newRow.push_back(firstTable->getVariable(newColumnTitles[i]));
 	}
 	// get all needed data from second table
-	for (unsigned int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
+	for (int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
 		newRow.push_back(secondTable->getVariable(newColumnTitles[j]));
 	}
 
-	Attribute* identifier = new Attribute("int", to_string(identifierCount));
+	string keyName = to_string(identifierCount);
+	for (unsigned int i = keyName.length(); i < 10; i++) {
+		keyName = "0" + keyName;
+	}
+
+	Attribute* identifier = new Attribute("int", keyName);
 	newRow.push_back(identifier);
 
 	return newRow;
@@ -81,13 +86,13 @@ Table* Engine::naturalJoin(Table* firstTable, Table* secondTable) {
 	vector<string> newColumnTypes;
 	
 	// add all of first table's column names/types to the new table's column names/types
-	for ( unsigned int i = 0; i < firstTableColumns.size(); i++) {
+	for (int i = 0; i < firstTableColumns.size(); i++) {
 		newColumnTitles.push_back(firstTableColumns[i]);
 		newColumnTypes.push_back(firstTable->getTypeOfColumn(firstTableColumns[i]));
 	}
 
 	// add all of second table's column names/types to the new table's column names/types if they didn't exist in the first table
-	for (unsigned int j = 0; j < secondTableColumns.size(); j++) {
+	for (int j = 0; j < secondTableColumns.size(); j++) {
 		// check to make sure that the column we add is not in the shared column already added
 		if (find(sharedColumns.begin(), sharedColumns.end(), secondTableColumns[j]) == sharedColumns.end()) {
 			newColumnTitles.push_back(secondTableColumns[j]);
