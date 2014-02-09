@@ -3,7 +3,7 @@
 #include "Engine.h"
 
 // make and return a new row with the naturally joined information
-static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vector<string> newColumnTitles) {
+static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vector<string> newColumnTitles, int identifierCount) {
 	vector<Attribute*> newRow;
 
 	// get all needed data from first table
@@ -15,7 +15,7 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 		newRow.push_back(secondTable->getVariable(newColumnTitles[j]));
 	}
 
-	Attribute* identifier = new Attribute("string", firstTable->getTableName() + secondTable->getTableName());
+	Attribute* identifier = new Attribute("int", to_string(identifierCount));
 	newRow.push_back(identifier);
 
 	return newRow;
@@ -43,13 +43,14 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 
 	string newKey = firstTable->getTableName() + secondTable->getTableName();
 	newColumnTitles.push_back(newKey);
-	newColumnTypes.push_back("string");
+	newColumnTypes.push_back("int");
 
 	// new table to add data to
 	Table* newTable = new Table("New Table", newKey, newColumnTypes, newColumnTitles);
 
 	int firstTableOffset = 0;
 	int secondTableOffset = 0;
+	int identifierCount = 0;
 	map<string, vector<Attribute*>> firstTableData = firstTable->getData();
 	map<string, vector<Attribute*>> secondTableData = secondTable->getData();
 
@@ -61,12 +62,14 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 		for (auto j = secondTableData.begin(); j != secondTableData.end(); j++) {
 			secondTable->setCurrentRow(secondTableOffset); // set current row of second table to correct row
 
-			// make sure the current rows match on every shared column
-			vector<Attribute*> newRow = fillNewRow(firstTable, secondTable, newColumnTitles);
+			// combine all data among the two rows
+			vector<Attribute*> newRow = fillNewRow(firstTable, secondTable, newColumnTitles, identifierCount);
+			identifierCount++;
 			newTable->addRow(newRow, newColumnTypes);
 			
-				secondTableOffset++;
+			secondTableOffset++;
 		}
+		secondTableOffset = 0;
 		firstTableOffset++;
 	}
 	return newTable;

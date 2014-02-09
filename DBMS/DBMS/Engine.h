@@ -40,11 +40,11 @@ public:
 		*********************************************************************************/
 
 	// create a table with the row types and column titles given
-	void createTable(string tableName, string keyName, vector<string> rowTypes, vector<string> columnTitles) {
+	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles) {
 		if (find(columnTitles.begin(), columnTitles.end(), keyName) == columnTitles.end()) {
 			throw "key name does not match any column, table not created";
 		}
-		tables.push_back(new Table(tableName, keyName, rowTypes, columnTitles));
+		tables.push_back(new Table(tableName, keyName, columnTypes, columnTitles));
 	}
 
 

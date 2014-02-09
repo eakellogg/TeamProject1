@@ -46,7 +46,7 @@ int main()
 		Table* tbld = NULL;
 
 		tblc = engine.naturalJoin(tblb, tbla);
-		tbld = engine.naturalJoin(tblc, tblb);
+		tbld = engine.crossProduct(tblc, tbla);
 		
 		tbld->printTable();
 		

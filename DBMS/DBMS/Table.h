@@ -55,8 +55,8 @@ public:
 
 
 	// add a row to the table
-	void addRow(vector<Attribute*> row, vector<string> rowTypes) {
-		if (checkMatchingTypes(rowTypes)) {
+	void addRow(vector<Attribute*> row, vector<string> columnTypes) {
+		if (checkMatchingTypes(columnTypes)) {
 			currentRow = row;
 			string key = getVariable(keyName)->getValue();
 			data.insert(make_pair(key, row));
