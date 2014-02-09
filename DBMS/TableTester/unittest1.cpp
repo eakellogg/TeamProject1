@@ -57,15 +57,15 @@ namespace TableTester
 			vector<Attribute*> student2 = vector<Attribute*>{nameb, schoolb, ageb};
 			vector<Attribute*> student3 = vector<Attribute*>{namec, schoolc, agec};
 
-			Table* tbl = new Table("testTable", columnTypes, columnTitles);
+			Table* tbl = new Table("testTable", "name", columnTypes, columnTitles);
 
 //************************************************************************************************************
 
 			// test adding rows
 			try {
-				tbl->addRow(student1[0]->getValue(), student1, columnTypes);
-				tbl->addRow(student2[0]->getValue(), student2, columnTypes);
-				tbl->addRow(student3[0]->getValue(), student3, badRowTypes); // should throw an error b/c of improper row types
+				tbl->addRow(student1, columnTypes);
+				tbl->addRow(student2, columnTypes);
+				tbl->addRow(student3, badRowTypes); // should throw an error b/c of improper row types
 			}
 			catch (const char* error) {
 				Assert::AreEqual(error, "types do not match"); // verify error is thrown
@@ -147,8 +147,14 @@ namespace TableTester
 //************************************************************************************************************
 
 			// test adding tables
-			engine.createTable("students", columnTypes, columnTitles);
-			engine.createTable("people", columnTypes, columnTitles);
+			engine.createTable("students", "name", columnTypes, columnTitles);
+			engine.createTable("people", "name", columnTypes, columnTitles);
+			try {
+				engine.createTable("people", "meh", columnTypes, columnTitles);
+			}
+			catch (const char* error) {
+				Assert::AreEqual(error, "key name does not match any column, table not created");
+			}
 			Assert::IsTrue(engine.getTables().size() == 2);
 
 //************************************************************************************************************
@@ -167,14 +173,14 @@ namespace TableTester
 
 			// test insert into a table
 			try {
-				engine.insertInto("children", "name", student1, columnTypes); // should throw error b/c no table with that name
+				engine.insertInto("children", student1, columnTypes); // should throw error b/c no table with that name
 			}
 			catch (const char* error) {
 				Assert::AreEqual(error, "table does not exist"); // verify error is thrown
 			}
 
-			engine.insertInto("students", student1[0]->getValue(), student1, columnTypes);
-			engine.insertInto("students", student2[0]->getValue(), student2, columnTypes);
+			engine.insertInto("students", student1, columnTypes);
+			engine.insertInto("students", student2, columnTypes);
 			Assert::IsTrue(engine.getTables()[0]->getData().size() == 2); // added two students, make sure size is now 2
 		}
 
@@ -186,8 +192,8 @@ namespace TableTester
 			vector<string> columnTypesB = vector<string>{"string", "string", "int"};
 			vector<string> columnTitlesB = vector<string>{"name", "school", "age"};
 
-			Table* tbla = new Table("testTableA", columnTypesA, columnTitlesA);
-			Table* tblb = new Table("testTableA", columnTypesB, columnTitlesB);
+			Table* tbla = new Table("testTableA", "name", columnTypesA, columnTitlesA);
+			Table* tblb = new Table("testTableA", "name", columnTypesB, columnTitlesB);
 			//Table* tblc = engine.naturalJoin(tbla, tblb);
 		}
 

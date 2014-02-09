@@ -4,7 +4,7 @@
 int main()
 {
 	try {
-		/*
+		
 		Attribute* namea = new Attribute("string", "Zach Brown");
 		Attribute* nameb = new Attribute("string", "Jacob Zerr");
 		Attribute* namec = new Attribute("string", "Victoria Elliott");
@@ -17,28 +17,37 @@ int main()
 		Attribute* ageb = new Attribute("int", "75");
 		Attribute* agec = new Attribute("int", "18");
 
+		Attribute* citya = new Attribute("string", "College Station");
+		Attribute* statea = new Attribute("string", "Texas");
+
 		vector<string> columnTypes = vector<string>{"string", "string", "int"};
 		vector<string> badRowTypes = vector<string>{"string", "string", "string"};
 		vector<string> columnTitles = vector<string>{"name", "school", "age"};
 
 		vector<Attribute*> student1 = vector<Attribute*>{namea, schoola, agea};
 		vector<Attribute*> student2 = vector<Attribute*>{nameb, schoolb, ageb};
-		vector<Attribute*> student3 = vector<Attribute*>{namec, schoolc, agec};
-		*/
+		vector<Attribute*> student3 = vector<Attribute*>{namea, schoola, agec};
+
+		vector<Attribute*> student4 = vector<Attribute*>{namea, schoola, statea};
+		
 		Engine engine = Engine();
 
 		vector<string> columnTypesA = vector<string>{"string", "string", "string"};
 		vector<string> columnTitlesA = vector<string>{"name", "school", "state"};
 		vector<string> columnTypesB = vector<string>{"string", "string", "int"};
-		vector<string> columnTitlesB = vector<string>{"name", "city", "age"};
+		vector<string> columnTitlesB = vector<string>{"name", "school", "age"};
 
-		Table* tbla = new Table("testTableA", columnTypesA, columnTitlesA);
-		Table* tblb = new Table("testTableA", columnTypesB, columnTitlesB);
+		Table* tbla = new Table("TableA", "state", columnTypesA, columnTitlesA);
+		tbla->addRow(student4, columnTypesA);
+		Table* tblb = new Table("testTableB", "age", columnTypesB, columnTitlesB);
+		tblb->addRow(student3, columnTypesB);
+		tblb->addRow(student1, columnTypesB);
 		Table* tblc = NULL;
+		
 		tblc = engine.naturalJoin(tbla, tblb);
-		for (int i = 0; i < tblc->getColumnTitles().size(); i++) {
-			cout << tblc->getColumnTitles()[i] << "    " << tblc->getColumnTypes()[i] << endl;
-		}
+		
+		tblc->printTable();
+		
 	}
 	catch (const char* error) {
 		cout << error << endl;

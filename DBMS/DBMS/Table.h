@@ -6,6 +6,7 @@
 #include <vector>
 #include <typeinfo>
 #include <map>
+#include <iomanip>
 
 #include "Attribute.h"
 
@@ -14,6 +15,7 @@ using namespace std;
 
 class Table {
 	string tableName;
+	string keyName;
 	map< string, vector<Attribute*> > data; // the rows of the table
 	vector<string> columnTypes;
 	vector<string> columnTitles;
@@ -24,8 +26,8 @@ public:
 *********************************************************************************/
 
 
-	Table(string tableName, vector<string> columnTypes, vector<string> columnTitles)
-		:tableName(tableName), columnTypes(columnTypes), columnTitles(columnTitles)
+	Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles)
+		:tableName(tableName), keyName(keyName), columnTypes(columnTypes), columnTitles(columnTitles)
 	{	}
 
 
@@ -36,13 +38,15 @@ public:
 
 	string getTableName() { return tableName; }
 
+	string getKeyName() { return keyName; }
+
 	map< string, vector<Attribute*> > getData() { return data; }
 
 	vector<string> getColumnTypes() { return columnTypes; }
 
 	vector<string> getColumnTitles() { return columnTitles; }
 
-	vector<Attribute*> getCurrentRow() { return currentRow; };
+	vector<Attribute*> getCurrentRow() { return currentRow; }
 
 
 /*********************************************************************************
@@ -51,8 +55,10 @@ public:
 
 
 	// add a row to the table
-	void addRow(string key, vector<Attribute*> row, vector<string> rowTypes) {
+	void addRow(vector<Attribute*> row, vector<string> rowTypes) {
 		if (checkMatchingTypes(rowTypes)) {
+			currentRow = row;
+			string key = getVariable(keyName)->getValue();
 			data.insert(make_pair(key, row));
 			return;
 		}
@@ -111,10 +117,10 @@ public:
 	}
 
 
-	// takes in a variable name, searches the current row, and returns the value of the variable name
-	Attribute* getVariable(string variableName) {
+	// takes in a column name, searches the current row, and returns the value of the column name
+	Attribute* getVariable(string columnName) {
 		for (int i = 0; i < columnTitles.size(); i++) {
-			if (columnTitles[i] == variableName) {
+			if (columnTitles[i] == columnName) {
 				return currentRow[i];
 			}
 		}
@@ -125,6 +131,20 @@ public:
 /*********************************************************************************
 	helper functions
 *********************************************************************************/
+
+	
+	// reset the currentRow pointer to the beginning of the map
+	void resetCurrentRow() {
+		currentRow = data.begin()->second;
+	}
+
+
+	// set the currentRow pointer appropriately with regards to the offset passed
+	void setCurrentRow(int offset) {
+		auto iterator = data.begin();
+		advance(iterator, offset);
+		currentRow = (iterator)->second;
+	}
 
 
 	// check to make sure the types of the table's rows and the passed types are equivalent
@@ -148,5 +168,40 @@ public:
 			}
 		}
 		throw "column does not exist";
+	}
+
+
+	// print the table in an orderly format
+	void printTable() {
+		cout << tableName << endl;
+	
+		// print the column names
+		cout << "********************************************************************************************" << endl;
+		for (int i = 0; i < columnTitles.size(); i++) {
+			cout << left << setw(20) << formatString(columnTitles[i], 20);
+		}
+		cout << endl << "********************************************************************************************" << endl;
+		auto iterator = data.begin();
+		// print the data for each row, alligned with the appropriate column
+		for (int i = 0; i < data.size(); i++) {
+			currentRow = iterator->second;
+			// print every individual row's data,alligned with the appropriate column
+			for (int j = 0; j < currentRow.size(); j++) {
+				cout << left << setw(20) << formatString(currentRow[j]->getValue(), 20);
+			}
+			cout << endl;
+			iterator++;
+		}
+		cout << endl;
+	}
+
+
+	// limit string's length to the specified limit for proper formatting
+	string formatString(string tempName, int limit) {
+		if (tempName.length() > limit) {
+			tempName = tempName.substr(0, limit);
+		}
+
+		return tempName;
 	}
 };
