@@ -14,6 +14,7 @@ namespace TableTester
 		Attribute* namea = new Attribute("string", "Zach Brown");
 		Attribute* nameb = new Attribute("string", "Jacob Zerr");
 		Attribute* namec = new Attribute("string", "Victoria Elliott");
+		Attribute* named = new Attribute("string", "Johnny Football");
 
 		Attribute* schoola = new Attribute("string", "Texas A&M");
 		Attribute* schoolb = new Attribute("string", "Kansas University");
@@ -36,14 +37,15 @@ namespace TableTester
 		vector<string> badColumnTypes = vector<string>{"int", "int", "int"};
 
 		vector<string> columnTitlesA = vector<string>{"name", "school", "age"};
-		vector<string> columnTitlesB = vector<string>{"name", "school", "state"};
+		vector<string> columnTitlesB = vector<string>{"name", "city", "state"};
 
 		vector<Attribute*> student1 = vector<Attribute*>{namea, schoola, agea};
 		vector<Attribute*> student2 = vector<Attribute*>{nameb, schoolb, ageb};
 		vector<Attribute*> student3 = vector<Attribute*>{namec, schoolc, agec};
 
-		//Table* tbla = new Table("TableA", "name", columnTypesA, columnTitlesA);
-		//Table* tblb = new Table("TableB", "name", columnTypesB, columnTitlesB);
+		vector<Attribute*> person1 = vector<Attribute*>{namea, citya, statea};
+		vector<Attribute*> person2 = vector<Attribute*>{nameb, cityb, stateb};
+		vector<Attribute*> person3 = vector<Attribute*>{named, cityc, statec};
 
 		Engine testEngine = Engine();
 
@@ -113,7 +115,7 @@ namespace TableTester
 
 //************************************************************************************************************
 		
-		TEST_METHOD(Insert_Row_Test){
+		TEST_METHOD(Insert_Into){
 			// verify number of tables
 			testEngine.createTable("tableName", "name", columnTypesA, columnTitlesA);
 
@@ -157,7 +159,7 @@ namespace TableTester
 
 //************************************************************************************************************
 
-		TEST_METHOD(Cross_Product_Test){
+		TEST_METHOD(Cross_Product){
 			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
 			testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
 
@@ -181,7 +183,7 @@ namespace TableTester
 
 //************************************************************************************************************
 
-		TEST_METHOD(Natural_Join_Test) {
+		TEST_METHOD(Natural_Join) {
 			/*
 			error cases:
 			no common column; results in "tables cannot be naturally joined due to no common column"
@@ -195,7 +197,7 @@ namespace TableTester
 
 //************************************************************************************************************
 
-		TEST_METHOD(Set_Union_Test){
+		TEST_METHOD(Set_Union){
 			// set_union_test
 		}
 
@@ -203,10 +205,25 @@ namespace TableTester
 
 //************************************************************************************************************
 
-		TEST_METHOD(Set_Difference_Test){
+		TEST_METHOD(Set_Difference){
 			// set_difference_test
 		}
 	};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	TEST_CLASS(UnitTest2)
 	{
 	public:
@@ -313,77 +330,6 @@ namespace TableTester
 
 			Assert::IsTrue(atoi(tbl->getVariable("age")->getValue().c_str()) == atoi(student2[2]->getValue().c_str()));
 
-		}
-
-		TEST_METHOD(Engine_Test){
-			// create information to put into table to prepare testing
-			Attribute* namea = new Attribute("string", "Zach Brown");
-			Attribute* nameb = new Attribute("string", "Jacob Zerr");
-			Attribute* namec = new Attribute("string", "Victoria Elliott");
-
-			Attribute* schoola = new Attribute("string", "Texas A&M");
-			Attribute* schoolb = new Attribute("string", "Kansas University");
-			Attribute* schoolc = new Attribute("string", "Wake Forest");
-
-			Attribute* agea = new Attribute("int", "20");
-			Attribute* ageb = new Attribute("int", "75");
-			Attribute* agec = new Attribute("int", "18");
-
-			vector<string> columnTypes = vector<string>{"string", "string", "int"};
-			vector<string> badRowTypes = vector<string>{"string", "string", "string"};
-			vector<string> columnTitles = vector<string>{"name", "school", "age"};
-
-			vector<Attribute*> student1 = vector<Attribute*>{namea, schoola, agea};
-			vector<Attribute*> student2 = vector<Attribute*>{nameb, schoolb, ageb};
-			vector<Attribute*> student3 = vector<Attribute*>{namec, schoolc, agec};
-
-			Engine engine = Engine();
-
-			//************************************************************************************************************
-
-			// test adding tables
-			engine.createTable("students", "name" ,  columnTypes, columnTitles);
-			engine.createTable("people", "name", columnTypes, columnTitles);
-			Assert::IsTrue(engine.getTables().size() == 2);
-
-			//************************************************************************************************************
-
-			// test deleting tables
-			try {
-				engine.dropTable("children"); // should throw error b/c no table with that name
-			}
-			catch (const char* error) {
-				Assert::AreEqual(error, "table does not exist"); // verify error is thrown
-			}
-			engine.dropTable("people");
-			Assert::IsTrue(engine.getTables().size() == 1); // added to tables, deleted one; make sure size is now 1
-
-			//************************************************************************************************************
-
-			// test insert into a table
-			try {
-				engine.insertInto("children",student1, columnTypes); // should throw error b/c no table with that name
-			}
-			catch (const char* error) {
-				Assert::AreEqual(error, "table does not exist"); // verify error is thrown
-			}
-
-			engine.insertInto("students",student1, columnTypes);
-			engine.insertInto("students",student2, columnTypes);
-			Assert::IsTrue(engine.getTables()[0]->getData().size() == 2); // added two students, make sure size is now 2
-		}
-
-		TEST_METHOD(Natural_Join_Test) {
-			// create information to put into table to prepare testing
-			Engine engine = Engine();
-			vector<string> columnTypesA = vector<string>{"string", "string", "string"};
-			vector<string> columnTitlesA = vector<string>{"name", "school", "state"};
-			vector<string> columnTypesB = vector<string>{"string", "string", "int"};
-			vector<string> columnTitlesB = vector<string>{"name", "school", "age"};
-
-			Table* tbla = new Table("testTableA", "name",  columnTypesA, columnTitlesA);
-			Table* tblb = new Table("testTableA", "name" ,columnTypesB, columnTitlesB);
-			//Table* tblc = engine.naturalJoin(tbla, tblb);
 		}
 
 	};
