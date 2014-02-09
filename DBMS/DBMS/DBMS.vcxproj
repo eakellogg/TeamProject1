@@ -66,6 +66,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CrossProduct.cpp" />
     <ClCompile Include="NaturalJoin.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>

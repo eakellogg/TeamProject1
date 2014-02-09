@@ -90,7 +90,10 @@ public:
 
 
 	// calculates the natural join of the two given tables and returns a new table with the result
-	Table* naturalJoin(Table* a, Table* b); // see NaturalJoin.cpp
+	Table* naturalJoin(Table* first, Table* secondTable); // see NaturalJoin.cpp
+
+	// calculates the cross product of the two given tables and returns a new table with the result
+	Table* crossProduct(Table* first, Table* secondTable); // see CrossProduct.cpp
 
 
 	/*********************************************************************************

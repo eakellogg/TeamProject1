@@ -43,10 +43,12 @@ int main()
 		tblb->addRow(student3, columnTypesB);
 		tblb->addRow(student1, columnTypesB);
 		Table* tblc = NULL;
+		Table* tbld = NULL;
+
+		tblc = engine.naturalJoin(tblb, tbla);
+		tbld = engine.naturalJoin(tblc, tblb);
 		
-		tblc = engine.naturalJoin(tbla, tblb);
-		
-		tblc->printTable();
+		tbld->printTable();
 		
 	}
 	catch (const char* error) {

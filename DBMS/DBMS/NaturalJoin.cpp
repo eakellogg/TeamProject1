@@ -79,7 +79,7 @@ Table* Engine::naturalJoin(Table* firstTable, Table* secondTable) {
 
 	vector<string> newColumnTitles;
 	vector<string> newColumnTypes;
-
+	
 	// add all of first table's column names/types to the new table's column names/types
 	for (int i = 0; i < firstTableColumns.size(); i++) {
 		newColumnTitles.push_back(firstTableColumns[i]);
@@ -94,26 +94,26 @@ Table* Engine::naturalJoin(Table* firstTable, Table* secondTable) {
 			newColumnTypes.push_back(secondTable->getTypeOfColumn(secondTableColumns[j]));
 		}
 	}
-
+	
 	string newKey = firstTable->getTableName() + secondTable->getTableName();
 	newColumnTitles.push_back(newKey);
 	newColumnTypes.push_back("int");
 
 	// new table to add data to
 	Table* newTable = new Table("New Table", newKey, newColumnTypes, newColumnTitles);
-
+	
 	int firstTableOffset = 0;
 	int secondTableOffset = 0;
 	int identifierCount = 0;
 	map<string, vector<Attribute*>> firstTableData = firstTable->getData();
 	map<string, vector<Attribute*>> secondTableData = secondTable->getData();
-
+	
 	// iterate through all rows of the first table
 	for (map<string, vector<Attribute*>>::iterator i = firstTableData.begin(); i != firstTableData.end(); i++) {
 		firstTable->setCurrentRow(firstTableOffset); // set current row of first table to correct row
 		
 		// for each rows of first table, iterate through all rows of the second table
-		for (auto j = secondTableData.begin(); j != secondTableData.end(); j++) {
+		for (map<string, vector<Attribute*>>::iterator j = secondTableData.begin(); j != secondTableData.end(); j++) {
 			secondTable->setCurrentRow(secondTableOffset); // set current row of second table to correct row
 
 			// make sure the current rows match on every shared column
@@ -124,7 +124,9 @@ Table* Engine::naturalJoin(Table* firstTable, Table* secondTable) {
 			}
 			secondTableOffset++;
 		}	
+		secondTableOffset = 0;
 		firstTableOffset++;
 	}
+	
 	return newTable;
 }
