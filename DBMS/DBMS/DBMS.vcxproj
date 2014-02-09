@@ -66,6 +66,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EnginesetDifference.cpp" />
+    <ClCompile Include="EnginesetUnion.cpp" />
     <ClCompile Include="TableConditionTree.cpp" />
     <ClCompile Include="EngineCrossProduct.cpp" />
     <ClCompile Include="EngineDelete.cpp" />

@@ -20,7 +20,7 @@ void  Engine::update(string tableName, vector< tuple<string, string> > namevarpa
 		table->setCurrentRow(it->second);
 		if ( table->EvalConditionTree(&t) == TRUE )
 		{
-			for (int i = 0; i < namevarpairs.size(); i++)
+			for ( unsigned int i = 0; i < namevarpairs.size(); i++)
 			{
 				try{
 					Attribute* a = table->getVariable(get<0>(namevarpairs[i]));

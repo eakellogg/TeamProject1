@@ -1,4 +1,6 @@
 #pragma once
+#ifndef TABLE_H
+#define TABLE_H
 
 #include <string>
 #include <iostream>
@@ -110,3 +112,5 @@ string formatString(string tempName, unsigned int limit);
 	//Comparion of strings as if they were integers
 int compareStringInts(string lv, string rv);
 };
+
+#endif

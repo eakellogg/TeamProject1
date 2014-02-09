@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef ENGINE_H
+#define ENGINE_H
+
 #include <string>
 #include <iostream>
 #include <tuple>
@@ -77,3 +80,5 @@ public:
 	// search database for a table with matching name
 	Table* findTable(string tableName);
 };
+
+#endif

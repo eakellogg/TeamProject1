@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef ATTRIBUTE_H
+#define ATTRIBUTE_H
+
 #include <string>
 #include <iostream>
 
@@ -38,3 +41,5 @@ public:
 		value = newValue;
 	}
 };
+
+#endif

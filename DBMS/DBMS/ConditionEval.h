@@ -8,6 +8,9 @@ In my example the condition tree is evaluated assuming all nodes are either oper
 pseudo code of how it would work with the table as well -Zach Brown
 */
 
+#ifndef CONDITIONEVAL_H
+#define CONDITIONEVAL_H
+
 #include "ConditionTree.h"
 #include <tuple>
 #include <stdlib.h>
@@ -23,3 +26,4 @@ string EvalConditionTree(ConditionTree* tree);
 //tuple< type , value >
 tuple<string, string> NodeEval(ConditionTree::Node* n);
 
+#endif 

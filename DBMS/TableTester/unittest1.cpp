@@ -1,11 +1,5 @@
-#include <stdlib.h>
-#include <vector>
-#include <algorithm>
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "Engine.h"
-#include "Table.h"
-#include "Attribute.h"
 
 using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -76,12 +70,12 @@ namespace TableTester
 			Assert::AreEqual(tableName, testEngine.getTables()[0]->getTableName());
 
 			// check row type equality
-			for (int i = 0; i < testEngine.getTables()[0]->getColumnTypes().size(); i++) {
+			for (unsigned int i = 0; i < testEngine.getTables()[0]->getColumnTypes().size(); i++) {
 				Assert::AreEqual(columnTypesA[i], testEngine.getTables()[0]->getColumnTypes()[i]);
 			}
 
 			// check row title equality
-			for (int i = 0; i < testEngine.getTables()[0]->getColumnTitles().size(); i++) {
+			for (unsigned int i = 0; i < testEngine.getTables()[0]->getColumnTitles().size(); i++) {
 				Assert::AreEqual(columnTitlesA[i], testEngine.getTables()[0]->getColumnTitles()[i]);
 			}
 		}
@@ -152,7 +146,7 @@ namespace TableTester
 			// check each row of the table
 			for (map<string, vector<Attribute*>>::iterator i = addedAttributes.begin(); i != addedAttributes.end(); i++) {
 				// check all attribute's type and value equality in the each row
-				for (int j = 0; j < i->second.size(); j++) {
+				for (unsigned int j = 0; j < i->second.size(); j++) {
 					Assert::AreEqual(i->second[j]->getType(), student1[j]->getType());
 					Assert::AreEqual(i->second[j]->getValue(), student1[j]->getValue());
 				}
@@ -378,197 +372,6 @@ namespace TableTester
 		}
 
 	};
-	TEST_CLASS(EvalTest)
-	{
-	public:
-
-		TEST_METHOD(Test_Equality_String)
-		{
-			//Current checks the results of eval on a simple two operand tree with equailty
-
-			ConditionTree t(EQUAL, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("Hello", LITERAL_STRING);
-			n->setRightChild("Hello", LITERAL_STRING);
-
-			Table* table = new Table("DUMMY", "Name" , vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setRightChild("Bye", LITERAL_STRING);
-			result = table->EvalConditionTree(&t);
-			Assert::AreNotEqual(TRUE.c_str(), result.c_str());
-
-		}
-		TEST_METHOD(Test_Less_Int)
-		{
-
-			ConditionTree t(LESS, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("5", LITERAL_INT);
-			n->setRightChild("10", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("11", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-		}
-		TEST_METHOD(Test_Greater_Int)
-		{
-
-			ConditionTree t(GREATER, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("10", LITERAL_INT);
-			n->setRightChild("5", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("4", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-		}
-		TEST_METHOD(Test_LessEqual_Int)
-		{
-
-			ConditionTree t(LESSEQUAL, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("5", LITERAL_INT);
-			n->setRightChild("10", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("10", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("11", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-		}
-		TEST_METHOD(Test_GreaterEqual_Int)
-		{
-
-			ConditionTree t(GREATEREQUAL, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("10", LITERAL_INT);
-			n->setRightChild("5", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("5", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("4", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-		}
-
-		TEST_METHOD(Test_AND)
-		{
-
-			ConditionTree t(AND, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("TRUE", LITERAL_INT);
-			n->setRightChild("TRUE", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("FALSE", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-
-
-			n->setLeftChild("FALSE", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-		}
-		TEST_METHOD(Test_OR)
-		{
-
-			ConditionTree t(OR, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("TRUE", LITERAL_INT);
-			n->setRightChild("TRUE", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-			n->setLeftChild("FALSE", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-
-
-			n->setRightChild("FALSE", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-		}
-		TEST_METHOD(Test_NOT)
-		{
-
-			ConditionTree t(NOT, OPERATOR);
-			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("TRUE", LITERAL_INT);
-
-			Table* table = new Table("DUMMY", "Name", vector<string>{ "Name" }, vector<string>{ "STRING" });
-			string result = table->EvalConditionTree(&t);
-
-			Assert::AreEqual(FALSE.c_str(), result.c_str());
-
-			n->setLeftChild("FALSE", LITERAL_INT);
-
-			result = table->EvalConditionTree(&t);
-			Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-
-		}
-
-
-
-	};
+	
 };
 		

@@ -18,7 +18,7 @@ Table* Engine::selection(string tableName, ConditionTree t){
 
 			vector<Attribute*> oldRow  = it->second;
 			vector<Attribute*> newRow;
-			for (int i = 0; i < oldRow.size(); i++)
+			for (unsigned int i = 0; i < oldRow.size(); i++)
 			{
 				Attribute* a = new Attribute(oldRow[i]->getType(), oldRow[i]->getValue());
 				newRow.push_back(a);

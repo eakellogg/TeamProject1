@@ -39,7 +39,7 @@ using namespace std;
 	// delete a table from the database
 	void Engine::dropTable(string tableName) {
 		// search database for a table with matching name; delete table if it exists
-		for (int i = 0; i < tables.size(); i++) {
+		for (unsigned int i = 0; i < tables.size(); i++) {
 			if (tables[i]->getTableName() == tableName) {
 				tables.erase(tables.begin() + i); // must use tables.begin() to get iterator; increment with i
 				return;
@@ -95,7 +95,7 @@ using namespace std;
 	// search database for a table with matching name
 	Table* Engine::findTable(string tableName) {
 		// compare passed name to names of all tables in the database
-		for (int i = 0; i < tables.size(); i++) {
+		for (unsigned int i = 0; i < tables.size(); i++) {
 			if (tables[i]->getTableName() == tableName) {
 				return tables[i];
 			}

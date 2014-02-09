@@ -7,11 +7,11 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 	vector<Attribute*> newRow;
 
 	// get all needed data from first table
-	for (int i = 0; i < firstTable->getColumnTitles().size(); i++) {
+	for (unsigned int i = 0; i < firstTable->getColumnTitles().size(); i++) {
 		newRow.push_back(firstTable->getVariable(newColumnTitles[i]));
 	}
 	// get all needed data from second table
-	for (int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
+	for (unsigned int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
 		newRow.push_back(secondTable->getVariable(newColumnTitles[j]));
 	}
 
@@ -30,13 +30,13 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 	vector<string> newColumnTypes;
 
 	// add all of first table's column names/types to the new table's column names/types
-	for (int i = 0; i < firstTableColumns.size(); i++) {
+	for (unsigned int i = 0; i < firstTableColumns.size(); i++) {
 		newColumnTitles.push_back(firstTableColumns[i]);
 		newColumnTypes.push_back(firstTable->getTypeOfColumn(firstTableColumns[i]));
 	}
 
 	// add all of second table's column names/types to the new table's column names/types
-	for (int j = 0; j < secondTableColumns.size(); j++) {
+	for (unsigned int j = 0; j < secondTableColumns.size(); j++) {
 			newColumnTitles.push_back(secondTableColumns[j]);
 			newColumnTypes.push_back(secondTable->getTypeOfColumn(secondTableColumns[j]));
 	}
