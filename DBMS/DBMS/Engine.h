@@ -88,6 +88,11 @@ public:
 		}
 		*/
 
+	// calculates the union of the two given tables and returns a new table with the result
+	Table* setUnion(Table* first, Table* secondTable); // see setUnion.cpp
+
+	// calculates the difference of the two given tables and returns a new table with the result
+	Table* setDifference(Table* first, Table* secondTable); // see setDifference.cpp
 
 	// calculates the natural join of the two given tables and returns a new table with the result
 	Table* naturalJoin(Table* first, Table* secondTable); // see NaturalJoin.cpp
