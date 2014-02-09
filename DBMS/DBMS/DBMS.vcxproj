@@ -66,12 +66,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CrossProduct.cpp" />
-    <ClCompile Include="NaturalJoin.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TableConditionTree.cpp" />
+    <ClCompile Include="EngineCrossProduct.cpp" />
+    <ClCompile Include="EngineDelete.cpp" />
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="EngineProjection.cpp" />
+    <ClCompile Include="EngineSelection.cpp" />
+    <ClCompile Include="EngineUpdate.cpp" />
+    <ClCompile Include="EngineNaturalJoin.cpp" />
+    <ClCompile Include="Table.cpp" />
+    <ClCompile Include="TableConditionEval.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attribute.h" />
+    <ClInclude Include="ConditionEval.h" />
+    <ClInclude Include="ConditionTree.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>

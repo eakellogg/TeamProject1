@@ -7,11 +7,13 @@
 #include <typeinfo>
 #include <map>
 #include <iomanip>
-
+#include "ConditionTree.h"
 #include "Attribute.h"
 
 using namespace std;
 
+const static string INT_TYPE = "INT";
+const static string STRING_TYPE = "STRING";
 
 class Table {
 	string tableName;
@@ -21,49 +23,42 @@ class Table {
 	vector<string> columnTitles;
 	vector<Attribute*> currentRow;
 public:
+
+
 /*********************************************************************************
 	constructor
 *********************************************************************************/
 
-
-	Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles)
-		:tableName(tableName), keyName(keyName), columnTypes(columnTypes), columnTitles(columnTitles)
-	{	}
-
+	Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 /*********************************************************************************
 	non-modifying functions / accessor methods
 *********************************************************************************/
 
 
-	string getTableName() { return tableName; }
+	string getTableName();
 
-	string getKeyName() { return keyName; }
+	string getKeyName();
 
-	map< string, vector<Attribute*> > getData() { return data; }
+	map< string, vector<Attribute*> > getData();
 
-	vector<string> getColumnTypes() { return columnTypes; }
+	vector<string> getColumnTypes();
 
-	vector<string> getColumnTitles() { return columnTitles; }
+	vector<string> getColumnTitles();
 
-	vector<Attribute*> getCurrentRow() { return currentRow; }
+	vector<Attribute*> getCurrentRow();
+
+	string EvalConditionTree(ConditionTree* tree);
+
+	tuple<string, string> NodeEval(ConditionTree::Node* n);
 
 
 /*********************************************************************************
 	modifying functions
 *********************************************************************************/
 
-
 	// add a row to the table
-	void addRow(vector<Attribute*> row, vector<string> columnTypes) {
-		if (checkMatchingTypes(columnTypes)) {
-			currentRow = row;
-			string key = getVariable(keyName)->getValue();
-			data.insert(make_pair(key, row));
-			return;
-		}
-		throw "types do not match";
-	}
+	void addRow(vector<Attribute*> row, vector<string> columnTypes);
 
 /*
 	// update an already existing row
@@ -77,131 +72,41 @@ public:
 */
 
 	// delete a row from the table
-	void deleteRow(string key) {
-		try {
-			data.erase(key);
-		}
-		catch (out_of_range) {
-			throw "key does not exist";
-		}
-	}
-
+	void deleteRow(string key);
 
 	// find and return a specific row in the table
-	vector<Attribute*> getRow(string key) {
-		try {
-			return data.at(key);
-		}
-		catch (out_of_range) {
-			throw "key does not exist";
-		}
-	}
-
+	vector<Attribute*> getRow(string key);
 
 	// find and return a specific item in a specific row in the table
-	Attribute* getItem(string key, string columnName) {
-		try {
-			currentRow = data.at(key);
-		}
-		catch (out_of_range) {
-			throw "key does not exist";
-		}
-
-		// search the temporary row for correct item based on column name
-		for (int i = 0; i < (columnTitles.size() - 1); i++) {
-			if (columnTitles[i] == columnName) {
-				return currentRow[i];
-			}
-		}
-		throw "column does not exist";
-	}
-
+Attribute* getItem(string key, string columnName);
 
 	// takes in a column name, searches the current row, and returns the value of the column name
-	Attribute* getVariable(string columnName) {
-		for (int i = 0; i < columnTitles.size(); i++) {
-			if (columnTitles[i] == columnName) {
-				return currentRow[i];
-			}
-		}
-		throw "variable does not exist";
-	}
-
-
+Attribute* getVariable(string columnName);
+	
 /*********************************************************************************
 	helper functions
 *********************************************************************************/
-
-	
 	// reset the currentRow pointer to the beginning of the map
-	void resetCurrentRow() {
-		currentRow = data.begin()->second;
-	}
-
+void resetCurrentRow();
 
 	// set the currentRow pointer appropriately with regards to the offset passed
-	void setCurrentRow(int offset) {
-		auto iterator = data.begin();
-		advance(iterator, offset);
-		currentRow = (iterator)->second;
-	}
+void setCurrentRow(int offset);
 
+	//set the currentRow point to this row object passed very dangerous!!! 
+void setCurrentRow(vector<Attribute*>);
 
 	// check to make sure the types of the table's rows and the passed types are equivalent
-	bool checkMatchingTypes(vector<string> rowTypes) {
-		// check every type of the row in question and compare with table's row types
-		for (int i = 0; i < columnTypes.size(); i++) {
-			if (rowTypes[i] != columnTypes[i]) {
-				return false; // incorrect type was found in the process of adding
-			}
-		}
-		return true;
-	}
-
+bool checkMatchingTypes(vector<string> rowTypes);
 
 	// return the type associated with a column name
-	string getTypeOfColumn(string columnName) {
-		// search all columns in the table by name
-		for (int i = 0; i < columnTitles.size(); i++) {
-			if (columnTitles[i] == columnName) { // if a match is found, return the corresponding type
-				return columnTypes[i];
-			}
-		}
-		throw "column does not exist";
-	}
-
-
-	// print the table in an orderly format
-	void printTable() {
-		cout << tableName << endl;
+string getTypeOfColumn(string columnName); 
 	
-		// print the column names
-		cout << "********************************************************************************************" << endl;
-		for (int i = 0; i < columnTitles.size(); i++) {
-			cout << left << setw(20) << formatString(columnTitles[i], 20);
-		}
-		cout << endl << "********************************************************************************************" << endl;
-		auto iterator = data.begin();
-		// print the data for each row, alligned with the appropriate column
-		for (int i = 0; i < data.size(); i++) {
-			currentRow = iterator->second;
-			// print every individual row's data,alligned with the appropriate column
-			for (int j = 0; j < currentRow.size(); j++) {
-				cout << left << setw(20) << formatString(currentRow[j]->getValue(), 20);
-			}
-			cout << endl;
-			iterator++;
-		}
-		cout << endl;
-	}
-
+	// print the table in an orderly format
+void printTable();
 
 	// limit string's length to the specified limit for proper formatting
-	string formatString(string tempName, int limit) {
-		if (tempName.length() > limit) {
-			tempName = tempName.substr(0, limit);
-		}
+string formatString(string tempName, unsigned int limit);
 
-		return tempName;
-	}
+	//Comparion of strings as if they were integers
+int compareStringInts(string lv, string rv);
 };

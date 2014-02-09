@@ -5,7 +5,7 @@
 #include <tuple>
 #include <vector>
 #include <typeinfo>
-
+#include "ConditionTree.h"
 #include "Table.h"
 #include "Attribute.h"
 
@@ -20,73 +20,42 @@ public:
 		constructor
 		*********************************************************************************/
 
-
 	//constructor
-	Engine()
-	{	}
-
+	Engine();
 
 	/*********************************************************************************
 		non-modifying functions / accessor methods
 		*********************************************************************************/
 
-
 	//we can remove this section if we find we don't need it
-	vector<Table*> getTables() { return tables; }
-
+	vector<Table*> getTables();
 
 	/*********************************************************************************
 		modifying functions
 		*********************************************************************************/
 
 	// create a table with the row types and column titles given
-	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles) {
-		if (find(columnTitles.begin(), columnTitles.end(), keyName) == columnTitles.end()) {
-			throw "key name does not match any column, table not created";
-		}
-		tables.push_back(new Table(tableName, keyName, columnTypes, columnTitles));
-	}
+	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 
 	// delete a table from the database
-	void dropTable(string tableName) {
-		// search database for a table with matching name; delete table if it exists
-		for (int i = 0; i < tables.size(); i++) {
-			if (tables[i]->getTableName() == tableName) {
-				tables.erase(tables.begin() + i); // must use tables.begin() to get iterator; increment with i
-				return;
-			}
-		}
-		throw "table does not exist";
-	}
+	void dropTable(string tableName);
 
 
 	// insert a row into the table with the proper name
-	void insertInto(string tableName, vector<Attribute*> row, vector<string> columnTypes) {
-		Table* tempTable = findTable(tableName);
-		tempTable->addRow(row, columnTypes);
-	}
+	void insertInto(string tableName, vector<Attribute*> row, vector<string> columnTypes);
 
+	//Delete all rows in the table that meet the condition
+	void deleteFrom(string tableName, ConditionTree t);
 
-	// changes multiple rows and multiple Attributes at a time
-	// update a row in the table with the proper name
-	//pair <name, literal>
-	// not done yet
-	/*	void update(string tableName, vector<string> conditions, vector<string> columnNames) {
-			int pos = 0; //!!!!!!!!!!!!!! REALLY NEED TO FIND THIS METHOD
-			Table* tempTable = findTable(tableName);
-			tempTable->updateRow(row, rowTypes, pos);
-			}
-			*/
+	//Change the variables listed to their new values, if the row in the table meets the condition
+	void  update(string tableName, vector< tuple<string, string> > namevarpairs, ConditionTree t);
 
-	// delete a row in the table with the proper name
-	//same condition problem as update
-	/*
-		void deleteFrom(string tableName, int pos) {
-		Table* tempTable = findTable(tableName);
-		tempTable->deleteRow(pos);
-		}
-		*/
+	//Return a table that has only the rows from the old table that meet the condition
+	Table* selection(string tableName, ConditionTree t);
+
+	//Return a table that has only the specified columns of the old table
+	Table* projection(string startTable, vector<string> variables);
 
 	// calculates the union of the two given tables and returns a new table with the result
 	Table* setUnion(Table* first, Table* secondTable); // see setUnion.cpp
@@ -105,15 +74,6 @@ public:
 		helper functions
 		*********************************************************************************/
 
-
 	// search database for a table with matching name
-	Table* findTable(string tableName) {
-		// compare passed name to names of all tables in the database
-		for (int i = 0; i < tables.size(); i++) {
-			if (tables[i]->getTableName() == tableName) {
-				return tables[i];
-			}
-		}
-		throw "table does not exist"; // throwing exception prevents needing checks for unfound tables in other functions
-	}
+	Table* findTable(string tableName);
 };

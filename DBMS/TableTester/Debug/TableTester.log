@@ -1,32 +1,9 @@
-﻿Build started 2/9/2014 1:40:09 AM.
-     1>Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\TableTester\TableTester.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\TableTester.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /FC /errorReport:prompt unittest1.cpp
-         unittest1.cpp
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(2): warning C4627: '#include <vector>': skipped when looking for precompiled header use
-                 Add directive to 'stdafx.h' or rebuild precompiled header
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(3): warning C4627: '#include <algorithm>': skipped when looking for precompiled header use
-                 Add directive to 'stdafx.h' or rebuild precompiled header
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(111): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(122): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(153): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(165): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(180): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(186): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(189): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(201): warning C4018: '>' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(54): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(107): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(79): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(84): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\tabletester\unittest1.cpp(155): warning C4018: '<' : signed/unsigned mismatch
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.lib" /MACHINE:X86 /DLL Debug\stdafx.obj
-         Debug\unittest1.obj
-         "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\DBMS.lib"
-         TableTester.vcxproj -> C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\TableTester.dll
-     1>Done Building Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\TableTester\TableTester.vcxproj" (Build target(s)).
+﻿Build started 2/9/2014 1:59:36 PM.
+     1>Project "C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\TableTester\TableTester.vcxproj" on node 3 (Build target(s)).
+     1>Link:
+         TableTester.vcxproj -> C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\Debug\TableTester.dll
+     1>Done Building Project "C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\TableTester\TableTester.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.80
+Time Elapsed 00:00:00.68

@@ -1,50 +1,23 @@
-﻿Build started 2/9/2014 12:38:43 AM.
-     1>Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2/9/2014 1:49:02 PM.
+     1>Project "C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\DBMS\DBMS.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt CrossProduct.cpp NaturalJoin.cpp
-         CrossProduct.cpp
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(111): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(122): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(153): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(165): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(180): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(186): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(189): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(201): warning C4018: '>' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(54): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(107): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\crossproduct.cpp(10): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\crossproduct.cpp(14): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\crossproduct.cpp(33): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\crossproduct.cpp(39): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
-         Compiling...
-         NaturalJoin.cpp
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(111): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(122): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(153): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(165): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(180): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(186): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(189): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\table.h(201): warning C4018: '>' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(54): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\engine.h(107): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(18): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(19): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(34): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(49): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(53): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(84): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\nathan de jong\desktop\group project\teamproject1\dbms\dbms\naturaljoin.cpp(90): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt EngineProjection.cpp
+         EngineProjection.cpp
+     1>cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\DBMS.lib" /NOLOGO Debug\CrossProduct.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\Debug\DBMS.lib" /NOLOGO Debug\ConditionTree.obj
+         Debug\CrossProduct.obj
+         Debug\DeleteEngine.obj
+         Debug\Engine.obj
+         Debug\EngineProjection.obj
+         Debug\EngineSelection.obj
+         Debug\EngineUpdate.obj
          Debug\NaturalJoin.obj
-         Debug\Source.obj
-         DBMS.vcxproj -> C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\Debug\DBMS.lib
-     1>Done Building Project "C:\Users\Nathan De Jong\Desktop\Group Project\TeamProject1\DBMS\DBMS\DBMS.vcxproj" (Build target(s)).
+         Debug\Table.obj
+         Debug\TableConditionEval.obj
+         DBMS.vcxproj -> C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\Debug\DBMS.lib
+     1>Done Building Project "C:\Users\Solevi\Documents\TeamProject3\TeamProject1\DBMS\DBMS\DBMS.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.99
+Time Elapsed 00:00:01.06
