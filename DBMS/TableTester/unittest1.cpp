@@ -158,8 +158,23 @@ namespace TableTester
 //************************************************************************************************************
 
 		TEST_METHOD(Cross_Product_Test){
-			// verify number of tables
-			testEngine.createTable("tableName", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
+
+			testEngine.insertInto("students", student1, columnTypesA);
+			testEngine.insertInto("students", student2, columnTypesA);
+			testEngine.insertInto("students", student3, columnTypesA);
+
+			testEngine.insertInto("people", person1, columnTypesB);
+			testEngine.insertInto("people", person2, columnTypesB);
+			testEngine.insertInto("people", person3, columnTypesB);
+
+			/*
+			error cases:
+			getTypeOfColumn throws "column does not exist"
+
+			need to check new table and ensure equality where it's needed
+			*/
 		}
 
 //************************************************************************************************************
@@ -167,13 +182,13 @@ namespace TableTester
 //************************************************************************************************************
 
 		TEST_METHOD(Natural_Join_Test) {
-			// create information to put into table to prepare testing
-			Engine engine = Engine();
-			
+			/*
+			error cases:
+			no common column; results in "tables cannot be naturally joined due to no common column"
+			getTypeOfColumn throws "column does not exist"
 
-			Table* tbla = new Table("testTableA", "name", columnTypesA, columnTitlesA);
-			Table* tblb = new Table("testTableA", "name", columnTypesB, columnTitlesB);
-			//Table* tblc = engine.naturalJoin(tbla, tblb);
+			need to check new table and ensure equality where it's needed
+			*/
 		}
 
 //************************************************************************************************************
