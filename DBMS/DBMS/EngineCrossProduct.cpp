@@ -7,15 +7,20 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 	vector<Attribute*> newRow;
 
 	// get all needed data from first table
-	for (unsigned int i = 0; i < firstTable->getColumnTitles().size(); i++) {
+	for (int i = 0; i < firstTable->getColumnTitles().size(); i++) {
 		newRow.push_back(firstTable->getVariable(newColumnTitles[i]));
 	}
 	// get all needed data from second table
-	for (unsigned int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
+	for (int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
 		newRow.push_back(secondTable->getVariable(newColumnTitles[j]));
 	}
 
-	Attribute* identifier = new Attribute("int", to_string(identifierCount));
+	string keyName = to_string(identifierCount);
+	for (unsigned int i = keyName.length(); i < 10; i++) {
+		keyName = "0" + keyName;
+	}
+
+	Attribute* identifier = new Attribute("int", keyName);
 	newRow.push_back(identifier);
 
 	return newRow;
@@ -30,13 +35,13 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 	vector<string> newColumnTypes;
 
 	// add all of first table's column names/types to the new table's column names/types
-	for (unsigned int i = 0; i < firstTableColumns.size(); i++) {
+	for (int i = 0; i < firstTableColumns.size(); i++) {
 		newColumnTitles.push_back(firstTableColumns[i]);
 		newColumnTypes.push_back(firstTable->getTypeOfColumn(firstTableColumns[i]));
 	}
 
 	// add all of second table's column names/types to the new table's column names/types
-	for (unsigned int j = 0; j < secondTableColumns.size(); j++) {
+	for (int j = 0; j < secondTableColumns.size(); j++) {
 			newColumnTitles.push_back(secondTableColumns[j]);
 			newColumnTypes.push_back(secondTable->getTypeOfColumn(secondTableColumns[j]));
 	}
@@ -59,12 +64,16 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 		firstTable->setCurrentRow(firstTableOffset); // set current row of first table to correct row
 
 		// for each rows of first table, iterate through all rows of the second table
-		for (auto j = secondTableData.begin(); j != secondTableData.end(); j++) {
+		for (map<string, vector<Attribute*>>::iterator j = secondTableData.begin(); j != secondTableData.end(); j++) {
 			secondTable->setCurrentRow(secondTableOffset); // set current row of second table to correct row
 
 			// combine all data among the two rows
 			vector<Attribute*> newRow = fillNewRow(firstTable, secondTable, newColumnTitles, identifierCount);
 			identifierCount++;
+			for (int i = 0; i < newRow.size(); i++) {
+				cout << newRow[i]->getValue() << " ";
+			}
+			cout << endl;
 			newTable->addRow(newRow, newColumnTypes);
 			
 			secondTableOffset++;
