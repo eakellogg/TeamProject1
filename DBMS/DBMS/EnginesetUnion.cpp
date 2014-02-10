@@ -31,13 +31,20 @@ static bool unionCompatible(Table* firstTable, Table* secondTable) {
 static bool matchingData(map<string, vector<Attribute*>> firstTableData, vector<Attribute*> secondTableRow) {
 	//iterate through the first table data
 	for (map<string, vector<Attribute*>>::iterator i = firstTableData.begin(); i != firstTableData.end(); i++) {
+		bool isSame = true;
 		for (unsigned int j = 0; j < secondTableRow.size(); j++) {
-			//if the values are all the same return false
+			//if any of the values dont match change isSame
 			if (i->second[j]->getValue() != secondTableRow[j]->getValue()) {
-				return true;
+				isSame = false;
 			}
 		}
+		//if the rows matched, return that we had a match
+		if (isSame)
+		{
+			return true;
+		}
 	}
+
 	return false; //the data was not repeated in the first table
 }
 
@@ -92,7 +99,7 @@ Table* Engine::setUnion(Table* firstTable, Table* secondTable) {
 			}
 			newTable->addRow(newRow, newColumnTypes);
 		}
-		firstTableOffset++;
+		secondTableOffset++;
 	}
 
 	return newTable;

@@ -334,7 +334,64 @@ namespace TableTester
 		//************************************************************************************************************
 
 		TEST_METHOD(Set_Union){
-			// set_union_test
+			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("students2", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
+
+			testEngine.insertInto("students", student1, columnTypesA);
+			testEngine.insertInto("students", student2, columnTypesA);
+
+			testEngine.insertInto("students2", student2, columnTypesA);
+			testEngine.insertInto("students2", student3, columnTypesA);
+
+			Table* tbla = testEngine.getTables()[0];
+			Table* tblb = testEngine.getTables()[1];
+			Table* tblc = testEngine.getTables()[2];
+
+			try {
+				Table* tbld = testEngine.setUnion(tbla, tblc);
+			}
+			catch (const char* error) {
+				Assert::AreEqual(error, "tables are not union compatible, thus union cannot be performed");
+			}
+
+			Table* tble = testEngine.setUnion(tbla, tblb);
+
+			// verify correct size of union table
+			Assert::IsTrue(tble->getData().size() == 3);
+
+			// verify that new table has correctly merged column titles
+			vector<string> columnTitles = tble->getColumnTitles();
+			Assert::IsTrue(columnTitles[0] == "name");
+			Assert::IsTrue(columnTitles[1] == "school");
+			Assert::IsTrue(columnTitles[2] == "age");
+
+			// verify that new column has correctly merged column types
+			vector<string> columnTypes = tble->getColumnTypes();
+			Assert::IsTrue(columnTypes[0] == "string");
+			Assert::IsTrue(columnTypes[1] == "string");
+			Assert::IsTrue(columnTypes[2] == "int");
+
+			// need to check new table and ensure equality where it's needed - hardcoded values are what is expected
+			map<string, vector<Attribute*>> tbleData = tble->getData();
+			map<string, vector<Attribute*>>::iterator it = tbleData.begin();
+
+			vector<Attribute*> rowa = it->second;
+			Assert::IsTrue(rowa[0]->getValue() == "Jacob Zerr");
+			Assert::IsTrue(rowa[1]->getValue() == "Kansas University");
+			Assert::IsTrue(rowa[2]->getValue() == "75");
+			it++;
+
+			vector<Attribute*> rowb = it->second;
+			Assert::IsTrue(rowb[0]->getValue() == "Victoria Elliott");
+			Assert::IsTrue(rowb[1]->getValue() == "Wake Forest");
+			Assert::IsTrue(rowb[2]->getValue() == "18");
+			it++;
+
+			vector<Attribute*> rowc= it->second;
+			Assert::IsTrue(rowc[0]->getValue() == "Zach Brown");
+			Assert::IsTrue(rowc[1]->getValue() == "Texas A&M");
+			Assert::IsTrue(rowc[2]->getValue() == "20");
 		}
 
 		//************************************************************************************************************
@@ -342,7 +399,52 @@ namespace TableTester
 		//************************************************************************************************************
 
 		TEST_METHOD(Set_Difference){
-			// set_difference_test
+			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("students2", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
+
+			testEngine.insertInto("students", student1, columnTypesA);
+			testEngine.insertInto("students", student2, columnTypesA);
+
+			testEngine.insertInto("students2", student2, columnTypesA);
+			testEngine.insertInto("students2", student3, columnTypesA);
+
+			Table* tbla = testEngine.getTables()[0];
+			Table* tblb = testEngine.getTables()[1];
+			Table* tblc = testEngine.getTables()[2];
+
+			try {
+				Table* tbld = testEngine.setDifference(tbla, tblc);
+			}
+			catch (const char* error) {
+				Assert::AreEqual(error, "tables are not union compatible, thus difference cannot be performed");
+			}
+
+			Table* tble = testEngine.setDifference(tbla, tblb);
+
+			// verify correct size of union table
+			Assert::IsTrue(tble->getData().size() == 1);
+
+			// verify that new table has correctly merged column titles
+			vector<string> columnTitles = tble->getColumnTitles();
+			Assert::IsTrue(columnTitles[0] == "name");
+			Assert::IsTrue(columnTitles[1] == "school");
+			Assert::IsTrue(columnTitles[2] == "age");
+
+			// verify that new column has correctly merged column types
+			vector<string> columnTypes = tble->getColumnTypes();
+			Assert::IsTrue(columnTypes[0] == "string");
+			Assert::IsTrue(columnTypes[1] == "string");
+			Assert::IsTrue(columnTypes[2] == "int");
+
+			// need to check new table and ensure equality where it's needed - hardcoded values are what is expected
+			map<string, vector<Attribute*>> tbleData = tble->getData();
+			map<string, vector<Attribute*>>::iterator it = tbleData.begin();
+
+			vector<Attribute*> rowa = it->second;
+			Assert::IsTrue(rowa[0]->getValue() == "Zach Brown");
+			Assert::IsTrue(rowa[1]->getValue() == "Texas A&M");
+			Assert::IsTrue(rowa[2]->getValue() == "20");
 		}
 
 		//************************************************************************************************************
