@@ -69,6 +69,10 @@ int main()
 		tbld = testEngine.naturalJoin(tbla, tblb);
 		tbld->printTable();
 		
+		vector<string> newTitles = vector<string>{"nombre", "university", "age"};
+		testEngine.rename("students", newTitles);
+		tbla->printTable();
+		cout << tbla->getKeyName() << endl;
 	}
 	catch (const char* error) {
 		cout << error << endl;

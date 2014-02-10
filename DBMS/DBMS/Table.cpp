@@ -72,6 +72,20 @@ using namespace std;
 	}
 
 
+	//rename a column. If that column is the key, update keyName.
+	void Table::renameColumn(int column, string name) {
+		try {
+			if (columnTitles[column] == keyName) {
+				keyName = name;
+			}
+			columnTitles[column] = name;
+		}
+		catch (out_of_range) {
+			throw "column does not exist";
+		}
+	}
+
+
 	// find and return a specific row in the table
 	vector<Attribute*> Table::getRow(string key) {
 		try {

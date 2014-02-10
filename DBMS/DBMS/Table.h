@@ -76,6 +76,9 @@ public:
 	// delete a row from the table
 	void deleteRow(string key);
 
+	// rename a column
+	void renameColumn(int column, string name);
+
 	// find and return a specific row in the table
 	vector<Attribute*> getRow(string key);
 

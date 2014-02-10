@@ -40,10 +40,8 @@ public:
 	// create a table with the row types and column titles given
 	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
 
-
 	// delete a table from the database
 	void dropTable(string tableName);
-
 
 	// insert a row into the table with the proper name
 	void insertInto(string tableName, vector<Attribute*> row, vector<string> columnTypes);
@@ -52,7 +50,10 @@ public:
 	void deleteFrom(string tableName, ConditionTree t);
 
 	//Change the variables listed to their new values, if the row in the table meets the condition
-	void  update(string tableName, vector< tuple<string, string> > namevarpairs, ConditionTree t);
+	void update(string tableName, vector< tuple<string, string> > namevarpairs, ConditionTree t);
+
+	//Rename the columns in a given table using the given names
+	void rename(string tableName, vector<string> attributes);
 
 	//Return a table that has only the rows from the old table that meet the condition
 	Table* selection(string tableName, ConditionTree t);
