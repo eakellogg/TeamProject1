@@ -38,7 +38,9 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		*/
 		if (value == EQUAL)
 		{
-			if (NodeEval(n->getLeftChild()) == NodeEval(n->getRightChild()))
+			cout << get<1>(NodeEval(n->getLeftChild()));
+			cout << get<1>(NodeEval(n->getRightChild())) << endl;
+			if (get<1>(NodeEval(n->getLeftChild())) == get<1>(NodeEval(n->getRightChild())))
 				return make_tuple(LITERAL_STRING, TRUE);
 			else
 				return make_tuple(LITERAL_STRING, FALSE);
@@ -271,10 +273,10 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		}
 		else
 		{
-			newValue = "INVALUD Varible Type";
+			newValue = "INVALID Varible Type";
 			newType = FAILURE;
 		}
-
+		cout << "Evalutiona of variable returns " << newValue << endl;
 		return make_tuple(newType, newValue);
 
 	}

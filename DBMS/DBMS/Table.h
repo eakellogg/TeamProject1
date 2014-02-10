@@ -33,6 +33,8 @@ public:
 
 	Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
 
+	Table(Table* table);
+
 /*********************************************************************************
 	non-modifying functions / accessor methods
 *********************************************************************************/
@@ -62,17 +64,6 @@ public:
 	// add a row to the table
 	void addRow(vector<Attribute*> row, vector<string> columnTypes);
 
-/*
-	// update an already existing row
-	void updateRow(vector<string> newRow, vector<string> rowTypes, int pos) { // need diff. than pos
-		if (checkMatchingTypes(rowTypes)) {
-			data[pos] = newRow;
-			return;
-		}
-		throw "types do not match";
-	}
-*/
-
 	// delete a row from the table
 	void deleteRow(string key);
 
@@ -83,37 +74,38 @@ public:
 	vector<Attribute*> getRow(string key);
 
 	// find and return a specific item in a specific row in the table
-Attribute* getItem(string key, string columnName);
+	Attribute* getItem(string key, string columnName);
 
 	// takes in a column name, searches the current row, and returns the value of the column name
-Attribute* getVariable(string columnName);
+	Attribute* getVariable(string columnName);
 	
 /*********************************************************************************
 	helper functions
 *********************************************************************************/
+
 	// reset the currentRow pointer to the beginning of the map
-void resetCurrentRow();
+	void resetCurrentRow();
 
 	// set the currentRow pointer appropriately with regards to the offset passed
-void setCurrentRow(int offset);
+	void setCurrentRow(int offset);
 
 	//set the currentRow point to this row object passed very dangerous!!! 
-void setCurrentRow(vector<Attribute*>);
+	void setCurrentRow(vector<Attribute*>);
 
 	// check to make sure the types of the table's rows and the passed types are equivalent
-bool checkMatchingTypes(vector<string> rowTypes);
+	bool checkMatchingTypes(vector<string> rowTypes);
 
 	// return the type associated with a column name
-string getTypeOfColumn(string columnName); 
+	string getTypeOfColumn(string columnName); 
 	
 	// print the table in an orderly format
-void printTable();
+	void printTable();
 
 	// limit string's length to the specified limit for proper formatting
-string formatString(string tempName, unsigned int limit);
+	string formatString(string tempName, unsigned int limit);
 
 	//Comparion of strings as if they were integers
-int compareStringInts(string lv, string rv);
+	int compareStringInts(string lv, string rv);
 };
 
 #endif

@@ -158,6 +158,125 @@ namespace TableTester
 
 		//************************************************************************************************************
 
+		TEST_METHOD(Update) {
+
+			vector<string> columnTypes;
+			columnTypes.push_back(STRING_TYPE);
+			vector<string> columnNames;
+			columnNames.push_back("Name");
+
+			Attribute* a = new Attribute(STRING_TYPE, "BOB");
+			vector<Attribute*> row;
+			row.push_back(a);
+
+			Engine engine;
+			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			engine.insertInto("TestTable", row, columnTypes);
+
+			vector< tuple<string, string> > namevarpairs;
+			namevarpairs.push_back(make_tuple("Name", "Emily"));
+
+			ConditionTree t(EQUAL, OPERATOR);
+			ConditionTree::Node* n = t.getRoot();
+
+			n->setLeftChild("Name", VARIABLE);
+			n->setRightChild("BOB", LITERAL_STRING);
+
+			engine.update("TestTable", namevarpairs, t);
+
+			Table* table = engine.findTable("TestTable");
+
+			map< string, vector<Attribute*> > data = table->getData();
+			map< string, vector<Attribute*> >::iterator it = data.begin();
+
+			vector< Attribute* > ats = it->second;
+
+			Assert::AreEqual(ats[0]->getValue().c_str(), "Emily");
+		}
+
+		//************************************************************************************************************
+
+		//************************************************************************************************************
+
+		TEST_METHOD(Delete) {
+
+			vector<string> columnTypes;
+			columnTypes.push_back(STRING_TYPE);
+			vector<string> columnNames;
+			columnNames.push_back("Name");
+
+			Attribute* a = new Attribute(STRING_TYPE, "BOB");
+			vector<Attribute*> row;
+			row.push_back(a);
+
+			Engine engine;
+			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			engine.insertInto("TestTable", row, columnTypes);
+
+
+			ConditionTree t(EQUAL, OPERATOR);
+			ConditionTree::Node* n = t.getRoot();
+
+			n->setLeftChild("Name", VARIABLE);
+			n->setRightChild("BOB", LITERAL_STRING);
+
+			engine.deleteFrom("TestTable", t);
+
+			Table* table = engine.findTable("TestTable");
+
+			map< string, vector<Attribute*> > data = table->getData();
+			map< string, vector<Attribute*> >::iterator it = data.begin();
+
+			bool result = false;
+			if (it == data.end())
+				result = true;
+			Assert::AreEqual(result, true);
+		}
+
+		//************************************************************************************************************
+
+		//************************************************************************************************************
+
+		TEST_METHOD(Test_Selection)
+		{
+			//TODO improve!
+			vector<string> columnTypes;
+			columnTypes.push_back(STRING_TYPE);
+			vector<string> columnNames;
+			columnNames.push_back("Name");
+
+			Attribute* a = new Attribute(STRING_TYPE, "BOB");
+			vector<Attribute*> row;
+			row.push_back(a);
+
+			Engine engine;
+			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			engine.insertInto("TestTable", row, columnTypes);
+
+			vector< tuple<string, string> > namevarpairs;
+			namevarpairs.push_back(make_tuple("Name", "BOB"));
+
+			ConditionTree t(EQUAL, OPERATOR);
+			ConditionTree::Node* n = t.getRoot();
+
+			n->setLeftChild("Name", VARIABLE);
+			n->setRightChild("BOB", LITERAL_STRING);
+
+			Table* newTable = engine.selection("TestTable", t);
+
+
+			map< string, vector<Attribute*> > data = newTable->getData();
+			map< string, vector<Attribute*> >::iterator it = data.begin();
+
+			vector< Attribute* > ats = it->second;
+
+			Assert::AreEqual(ats[0]->getValue().c_str(), "BOB");
+		}
+
+		//************************************************************************************************************
+
+		//************************************************************************************************************
+
 		TEST_METHOD(Projection)
 		{
 			vector<string> columnTypes;
@@ -190,6 +309,40 @@ namespace TableTester
 			vector< Attribute* > ats = it->second;
 
 			Assert::AreEqual(ats[0]->getValue().c_str(), "10");
+		}
+
+		//************************************************************************************************************
+
+		//************************************************************************************************************
+
+		TEST_METHOD(Rename) {
+			Assert::IsTrue(testEngine.getTables().size() == 0);
+			vector<string> newTitles = vector<string>{"nombre", "university", "age"};
+			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
+
+			Table* renamedTable;
+			renamedTable = testEngine.rename("students", newTitles);
+
+			for (int i = 0; i < renamedTable->getColumnTitles().size(); i++) {
+				Assert::AreEqual(renamedTable->getColumnTitles()[i], newTitles[i]);
+			}
+			Assert::AreEqual(renamedTable->getKeyName(), newTitles[0]);
+		}
+
+		//************************************************************************************************************
+
+		//************************************************************************************************************
+
+		TEST_METHOD(Set_Union){
+			// set_union_test
+		}
+
+		//************************************************************************************************************
+
+		//************************************************************************************************************
+
+		TEST_METHOD(Set_Difference){
+			// set_difference_test
 		}
 
 		//************************************************************************************************************
@@ -346,22 +499,6 @@ namespace TableTester
 			Assert::IsTrue(rowb[3]->getValue() == "College Station");
 			Assert::IsTrue(rowb[4]->getValue() == "Texas");
 			Assert::IsTrue(rowb[5]->getValue() == "0000000001");
-		}
-
-		//************************************************************************************************************
-
-		//************************************************************************************************************
-
-		TEST_METHOD(Set_Union){
-			// set_union_test
-		}
-
-		//************************************************************************************************************
-
-		//************************************************************************************************************
-
-		TEST_METHOD(Set_Difference){
-			// set_difference_test
 		}
 	};
 };

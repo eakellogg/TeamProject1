@@ -16,6 +16,26 @@ using namespace std;
 	{	}
 
 
+	Table::Table(Table* table) {
+		tableName = "new" + table->getTableName();
+		keyName = table->getKeyName();
+		for (int i = 0; i < table->getColumnTitles().size(); i++) {
+			columnTitles.push_back(table->getColumnTitles()[i]);
+			columnTypes.push_back(table->getColumnTypes()[i]);
+		}
+
+		map< string, vector<Attribute*> > data = table->getData();
+		for (map< string, vector<Attribute*> >::iterator it = data.begin(); it != data.end(); it++) {
+			vector<Attribute*> newRow;
+			vector<Attribute*> tempRow = it->second;
+			for (int j = 0; j < tempRow.size(); j++) {
+				Attribute* newAttribute = new Attribute(tempRow[j]->getType(), tempRow[j]->getValue());
+				newRow.push_back(newAttribute);
+			}
+			addRow(newRow, table->getColumnTypes());
+		}
+	}
+
 	/*********************************************************************************
 	non-modifying functions / accessor methods
 	*********************************************************************************/

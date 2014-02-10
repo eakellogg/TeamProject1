@@ -46,20 +46,20 @@ public:
 	// insert a row into the table with the proper name
 	void insertInto(string tableName, vector<Attribute*> row, vector<string> columnTypes);
 
-	//Delete all rows in the table that meet the condition
-	void deleteFrom(string tableName, ConditionTree t);
-
 	//Change the variables listed to their new values, if the row in the table meets the condition
 	void update(string tableName, vector< tuple<string, string> > namevarpairs, ConditionTree t);
 
-	//Rename the columns in a given table using the given names
-	void rename(string tableName, vector<string> attributes);
+	//Delete all rows in the table that meet the condition
+	void deleteFrom(string tableName, ConditionTree t);
 
 	//Return a table that has only the rows from the old table that meet the condition
 	Table* selection(string tableName, ConditionTree t);
 
 	//Return a table that has only the specified columns of the old table
 	Table* projection(string startTable, vector<string> variables);
+
+	//Rename the columns in a given table using the given names
+	Table* rename(string tableName, vector<string> attributes);
 
 	// calculates the union of the two given tables and returns a new table with the result
 	Table* setUnion(Table* first, Table* secondTable); // see setUnion.cpp
@@ -76,7 +76,7 @@ public:
 
 	/*********************************************************************************
 		helper functions
-		*********************************************************************************/
+	*********************************************************************************/
 
 	// search database for a table with matching name
 	Table* findTable(string tableName);

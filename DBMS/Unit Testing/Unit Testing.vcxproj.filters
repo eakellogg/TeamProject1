@@ -29,9 +29,6 @@
     <ClCompile Include="TableEvalTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EngineQueryTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Deliverables_2_Testing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

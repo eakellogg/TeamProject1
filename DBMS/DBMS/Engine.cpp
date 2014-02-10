@@ -55,40 +55,6 @@ using namespace std;
 		tempTable->addRow(row, columnTypes);
 	}
 
-
-	// changes multiple rows and multiple Attributes at a time
-	// update a row in the table with the proper name
-	//pair <name, literal>
-	// not done yet
-	/*	void update(string tableName, vector<string> conditions, vector<string> columnNames) {
-	int pos = 0; //!!!!!!!!!!!!!! REALLY NEED TO FIND THIS METHOD
-	Table* tempTable = findTable(tableName);
-	tempTable->updateRow(row, rowTypes, pos);
-	}
-	*/
-
-	// delete a row in the table with the proper name
-	//same condition problem as update
-	/*
-	void deleteFrom(string tableName, int pos) {
-	Table* tempTable = findTable(tableName);
-	tempTable->deleteRow(pos);
-	}
-	*/
-
-	// calculates the union of the two given tables and returns a new table with the result
-	//Table* Engine::setUnion(Table* first, Table* secondTable); // see setUnion.cpp
-
-	// calculates the difference of the two given tables and returns a new table with the result
-	//Table* Engine::setDifference(Table* first, Table* secondTable); // see setDifference.cpp
-
-	// calculates the natural join of the two given tables and returns a new table with the result
-	//Table* Engine::naturalJoin(Table* first, Table* secondTable); // see NaturalJoin.cpp
-
-	// calculates the cross product of the two given tables and returns a new table with the result
-	//Table* Engine::crossProduct(Table* first, Table* secondTable); // see CrossProduct.cpp
-
-
 	/*********************************************************************************
 	helper functions
 	*********************************************************************************/

@@ -1,7 +1,10 @@
 #include "Engine.h"
 
-void Engine::rename(string tableName, vector<string> attributes) {
-	Table* table = findTable(tableName);
+Table* Engine::rename(string tableName, vector<string> attributes) {
+
+	Table* oldtable = findTable(tableName);
+	Table* table = new Table((*oldtable));
+
 
 	vector<string> columnTitles = table->getColumnTitles();
 
@@ -15,4 +18,5 @@ void Engine::rename(string tableName, vector<string> attributes) {
 			table->renameColumn(i, attributes[i]);
 		}
 	}
+	return table;
 }
