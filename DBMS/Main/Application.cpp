@@ -63,10 +63,10 @@ int main()
 		Table* tblc = NULL;
 		Table* tbld = NULL;
 
-		tblc = testEngine.naturalJoin(tbla, tblb);
+		tblc = testEngine.crossProduct(tbla, tblb);
 		tblc->printTable();
-		tbld = testEngine.naturalJoin(tblc, tbla);
-		
+
+		tbld = testEngine.naturalJoin(tbla, tblb);
 		tbld->printTable();
 		
 	}

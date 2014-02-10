@@ -7,9 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBMS", "DBMS\DBMS.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main", "Main\Main.vcxproj", "{1FC8ECE5-FAB8-4C91-AB58-2FF379D10DB6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TableTester", "TableTester\TableTester.vcxproj", "{817794FB-5FE1-45B3-BE8B-16394570B2E9}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Deliverables 2 Tests", "Deliverables 2 Tests\Deliverables 2 Tests.vcxproj", "{27BAC520-8F2F-4B58-81C1-3BD4AE9087B2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit Testing", "TableTester\TableTester.vcxproj", "{817794FB-5FE1-45B3-BE8B-16394570B2E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{817794FB-5FE1-45B3-BE8B-16394570B2E9}.Debug|Win32.Build.0 = Debug|Win32
 		{817794FB-5FE1-45B3-BE8B-16394570B2E9}.Release|Win32.ActiveCfg = Release|Win32
 		{817794FB-5FE1-45B3-BE8B-16394570B2E9}.Release|Win32.Build.0 = Release|Win32
-		{27BAC520-8F2F-4B58-81C1-3BD4AE9087B2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{27BAC520-8F2F-4B58-81C1-3BD4AE9087B2}.Debug|Win32.Build.0 = Debug|Win32
-		{27BAC520-8F2F-4B58-81C1-3BD4AE9087B2}.Release|Win32.ActiveCfg = Release|Win32
-		{27BAC520-8F2F-4B58-81C1-3BD4AE9087B2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

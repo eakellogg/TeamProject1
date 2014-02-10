@@ -70,10 +70,6 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 			// combine all data among the two rows
 			vector<Attribute*> newRow = fillNewRow(firstTable, secondTable, newColumnTitles, identifierCount);
 			identifierCount++;
-			for (int i = 0; i < newRow.size(); i++) {
-				cout << newRow[i]->getValue() << " ";
-			}
-			cout << endl;
 			newTable->addRow(newRow, newColumnTypes);
 			
 			secondTableOffset++;
