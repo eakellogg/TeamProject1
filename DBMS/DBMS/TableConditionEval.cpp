@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "Table.h"
 
@@ -38,8 +37,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		*/
 		if (value == EQUAL)
 		{
-			cout << get<1>(NodeEval(n->getLeftChild()));
-			cout << get<1>(NodeEval(n->getRightChild())) << endl;
 			if (get<1>(NodeEval(n->getLeftChild())) == get<1>(NodeEval(n->getRightChild())))
 				return make_tuple(LITERAL_STRING, TRUE);
 			else
@@ -217,7 +214,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			{
 				return make_tuple(FAILURE, "_TYPE_MISMATCH");
 			}
-			else if ((leftValue == TRUE || leftValue == FALSE) && (rightValue == TRUE || leftValue == FALSE))
+			else if ((leftValue == TRUE || leftValue == FALSE) && (rightValue == TRUE || rightValue == FALSE))
 			{
 				if ((leftValue == TRUE) || (rightValue == TRUE))
 					return make_tuple(LITERAL_STRING, TRUE);
@@ -276,7 +273,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			newValue = "INVALID Varible Type";
 			newType = FAILURE;
 		}
-		cout << "Evalutiona of variable returns " << newValue << endl;
 		return make_tuple(newType, newValue);
 
 	}
