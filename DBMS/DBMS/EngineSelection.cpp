@@ -14,12 +14,10 @@ Table* Engine::selection(string tableName, ConditionTree t){
 		it != oldData.end(); it++) {
 
 		string result;
-		cout << "This is the name of this row  " << it->second[0]->getValue() << endl;
+		oldtable->setCurrentRow(it->second);
 		result = oldtable->EvalConditionTree(&t);
-		cout << "This is what the evaluation of that row results in " << result << endl;
 		if (result == TRUE){
 			
-			oldtable->setCurrentRow(it->second);
 			vector<Attribute*> oldRow  = it->second;
 			vector<Attribute*> newRow;
 			for (unsigned int i = 0; i < oldRow.size(); i++)
