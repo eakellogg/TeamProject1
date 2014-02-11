@@ -8,7 +8,7 @@ const static string project = “project”;
 const static string rename = “rename”;
 const static string join = “JOIN”;
 const static string union = “+”;
-const static string difference = “-";
+const static string difference = "-";
 const static string product = “*”;
 
 // of type db_command :
@@ -32,7 +32,7 @@ const static string equals = “==”;
 const static string not_equal = “!=”;
 const static string less_than = “<”;
 const static string less_equal = “<=”;
-const static string arrow = “<-";
+const static string arrow = "<-";
 const static string greater_than = “>”;
 const static string greater_equal = “>=”;
 const static string or = “||”;
