@@ -31,9 +31,11 @@ public:
 	constructor
 *********************************************************************************/
 
+
 	Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 	Table(Table* table);
+
 
 /*********************************************************************************
 	non-modifying functions / accessor methods
@@ -61,6 +63,7 @@ public:
 	modifying functions
 *********************************************************************************/
 
+
 	// add a row to the table
 	void addRow(vector<Attribute*> row, vector<string> columnTypes);
 
@@ -79,9 +82,11 @@ public:
 	// takes in a column name, searches the current row, and returns the value of the column name
 	Attribute* getVariable(string columnName);
 	
+
 /*********************************************************************************
 	helper functions
 *********************************************************************************/
+
 
 	// reset the currentRow pointer to the beginning of the map
 	void resetCurrentRow();
@@ -106,6 +111,9 @@ public:
 
 	//Comparion of strings as if they were integers
 	int compareStringInts(string lv, string rv);
+
+	// print the correct border for the table
+	void printBorder(int numAttributes);
 };
 
 #endif

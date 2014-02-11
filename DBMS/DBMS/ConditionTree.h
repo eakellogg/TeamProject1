@@ -1,7 +1,4 @@
- 
-
-
-#ifndef COND_TREE_H
+ #ifndef COND_TREE_H
 #define COND_TREE_H
 
 #include <string>
@@ -39,8 +36,9 @@ public:
 		Node*       leftChild;
 		Node*       rightChild;
 		Node*       parent;
+
 	public:
-		            Node(std::string value, std::string type, Node* parent);
+		Node(std::string value, std::string type, Node* parent);
 		std::string getValue()     const;
 		std::string getType()      const;
 		Node*       getParent()    const;
@@ -48,7 +46,7 @@ public:
 		Node*       getRightChild()const;
 		Node*       setLeftChild(std::string v, std::string t);
 		Node*       setRightChild(std::string v, std::string t);   
-		//Node*       setParent(std::string v, std::string t);
+		//Node*     setParent(std::string v, std::string t);
 	};
 
 private:
@@ -58,9 +56,6 @@ public:
 	
 	Node* getRoot();
 	//Node* setRoot( std::string v , std::string t)
-
 };
-
-
 
 #endif

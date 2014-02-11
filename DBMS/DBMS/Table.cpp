@@ -4,11 +4,9 @@
 
 using namespace std;
 
-
-
-	/*********************************************************************************
+/*********************************************************************************
 	constructor
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	Table::Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles)
@@ -36,9 +34,9 @@ using namespace std;
 		}
 	}
 
-	/*********************************************************************************
+/*********************************************************************************
 	non-modifying functions / accessor methods
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	string Table::getTableName() { return tableName; }
@@ -54,9 +52,9 @@ using namespace std;
 	vector<Attribute*> Table::getCurrentRow() { return currentRow; }
 
 
-	/*********************************************************************************
+/*********************************************************************************
 	modifying functions
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	// add a row to the table
@@ -70,17 +68,7 @@ using namespace std;
 		throw "types do not match";
 	}
 
-	/*
-	// update an already existing row
-	void updateRow(vector<string> newRow, vector<string> rowTypes, int pos) { // need diff. than pos
-	if (checkMatchingTypes(rowTypes)) {
-	data[pos] = newRow;
-	return;
-	}
-	throw "types do not match";
-	}
-	*/
-
+	
 	// delete a row from the table
 	void Table::deleteRow(string key) {
 		try {
@@ -125,7 +113,6 @@ using namespace std;
 		catch (out_of_range) {
 			throw "key does not exist";
 		}
-
 		
 		// search the temporary row for correct item based on column name
 		for (unsigned int i = 0; i < (columnTitles.size() - 1); i++) {
@@ -148,9 +135,9 @@ using namespace std;
 	}
 
 
-	/*********************************************************************************
+/*********************************************************************************
 	helper functions
-	*********************************************************************************/
+*********************************************************************************/
 
 
 	// reset the currentRow pointer to the beginning of the map
@@ -166,9 +153,12 @@ using namespace std;
 		currentRow = (iterator)->second;
 	}
 
+
+	// set the currentRow pointer appropriately with regards to the passed row
 	void Table::setCurrentRow(vector<Attribute*> row){
 		currentRow = row;
 	}
+
 
 	// check to make sure the types of the table's rows and the passed types are equivalent
 	bool Table::checkMatchingTypes(vector<string> rowTypes) {
@@ -199,11 +189,12 @@ using namespace std;
 		cout << tableName << endl;
 
 		// print the column names
-		cout << "********************************************************************************************" << endl;
+		printBorder(columnTitles.size());
 		for (unsigned int i = 0; i < columnTitles.size(); i++) {
 			cout << left << setw(20) << formatString(columnTitles[i], 20);
 		}
-		cout << endl << "********************************************************************************************" << endl;
+		cout << endl;
+		printBorder(columnTitles.size());
 		auto iterator = data.begin();
 		// print the data for each row, alligned with the appropriate column
 		for ( unsigned int i = 0; i < data.size(); i++) {
@@ -224,6 +215,14 @@ using namespace std;
 		if (tempName.length() > limit) {
 			tempName = tempName.substr(0, limit);
 		}
-
 		return tempName;
+	}
+
+
+	// print the correct border for the table
+	void Table::printBorder(int numAttributes) {
+		for (int i = 0; i < numAttributes; i++) {
+			cout << "*********************";
+		}
+		cout << endl;
 	}

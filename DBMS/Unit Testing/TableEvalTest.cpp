@@ -32,6 +32,7 @@ public:
 		Assert::AreNotEqual(TRUE.c_str(), result.c_str());
 
 	}
+
 	TEST_METHOD(Test_Less_Int)
 	{
 
@@ -52,6 +53,7 @@ public:
 		Assert::AreEqual(FALSE.c_str(), result.c_str());
 
 	}
+
 	TEST_METHOD(Test_Greater_Int)
 	{
 
@@ -72,6 +74,7 @@ public:
 		Assert::AreEqual(FALSE.c_str(), result.c_str());
 
 	}
+
 	TEST_METHOD(Test_LessEqual_Int)
 	{
 
@@ -96,6 +99,7 @@ public:
 		result = table->EvalConditionTree(&t);
 		Assert::AreEqual(FALSE.c_str(), result.c_str());
 	}
+
 	TEST_METHOD(Test_GreaterEqual_Int)
 	{
 
@@ -141,14 +145,13 @@ public:
 		result = table->EvalConditionTree(&t);
 		Assert::AreEqual(FALSE.c_str(), result.c_str());
 
-
-
 		n->setLeftChild("FALSE", LITERAL_INT);
 
 		result = table->EvalConditionTree(&t);
 		Assert::AreEqual(FALSE.c_str(), result.c_str());
 
 	}
+
 	TEST_METHOD(Test_OR)
 	{
 
@@ -168,14 +171,13 @@ public:
 		result = table->EvalConditionTree(&t);
 		Assert::AreEqual(TRUE.c_str(), result.c_str());
 
-
-
 		n->setRightChild("FALSE", LITERAL_INT);
 
 		result = table->EvalConditionTree(&t);
 		Assert::AreEqual(FALSE.c_str(), result.c_str());
 
 	}
+
 	TEST_METHOD(Test_NOT)
 	{
 
@@ -193,11 +195,7 @@ public:
 
 		result = table->EvalConditionTree(&t);
 		Assert::AreEqual(TRUE.c_str(), result.c_str());
-
-
 	}
-
-
 
 };
 

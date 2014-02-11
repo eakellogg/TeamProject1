@@ -39,12 +39,10 @@ static bool matchingData(map<string, vector<Attribute*>> firstTableData, vector<
 			}
 		}
 		//if the rows matched, return that we had a match
-		if (isSame)
-		{
+		if (isSame)	{
 			return true;
 		}
 	}
-
 	return false; //the data was not repeated in the first table
 }
 

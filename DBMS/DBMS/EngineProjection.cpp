@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-
+// calculates the projection of the given table and returns a new table with the result
 Table* Engine::projection(string startTable, vector<string> variables){
 
 	Table* oldTable = findTable(startTable);
@@ -14,12 +14,15 @@ Table* Engine::projection(string startTable, vector<string> variables){
 
 		newTypes.push_back(oldTable->getTypeOfColumn(variables[i]));
 	}
+
 	bool keyIncluded = false;
+
 	for (unsigned int i = 0; i < variables.size(); i++){
 
 		if (variables[i] == oldTable->getKeyName())
 			keyIncluded = true;
 	}
+
 	Table* newtable;
 	if (keyIncluded)
 		newtable = new Table(oldTable->getTableName(), oldTable->getKeyName(), newTypes, variables);
@@ -32,6 +35,7 @@ Table* Engine::projection(string startTable, vector<string> variables){
 		oldTable->setCurrentRow(it->second);
 		vector<Attribute*> oldRow = it->second;
 		vector<Attribute*> newRow;
+
 		for (unsigned int i = 0; i < variables.size(); i++)
 		{
 			Attribute* a = new Attribute(newtable->getTypeOfColumn(variables[i]),
@@ -40,7 +44,6 @@ Table* Engine::projection(string startTable, vector<string> variables){
 			newRow.push_back(a);
 		}
 		newtable->addRow(newRow, newtable->getColumnTypes());
-
 	}
 	return newtable;
 }

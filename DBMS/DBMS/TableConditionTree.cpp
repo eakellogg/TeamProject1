@@ -1,6 +1,3 @@
-
-
-
 #include "ConditionTree.h"
 
 using namespace std;
@@ -49,41 +46,3 @@ ConditionTree::ConditionTree(string value, string type){
 ConditionTree::Node* ConditionTree::getRoot(){
 	return root;
 }
-
-
-
-
-/*
-class ConditionTree
-{
-public:
-	class Node
-	{
-	private:
-		std::string value;
-		std::string type; //Is the value a literal (string or int), operand , or table type
-		Node*       leftChild;
-		Node*       rightChild;
-		Node*       parent;
-	public:
-		Node(std::string value, std::string type, Node* parent);
-		std::string getValue()     const;
-		std::string getType()      const;
-		Node*       getParent()    const;
-		Node*       getLeftChild() const;
-		Node*       getRightChild()const;
-		void        setLeftChild(Node* n);
-		void        setRightChilde(Node* n);
-		void        setParent(Node* n);
-	};
-
-private:
-	Node* root;
-public:
-	ConditionTree();
-
-	Node* getRoot();
-
-};
-
-*/

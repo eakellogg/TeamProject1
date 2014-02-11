@@ -72,6 +72,7 @@ int main()
 		secondEQ->setLeftChild("Jacob Zerr", LITERAL_STRING);
 		secondEQ->setRightChild("name", VARIABLE);
 
+		// test each relational algebra method
 		Table* tblc = NULL;
 
 		cout << "selection:" << endl;

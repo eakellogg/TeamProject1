@@ -13,16 +13,15 @@ void Engine::update(string tableName, vector< tuple<string, string> > namevarpai
 	map< string, vector<Attribute* > >::iterator it = data.begin();
 	vector<string> rowstoremove;
 	bool keyChanged = false;
-	for (unsigned int i = 0; i < namevarpairs.size(); i++)
+
+	for (unsigned int i = 0; i < namevarpairs.size(); i++) 
 	{
 		if (get<0>(namevarpairs[i]) == table->getKeyName())
 			keyChanged = true;
 	}
-	for (
-		map< string, vector<Attribute* > >::iterator it = data.begin();
-		it != data.end(); it++)
-	{
 
+	for (map< string, vector<Attribute* > >::iterator it = data.begin(); it != data.end(); it++) 
+	{
 		table->setCurrentRow(it->second);
 		if (table->EvalConditionTree(&t) == TRUE)
 		{

@@ -26,7 +26,7 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 	return newRow;
 }
 
-
+// calculate the cross product of the given tables and return a new table with the result
 Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 	vector<string> firstTableColumns = firstTable->getColumnTitles();
 	vector<string> secondTableColumns = secondTable->getColumnTitles();

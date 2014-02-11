@@ -280,7 +280,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 }
 
 
-
 int Table::compareStringInts(string lv, string rv)
 {
 	int li = atoi(lv.c_str());

@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-
+// proform a selection on the given table and return a new table with the result
 Table* Engine::selection(string tableName, ConditionTree t){
 
 	Table* oldtable = findTable(tableName);
@@ -20,6 +20,7 @@ Table* Engine::selection(string tableName, ConditionTree t){
 			
 			vector<Attribute*> oldRow  = it->second;
 			vector<Attribute*> newRow;
+
 			for (unsigned int i = 0; i < oldRow.size(); i++)
 			{
 				Attribute* a = new Attribute(oldRow[i]->getType(), oldRow[i]->getValue());
@@ -28,7 +29,5 @@ Table* Engine::selection(string tableName, ConditionTree t){
 			newtable->addRow(newRow , oldtable->getColumnTypes());
 		}
 	}
-
 	return newtable;
-
 }

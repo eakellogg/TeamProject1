@@ -131,7 +131,6 @@ Table* Engine::naturalJoin(Table* firstTable, Table* secondTable) {
 		}	
 		secondTableOffset = 0;
 		firstTableOffset++;
-	}
-	
+	}	
 	return newTable;
 }
