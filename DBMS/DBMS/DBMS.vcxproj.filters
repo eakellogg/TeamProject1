@@ -54,6 +54,12 @@
     <ClCompile Include="EngineRename.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParserEvaluationTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Table.h">
@@ -69,6 +75,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConditionTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EvaluationTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TokenStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
