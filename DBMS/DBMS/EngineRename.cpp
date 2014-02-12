@@ -1,10 +1,9 @@
 #include "Engine.h"
 
 // rename a given table and return a new table with the result
-Table* Engine::rename(string tableName, vector<string> attributes) {
+Table* Engine::rename(Table* oldTable, vector<string> attributes) {
 
-	Table* oldtable = findTable(tableName);
-	Table* table = new Table((*oldtable));
+	Table* table = new Table((*oldTable));
 
 	vector<string> columnTitles = table->getColumnTitles();
 

@@ -2,12 +2,10 @@
 #include "ConditionEval.h"
 
 
-void Engine::update(string tableName, vector< tuple<string, string> > namevarpairs, ConditionTree t){
+void Engine::update(Table* table, vector< tuple<string, string> > namevarpairs, ConditionTree t){
 
 
 	//TODO This needs to remove the row and reinsert it if the key changes. 
-	Table* table = findTable(tableName);
-
 	map < string, vector<Attribute* > > data = table->getData();
 
 	map< string, vector<Attribute* > >::iterator it = data.begin();

@@ -91,20 +91,21 @@ namespace TableTester
 			Assert::IsTrue(testEngine.getTables().size() == 0);
 
 			testEngine.createTable("tableName", "name", columnTypesA, columnTitlesA);
+			Table* badTable = new Table("otherTable", "name", columnTypesA, columnTitlesA);
 
 			// verify table was added correctly
 			Assert::IsTrue(testEngine.getTables().size() == 1);
 
 			// should throw an error because badTableName is not the name of any existing table
 			try {
-				testEngine.dropTable("badTableName");
+				testEngine.dropTable(badTable);
 			}
 			catch (const char* error) {
 				// check error message equality
 				Assert::AreEqual(error, "table does not exist");
 			}
 
-			testEngine.dropTable("tableName");
+			testEngine.dropTable(testEngine.getTables()[0]);
 
 			// verify that number of tables is one less
 			Assert::IsTrue(testEngine.getTables().size() == 0);
@@ -117,13 +118,14 @@ namespace TableTester
 		TEST_METHOD(Insert_Into){
 			// verify number of tables
 			testEngine.createTable("tableName", "name", columnTypesA, columnTitlesA);
+			Table* badTable = new Table("otherTable", "name", columnTypesA, columnTitlesA);
 
 			Assert::IsTrue(testEngine.getTables().size() == 1); // one table
 			Assert::IsTrue(testEngine.getTables()[0]->getData().size() == 0); // table has no rows
 
 			// should throw an error because badTableName is not the name of any existing table
 			try {
-				testEngine.insertInto("badTableName", student1, columnTypesA);
+				testEngine.insertInto(badTable, student1, columnTypesA);
 			}
 			catch (const char* error) {
 				// check error message equality
@@ -132,14 +134,14 @@ namespace TableTester
 
 			// should throw an error because column types do not match
 			try {
-				testEngine.insertInto("tableName", student1, columnTypesB);
+				testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesB);
 			}
 			catch (const char* error) {
 				// check error message equality
 				Assert::AreEqual(error, "types do not match");
 			}
 
-			testEngine.insertInto("tableName", student1, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 			map<string, vector<Attribute*>> addedAttributes = testEngine.getTables()[0]->getData();
 
 			Assert::IsTrue(addedAttributes.size() == 1); // table has one row after insertion
@@ -171,7 +173,7 @@ namespace TableTester
 
 			Engine engine;
 			engine.createTable("TestTable", "Name", columnTypes, columnNames);
-			engine.insertInto("TestTable", row, columnTypes);
+			engine.insertInto(engine.getTables()[0], row, columnTypes);
 
 			vector< tuple<string, string> > namevarpairs;
 			namevarpairs.push_back(make_tuple("Name", "Emily"));
@@ -182,7 +184,7 @@ namespace TableTester
 			n->setLeftChild("Name", VARIABLE);
 			n->setRightChild("BOB", LITERAL_STRING);
 
-			engine.update("TestTable", namevarpairs, t);
+			engine.update(engine.getTables()[0], namevarpairs, t);
 
 			Table* table = engine.findTable("TestTable");
 
@@ -211,16 +213,16 @@ namespace TableTester
 
 			Engine engine;
 			engine.createTable("TestTable", "Name", columnTypes, columnNames);
-			engine.insertInto("TestTable", row, columnTypes);
+			engine.insertInto(engine.getTables()[0], row, columnTypes);
 
-
+	
 			ConditionTree t(EQUAL, OPERATOR);
 			ConditionTree::Node* n = t.getRoot();
 
 			n->setLeftChild("Name", VARIABLE);
 			n->setRightChild("BOB", LITERAL_STRING);
 
-			engine.deleteFrom("TestTable", t);
+			engine.deleteFrom(engine.getTables()[0], t);
 
 			Table* table = engine.findTable("TestTable");
 
@@ -251,7 +253,7 @@ namespace TableTester
 
 			Engine engine;
 			engine.createTable("TestTable", "Name", columnTypes, columnNames);
-			engine.insertInto("TestTable", row, columnTypes);
+			engine.insertInto(engine.getTables()[0], row, columnTypes);
 
 			vector< tuple<string, string> > namevarpairs;
 			namevarpairs.push_back(make_tuple("Name", "BOB"));
@@ -262,7 +264,7 @@ namespace TableTester
 			n->setLeftChild("Name", VARIABLE);
 			n->setRightChild("BOB", LITERAL_STRING);
 
-			Table* newTable = engine.selection("TestTable", t);
+			Table* newTable = engine.selection(engine.getTables()[0], t);
 
 
 			map< string, vector<Attribute*> > data = newTable->getData();
@@ -294,9 +296,9 @@ namespace TableTester
 
 			Engine engine;
 			engine.createTable("TestTable", "Name", columnTypes, columnNames);
-			engine.insertInto("TestTable", row, columnTypes);
+			engine.insertInto(engine.getTables()[0], row, columnTypes);
 
-			Table* newTable = engine.projection("TestTable", vector<string>{"Age"});
+			Table* newTable = engine.projection(engine.getTables()[0], vector<string>{"Age"});
 		
 			map< string, vector<Attribute*> > data = newTable->getData();
 			map< string, vector<Attribute*> >::iterator it = data.begin();
@@ -316,7 +318,7 @@ namespace TableTester
 			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
 
 			Table* renamedTable;
-			renamedTable = testEngine.rename("students", newTitles);
+			renamedTable = testEngine.rename(testEngine.getTables()[0], newTitles);
 
 			for (int i = 0; i < renamedTable->getColumnTitles().size(); i++) {
 				Assert::AreEqual(renamedTable->getColumnTitles()[i], newTitles[i]);
@@ -333,11 +335,11 @@ namespace TableTester
 			testEngine.createTable("students2", "name", columnTypesA, columnTitlesA);
 			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
 
-			testEngine.insertInto("students", student1, columnTypesA);
-			testEngine.insertInto("students", student2, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
 
-			testEngine.insertInto("students2", student2, columnTypesA);
-			testEngine.insertInto("students2", student3, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[1], student2, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[1], student3, columnTypesA);
 
 			Table* tbla = testEngine.getTables()[0];
 			Table* tblb = testEngine.getTables()[1];
@@ -398,11 +400,11 @@ namespace TableTester
 			testEngine.createTable("students2", "name", columnTypesA, columnTitlesA);
 			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
 
-			testEngine.insertInto("students", student1, columnTypesA);
-			testEngine.insertInto("students", student2, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
 
-			testEngine.insertInto("students2", student2, columnTypesA);
-			testEngine.insertInto("students2", student3, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[1], student2, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[1], student3, columnTypesA);
 
 			Table* tbla = testEngine.getTables()[0];
 			Table* tblb = testEngine.getTables()[1];
@@ -450,11 +452,11 @@ namespace TableTester
 			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
 			testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
 
-			testEngine.insertInto("students", student1, columnTypesA);
-			testEngine.insertInto("students", student2, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
 
-			testEngine.insertInto("people", person1, columnTypesB);
-			testEngine.insertInto("people", person2, columnTypesB);
+			testEngine.insertInto(testEngine.getTables()[1], person1, columnTypesB);
+			testEngine.insertInto(testEngine.getTables()[1], person2, columnTypesB);
 
 			Table* tbla = testEngine.getTables()[0];
 			Table* tblb = testEngine.getTables()[1];
@@ -536,11 +538,11 @@ namespace TableTester
 			testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
 			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
 
-			testEngine.insertInto("students", student1, columnTypesA);
-			testEngine.insertInto("students", student2, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
+			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
 
-			testEngine.insertInto("people", person1, columnTypesB);
-			testEngine.insertInto("people", person2, columnTypesB);
+			testEngine.insertInto(testEngine.getTables()[1], person1, columnTypesB);
+			testEngine.insertInto(testEngine.getTables()[1], person2, columnTypesB);
 
 			Table* tbla = testEngine.getTables()[0];
 			Table* tblb = testEngine.getTables()[1];

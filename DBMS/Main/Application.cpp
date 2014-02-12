@@ -49,14 +49,14 @@ int main()
 		testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
 		testEngine.createTable("otherstudents", "age", columnTypesA, columnTitlesA);
 
-		testEngine.insertInto("students", student1, columnTypesA);
-		testEngine.insertInto("students", student2, columnTypesA);
-		testEngine.insertInto("students", student3, columnTypesA);
-		testEngine.insertInto("otherstudents", student4, columnTypesA);
+		testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
+		testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
+		testEngine.insertInto(testEngine.getTables()[0], student3, columnTypesA);
+		testEngine.insertInto(testEngine.getTables()[2], student4, columnTypesA);
 
-		testEngine.insertInto("people", person1, columnTypesB);
-		testEngine.insertInto("people", person2, columnTypesB);
-		testEngine.insertInto("people", person3, columnTypesB);
+		testEngine.insertInto(testEngine.getTables()[1], person1, columnTypesB);
+		testEngine.insertInto(testEngine.getTables()[1], person2, columnTypesB);
+		testEngine.insertInto(testEngine.getTables()[1], person3, columnTypesB);
 
 		Table* tbla = testEngine.getTables()[0];
 		Table* tblb = testEngine.getTables()[1];
@@ -76,16 +76,16 @@ int main()
 		Table* tblc = NULL;
 
 		cout << "selection:" << endl;
-		tblc = testEngine.selection(tbla->getTableName(), t);
+		tblc = testEngine.selection(tbla, t);
 		tblc->printTable();
 
 		cout << "projection:" << endl;
 		vector<string> wantedColumns = {"name", "age"};
-		tblc = testEngine.projection(tbla->getTableName(), wantedColumns);
+		tblc = testEngine.projection(tbla, wantedColumns);
 		tblc->printTable();
 
 		cout << "rename:" << endl;
-		tblc = testEngine.rename(tbla->getTableName(), renamedTitles);
+		tblc = testEngine.rename(tbla, renamedTitles);
 		tblc->printTable();
 
 		cout << "union:" << endl;

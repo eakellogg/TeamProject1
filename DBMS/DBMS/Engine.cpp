@@ -37,10 +37,10 @@ using namespace std;
 
 
 	// delete a table from the database
-	void Engine::dropTable(string tableName) {
+	void Engine::dropTable(Table* table) {
 		// search database for a table with matching name; delete table if it exists
 		for (unsigned int i = 0; i < tables.size(); i++) {
-			if (tables[i]->getTableName() == tableName) {
+			if (tables[i]->getTableName() == table->getTableName()) {
 				tables.erase(tables.begin() + i); // must use tables.begin() to get iterator; increment with i
 				return;
 			}
@@ -50,9 +50,8 @@ using namespace std;
 
 
 	// insert a row into the table with the proper name
-	void Engine::insertInto(string tableName, vector<Attribute*> row, vector<string> columnTypes) {
-		Table* tempTable = findTable(tableName);
-		tempTable->addRow(row, columnTypes);
+	void Engine::insertInto(Table* table, vector<Attribute*> row, vector<string> columnTypes) {
+		table->addRow(row, columnTypes);
 	}
 
 

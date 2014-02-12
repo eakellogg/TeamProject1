@@ -40,25 +40,25 @@ public:
 	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 	// delete a table from the database
-	void dropTable(string tableName);
+	void dropTable(Table* table);
 
 	// insert a row into the table with the proper name
-	void insertInto(string tableName, vector<Attribute*> row, vector<string> columnTypes);
+	void insertInto(Table* table, vector<Attribute*> row, vector<string> columnTypes);
 
-	//Change the variables listed to their new values, if the row in the table meets the condition
-	void update(string tableName, vector< tuple<string, string> > namevarpairs, ConditionTree t);
+	// change the variables listed to their new values, if the row in the table meets the condition
+	void update(Table* table, vector< tuple<string, string> > namevarpairs, ConditionTree t);
 
-	//Delete all rows in the table that meet the condition
-	void deleteFrom(string tableName, ConditionTree t);
+	// delete all rows in the table that meet the condition
+	void deleteFrom(Table* table, ConditionTree t);
 
-	//Return a table that has only the rows from the old table that meet the condition
-	Table* selection(string tableName, ConditionTree t);
+	// return a table that has only the rows from the old table that meet the condition
+	Table* selection(Table* oldTable, ConditionTree t);
 
-	//Return a table that has only the specified columns of the old table
-	Table* projection(string startTable, vector<string> variables);
+	// return a table that has only the specified columns of the old table
+	Table* projection(Table* oldTable, vector<string> variables);
 
-	//Rename the columns in a given table using the given names
-	Table* rename(string tableName, vector<string> attributes);
+	// rename the columns in a given table using the given names
+	Table* rename(Table* oldTable, vector<string> attributes);
 
 	// calculates the union of the two given tables and returns a new table with the result
 	Table* setUnion(Table* first, Table* secondTable); // see setUnion.cpp

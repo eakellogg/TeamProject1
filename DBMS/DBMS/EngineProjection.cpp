@@ -1,9 +1,8 @@
 #include "Engine.h"
 
 // calculates the projection of the given table and returns a new table with the result
-Table* Engine::projection(string startTable, vector<string> variables){
+Table* Engine::projection(Table* oldTable, vector<string> variables){
 
-	Table* oldTable = findTable(startTable);
 	map< string, vector<Attribute*> > oldData = oldTable->getData();
 
 
