@@ -12,7 +12,7 @@ Table* Engine::rename(string tableName, vector<string> attributes) {
 		throw "incorrect number of attributes to rename";
 	}
 
-	for (unsigned int i = 0; i < columnTitles.size(); i++) {
+	for (int i = 0; i < columnTitles.size(); i++) {
 		if (columnTitles[i] != attributes[i]) {
 			//rename the column. If the column was the key, update keyName
 			table->renameColumn(i, attributes[i]);
