@@ -6,7 +6,9 @@
 using namespace std;
 
 
-const static string select = “select”;
+
+
+ const static string select = “select”;
  const static string project = “project”;
  const static string rename = “rename”;
  const static string join = “JOIN”;
