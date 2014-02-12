@@ -1,4 +1,3 @@
-
 #ifndef LEXER_H
 #define LEXER_H
 
@@ -19,31 +18,31 @@ const static string PRODUCT = "*";
 
 const static string DB_COMMAND = "DB_COMMAND";
 // of type db_command :
-const static string close = "CLOSE";
-const static string create_table = "CREATE TABLE";
-const static string deleted = "DELETE FROM";
-const static string Exit = "EXIT";
-const static string insert = "INSERT INTO";
-const static string open = "OPEN";
-const static string primary_key = "PRIMARY KEY";
-const static string set = "SET";
-const static string show = "SHOW";
-const static string update = "UPDATE";
-const static string values_from = "VALUES FROM";
-const static string values_from_relation = "VALUES FROM RELATION";
-const static string where = "WHERE";
-const static string write = "WRITE";
+const static string CLOSE = "CLOSE";
+const static string CREATE_TABLE = "CREATE TABLE";
+const static string DELETED = "DELETE FROM";
+const static string EXIT = "EXIT";
+const static string INSERT = "INSERT INTO";
+const static string OPEN = "OPEN";
+const static string PRIMARY_KEY = "PRIMARY KEY";
+const static string SET = "SET";
+const static string SHOW = "SHOW";
+const static string UPDATE = "UPDATE";
+const static string VALUES_FROM = "VALUES FROM";
+const static string VALUES_FROM_RELATION = "VALUES FROM RELATION";
+const static string WHERE = "WHERE";
+const static string WRITE = "WRITE";
 
 const static string OPERATOR_TYPE = "OPERATOR";
 //of type operator : 
-const static string equals = "==";
-const static string not_equal = "!=";
-const static string less_than = "<";
-const static string less_equal = "<=";
-const static string greater_than = ">";
-const static string greater_equal = ">=";
-const static string or = "||";
-const static string and = "&&";
+const static string EQUALS = "==";
+const static string NOT_EQUAL = "!=";
+const static string LESS_THAN = "<";
+const static string LESS_EQUAL = "<=";
+const static string GREATER_THAN = ">";
+const static string GREATER_EQUAL = ">=";
+const static string OR = "||";
+const static string AND = "&&";
 
 
 const static string IDENTIFIER = "IDENTIFIER";
