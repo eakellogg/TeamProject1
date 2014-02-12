@@ -11,12 +11,12 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 		newRow.push_back(firstTable->getVariable(newColumnTitles[i]));
 	}
 	// get all needed data from second table
-	for (unsigned int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
+	for (int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
 		newRow.push_back(secondTable->getVariable(newColumnTitles[j]));
 	}
 
 	string keyName = to_string(identifierCount);
-	for (unsigned int i = keyName.length(); i < 10; i++) {
+	for (int i = keyName.length(); i < 10; i++) {
 		keyName = "0" + keyName;
 	}
 
