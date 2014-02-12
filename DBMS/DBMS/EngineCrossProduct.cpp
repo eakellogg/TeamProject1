@@ -7,7 +7,7 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 	vector<Attribute*> newRow;
 
 	// get all needed data from first table
-	for (unsigned int i = 0; i < firstTable->getColumnTitles().size(); i++) {
+	for (int i = 0; i < firstTable->getColumnTitles().size(); i++) {
 		newRow.push_back(firstTable->getVariable(newColumnTitles[i]));
 	}
 	// get all needed data from second table
