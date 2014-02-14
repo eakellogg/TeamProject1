@@ -12,6 +12,14 @@ EvaluationTree::Node::Node(Node* parent, string type, void* value){
 	this->type = type;
 	this->value = value;
 }
+EvaluationTree::Node::~Node(){
+	
+	delete value;
+	for (int i = 0; i < children.size(); i++)
+	{
+		delete children[0];
+	}
+}
 void EvaluationTree::Node::setParent(Node* parent){
 	this->parent = parent;
 }
@@ -44,5 +52,9 @@ EvaluationTree::Node* EvaluationTree::getRoot(){
 EvaluationTree::EvaluationTree(Node* root){
 	this->root = root;
 }
+EvaluationTree::~EvaluationTree(){
+	delete root;
+}
+
 
 

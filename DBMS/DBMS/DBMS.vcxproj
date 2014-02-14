@@ -86,6 +86,7 @@
     <ClInclude Include="Attribute.h" />
     <ClInclude Include="ConditionEval.h" />
     <ClInclude Include="ConditionTree.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EvaluationTree.h" />
     <ClInclude Include="TokenStream.h" />

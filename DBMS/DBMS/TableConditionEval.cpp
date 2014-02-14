@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Table.h"
-
+#include "Lexer.h"
+#include "EvaluationTree.h"
 typedef ConditionTree::Node Node;
 using namespace std;
 
@@ -20,7 +21,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 	string type = n->getType();
 	string value = n->getValue();
 
-	if (type == LITERAL_STRING || type == LITERAL_INT)
+	if (type == STRING_LITERAL || type == INT_LITERAL)
 	{
 		return make_tuple(type, value);
 	}
@@ -36,13 +37,14 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		const std::string OR = "||";
 		const std::string NOT = "!";
 		*/
-		if (value == EQUAL)
+		if (value == EQUALS)
 		{
+
 			vector< Node* > children = n->getChildern();
 			if (get<1>(NodeEval(children[0])) == get<1>(NodeEval(children[1])))
-				return make_tuple(LITERAL_STRING, TRUE);
+				return make_tuple(STRING_LITERAL, TRUE);
 			else
-				return make_tuple(LITERAL_STRING, FALSE);
+				return make_tuple(STRING_LITERAL, FALSE);
 		}
 
 		else if (value == LESS)
@@ -59,24 +61,24 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == -1)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
 		else if (value == GREATER)
 		{
@@ -92,24 +94,24 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == 1)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
 		else if (value == LESSEQUAL)
 		{
@@ -125,24 +127,24 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == -1 || comparison == 0)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
 		else if (value == GREATEREQUAL)
 		{
@@ -158,24 +160,24 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == 1 || comparison == 0)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
 		else if (value == AND)
 		{
@@ -193,9 +195,9 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			}
 
 			if (result)
-				return make_tuple(LITERAL_STRING, TRUE);
+				return make_tuple(STRING_LITERAL, TRUE);
 			else
-				return make_tuple(LITERAL_STRING, FALSE);
+				return make_tuple(STRING_LITERAL, FALSE);
 
 		}
 		else if (value == OR)
@@ -214,9 +216,9 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			}
 
 			if (result)
-				return make_tuple(LITERAL_STRING, TRUE);
+				return make_tuple(STRING_LITERAL, TRUE);
 			else
-				return make_tuple(LITERAL_STRING, FALSE);
+				return make_tuple(STRING_LITERAL, FALSE);
 		}
 		else if (type == VARIABLE)
 		{
@@ -227,21 +229,21 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			newValue = attribute->getValue();
 			if (attribute->getType() == INT_TYPE)
 			{
-				newType = LITERAL_INT;
+				newType = INT_LITERAL;
 			}
 			else if (attribute->getType() == STRING_TYPE)
 			{
-				newType = LITERAL_STRING;
+				newType = STRING_LITERAL;
 			}
 			else
 			{
 				newValue = "INVALID Varible Type";
-				newType = FAILURE;
+				newType = PARSE_FAILURE;
 			}
 			return make_tuple(newType, newValue);
 
 		}
-		else return make_tuple(FAILURE, UNKNOWN);
+		else return make_tuple(PARSE_FAILURE, UNKNOWN);
 	}
 }
 

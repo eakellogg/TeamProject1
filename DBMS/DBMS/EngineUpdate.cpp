@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "ConditionEval.h"
-
+#include "Constants.h"
 
 void Engine::update(Table* table, vector< tuple<string, string> > namevarpairs, ConditionTree t){
 

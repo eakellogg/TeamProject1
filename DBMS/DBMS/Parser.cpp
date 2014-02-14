@@ -2,53 +2,63 @@
 
 #include <list>
 #include <tuple>
+#include <iostream>
 
 typedef ConditionTree::Node Node;
 EvaluationTree* parseQuery(TokenStream& ts){
 
 	EvaluationTree::Node* leftChild = parseRelationName(ts);
 
-	if (leftChild->getType() != RELATION_NAME)
+	if (leftChild->getType() == RELATION_NAME)
 	{
-		//TODO 
-		//THROW ERROR
-	}
 
-	string parentType = QUERY_OPERATOR;
-	
-	Token token = ts.getToken();
-	if (token.getType()!= PLACEMENT_SYMBOL )
+		string parentType = QUERY_OPERATOR;
+
+		Token token = ts.getToken();
+		if (token.getType() != PLACEMENT_SYMBOL)
+		{
+			//TODO
+			//I'm not great with exceptions I need ideas
+			//throw error;
+		}
+
+		string* value = new string(token.getValue());
+		EvaluationTree::Node* root = new EvaluationTree::Node(NULL, QUERY_OPERATOR, (void*)value);
+
+		root->addChild(leftChild);//----------------------------------------
+
+		EvaluationTree::Node* rightChild = parseExpresion(ts);
+
+		if (rightChild->getType() != EXPR){
+			//TODO
+			//THROW ERROR
+		}
+
+		root->addChild(rightChild); //--------------------------------------
+
+		EvaluationTree* tree = new EvaluationTree(root);
+		return tree;
+	}
+	else
 	{
-		//TODO
-		//I'm not great with exceptions I need ideas
-		//throw error;
-	}
-	
-	string* value = new string(token.getValue());
-	EvaluationTree::Node* root = new EvaluationTree::Node(NULL, QUERY_OPERATOR, (void*) value);
-	
-	root->addChild(leftChild);//----------------------------------------
-
-	EvaluationTree::Node* rightChild = parseExpresion(ts);
-
-	if (rightChild->getType() != EXPR){
-		//TODO
-		//THROW ERROR
+		EvaluationTree* tree = parseCommand(ts);
+		if (tree->getRoot()->getType() == PARSE_FAILURE)
+		{
+			///FAILURE
+		}
+		return tree;
 	}
 
-	root->addChild(rightChild); //--------------------------------------
-
-	EvaluationTree* tree = new EvaluationTree(root);
-	return tree;
 
 }
 
 EvaluationTree::Node* parseRelationName(TokenStream& ts){
 
+	
 	EvaluationTree::Node* result;
 
 	Token t = ts.getToken();
-	if (t.getType() == IDENTIFIER){
+	if ( t.getType() == IDENTIFIER ){
 		
 		string* relation_name = new string( t.getValue() );
 		result = new EvaluationTree::Node(NULL,RELATION_NAME, (void*)(relation_name));
@@ -59,6 +69,7 @@ EvaluationTree::Node* parseRelationName(TokenStream& ts){
 		result = new EvaluationTree::Node(NULL ,PARSE_FAILURE, (void*)(new string("Couldn't parse an relation name")));
 		return result;
 	}
+	
 }
 
 EvaluationTree::Node* parseExpresion(TokenStream& ts){
@@ -130,7 +141,7 @@ EvaluationTree::Node* parseSelection(TokenStream& ts){
 	}
 
 	ConditionTree* condtree = parseConditionTree(ts);
-	if (condtree->getRoot()->getType() == FAILURE){
+	if (condtree->getRoot()->getType() == PARSE_FAILURE){
 		delete condtree;
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse a condition Tree "));
 		return result;
@@ -162,7 +173,7 @@ EvaluationTree::Node* parseSelection(TokenStream& ts){
 
 }
 
-EvalNodePointer pareseProjection(TokenStream& ts){
+EvalNodePointer parseProjection(TokenStream& ts){
 
 	EvalNodePointer result;
 	Token t = ts.getToken();
@@ -425,8 +436,8 @@ EvalNodePointer parseNaturalJoin(TokenStream& ts){
 //Parse an Atomic-Expr
 EvalNodePointer parseAtomicExpr(TokenStream& ts){
 
-	EvalNodePointer result;
-
+	EvalNodePointer result = NULL;
+	
 	result = parseRelationName(ts);
 	if (result->getType() == RELATION_NAME){
 		return result;
@@ -456,7 +467,7 @@ EvalNodePointer parseAtomicExpr(TokenStream& ts){
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse atomic expr, no )"));
 		return result;
 	}
-
+	
 	return result;
 }
 	
@@ -472,18 +483,20 @@ Node* parseOperand(TokenStream& ts){
 		return result;
 	}
 
-	ts.pushToken(t);
-	if (t.getType() == INT_LITERAL || t.getType() == STRING_LITERAL)
+
+	if ( (t.getType() == INT_LITERAL) || ( t.getType() == STRING_LITERAL ))
 	{
 		if (t.getType() == INT_LITERAL)
-			result = new Node(LITERAL_INT, t.getValue(), NULL);
+			result = new Node(INT_LITERAL, t.getValue(), NULL);
 		else
-			result = new Node(LITERAL_STRING, t.getValue(), NULL);
+			result = new Node(STRING_LITERAL, t.getValue(), NULL);
+		
 		return result;
 	}
 
 	ts.pushToken(t);
-	result = new Node(FAILURE, "No operand", NULL);
+
+	result = new Node(PARSE_FAILURE, "No operand", NULL);
 	return result;
 
 
@@ -491,65 +504,128 @@ Node* parseOperand(TokenStream& ts){
 
 Node* parseComparison(TokenStream& ts){
 
-	Node* result;
+	Node* result = NULL;
 	//TODO finish
-	Node* leftOp = parseOperand(ts);
-	if (leftOp->getType() != FAILURE)
+
+	Token t = ts.getToken();
+	if (t.getValue() == OPEN_PAREN)
 	{
+		result = parseDisjunction(ts);
+		if (result->getType() != PARSE_FAILURE)
+		{
+			t = ts.getToken();
+			if (t.getValue() == CLOSE_PAREN)
+			{
+				return result;
+				
+			}
+			else
+			{
+				ts.pushToken(t);
+				delete result;
+				result = new Node(PARSE_FAILURE, "No )", NULL);
+				return result;
+			}
 
-		Token t = ts.getToken();
-
-		result = new Node(OPERATOR, t.getValue(), NULL);
-
-		Node* rightOp = parseOperand(ts);
-
-		result->addChild(leftOp);
-		result->addChild(rightOp);
-
-		return result;
-
+		}
+		else
+		{
+			delete result;
+			result = new Node(PARSE_FAILURE, "No condition", NULL);
+			return result;
+		}
 	}
-
-	delete leftOp;
-
-	result = parseDisjunction(ts);
-
-	if (result->getType() == FAILURE)
+	else
 	{
+		ts.pushToken(t);
+		Node* leftOp = parseOperand(ts);
+
+		if (leftOp->getType() != PARSE_FAILURE)
+		{
+
+			Token t = ts.getToken();
+
+			result = new Node(OPERATOR, t.getValue(), NULL);
+
+			Node* rightOp = parseOperand(ts);
+			if (rightOp->getType() == PARSE_FAILURE)
+			{
+				delete leftOp;
+				delete result;
+				result = new Node(PARSE_FAILURE, "NO right operand", NULL);
+				return result;
+			}
+
+			result->addChild(leftOp);
+			result->addChild(rightOp);
+			return result;
+		}
+
+		delete leftOp;
 		delete result;
-		return new Node(FAILURE, "No comparision", NULL);
-
+		result = new Node(PARSE_FAILURE, "NO right operand", NULL);
+		return result;
 	}
-
-	return result;
-
-
 }
 Node*   parseConjunction(TokenStream& ts){
 
-	Node* node = new Node(OPERATOR, AND, NULL);
-	Node* result = parseComparison(ts);
+	Node* result = new Node(OPERATOR, AND, NULL);
+	
+	
+	Node* node = parseComparison(ts);
 
-	while (result->getType() != FAILURE)
+	bool goOn = true;
+
+	while ( goOn)
 	{
-		node->addChild(result);
-		result = parseComparison(ts);
-	}
-	delete result;
+		if (node->getType() == PARSE_FAILURE)
+		{
+			delete  node;
+			goOn = false;
+			break;
+		}
+		else
+			result->addChild(node);
 
-	return node;
+		Token t = ts.getToken();
+		if (t.getValue() != AND){
+			goOn = false;
+			ts.pushToken(t);
+			break;
+		}
+		else
+			node = parseComparison(ts);
+	}
+
+	return result;
 }
 Node* parseDisjunction(TokenStream& ts){
 
 	Node* node = new Node( OPERATOR, OR , NULL );
+	
+	
 	Node* result = parseConjunction(ts);
 
-	while (result->getType() != FAILURE)
+	while (true)
 	{
+
+		if (result->getType() == PARSE_FAILURE)
+		{
+			delete node;
+			break;
+		}
+
 		node->addChild(result);
+
+		Token t = ts.getToken();
+		if (t.getValue() != OR)
+		{
+			ts.pushToken(t);
+			break;
+		}
 		result = parseConjunction(ts);
+
 	}
-	delete result;
 
 
 	return node;
@@ -1128,34 +1204,51 @@ EvalNodePointer    parseAttributeValuePairNode(TokenStream& ts){
 	Token t1 = ts.getToken();
 	Token t2 = ts.getToken();
 	Token t3 = ts.getToken();
-	while (t1.getType() == IDENTIFIER && t2.getValue() == ASSIGNMENT && (t3.getType() == LITERAL_INT || 
-		t3.getType() == LITERAL_STRING)){
+	while ( (t1.getType() == IDENTIFIER) && (t2.getValue() == ASSIGNMENT) && (t3.getType() == INT_LITERAL || 
+		t3.getType() == STRING_LITERAL)){
 
 		list->push_back(make_tuple(t1.getValue(), t3.getValue()));
+		 t1 = ts.getToken();
+		 t2 = ts.getToken();
+		 t3 = ts.getToken();
 	}
-	ts.pushToken(t3);
-	ts.pushToken(t2);
+	if (t3.getType() != FILLER)
+		ts.pushToken(t3);
+	if (t2.getType() != FILLER)
+		ts.pushToken(t2);
 	ts.pushToken(t1);
+
 
 	result = new EvalNode(NULL, ATTRIBUTE_VALUE_PAIR_LIST, (void*)list);
 	return result;
 }
 EvalNodePointer    parseLiteralList(TokenStream& ts){
 
-	vector< tuple<string* , string*>>* list = new vector<tuple<string*,string*> >();
+	vector< tuple<string , string> >* list = new vector<tuple<string ,string> >(); //Strings inside don't need to be pointers
 
 	EvalNodePointer result;
 
 	Token t = ts.getToken();
-	while (t.getType() != STRING_LITERAL || t.getType() != INT_LITERAL)
+	bool continueON = true;
+	while ( (t.getType() == STRING_LITERAL || t.getType() == INT_LITERAL) && continueON) //Make this standard
 	{
-		string* type = new string(t.getType());
-		string* value = new string(t.getValue());
 
-		list->push_back(make_tuple(type, value));
+		string type(t.getType());
+		string value(t.getValue());
+
+		list -> push_back(make_tuple(type, value));
+		
+		t = ts.getToken();
+
+		if (t.getValue() != COMMA){
+
+			ts.pushToken(t);
+			continueON = false;
+		}
+		else
+			t = ts.getToken();
 
 	}
-	ts.pushToken(t);
 
 	result = new EvalNode(NULL, LITERAL_LIST, (void*)list);
 	return result;

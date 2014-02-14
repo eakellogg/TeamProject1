@@ -7,13 +7,16 @@ using namespace std;
 /* Node Methods
 */
 //-----------------------------------------
-ConditionTree::Node::Node(string v, string t, Node* p){
+ConditionTree::Node::Node(string t, string v, Node* p){
 	
 	value  = v;
 	type   = t;
 	parent = p;
-	children.push_back(NULL);
-	children.push_back(NULL);
+}
+ConditionTree::Node::~Node(){
+
+	for (int i = 0; i < children.size(); i++)
+		delete children[i];
 }
 
 string ConditionTree::Node::getValue() const { return value; }
@@ -21,9 +24,9 @@ string ConditionTree::Node::getType() const  { return type;  }
 ConditionTree::Node* ConditionTree::Node::getParent() const { return parent; }
 
 
-ConditionTree::Node* ConditionTree::Node::addChild(string value, string type){
+ConditionTree::Node* ConditionTree::Node::addChild(string type, string value){
 
-	ConditionTree::Node* node = new ConditionTree::Node(value, type , this);
+	ConditionTree::Node* node = new ConditionTree::Node(type , value,  this);
 	children.push_back(node);
 	return node;
 
@@ -42,6 +45,9 @@ std::vector<ConditionTree::Node*> ConditionTree::Node::getChildern(){
 //----------------------------
 ConditionTree::ConditionTree(string value, string type){
 	root = new Node(value, type, NULL);
+}
+ConditionTree::~ConditionTree(){
+	delete root;
 }
 ConditionTree::ConditionTree(Node* n){
 	root = n;

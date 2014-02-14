@@ -1,9 +1,35 @@
 #include "Engine.h"
 #include "Table.h"
+#include "TokenStream.h"
+#include "Parser.h"
 
 int main()
 {
-	try {
+
+	TokenStream t2;
+
+	t2.pushToken(Token("JUNK", "THEEND"));//End
+
+
+	t2.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+	t2.pushToken(Token(STRING_LITERAL, "Bye"));
+	t2.pushToken(Token(OPERATOR, EQUALS));
+	t2.pushToken(Token(STRING_LITERAL, "Hello"));
+
+	t2.pushToken(Token(OPERATOR, OR));
+
+	t2.pushToken(Token(STRING_LITERAL, "Bye"));
+	t2.pushToken(Token(OPERATOR, EQUALS));
+	t2.pushToken(Token(STRING_LITERAL, "Hello"));
+
+	t2.pushToken(Token(SYMBOL, OPEN_PAREN));
+
+
+	ConditionTree::Node* result3 = parseComparison(t2);
+
+	//try {
+		/*
 		// create information to put into table to prepare testing
 		Attribute* namea = new Attribute(STRING_TYPE, "Zach Brown");
 		Attribute* nameb = new Attribute(STRING_TYPE, "Jacob Zerr");
@@ -108,5 +134,6 @@ int main()
 		cout << error << endl;
 		return 1;
 	}
+	*/
 	return 0;
 }
