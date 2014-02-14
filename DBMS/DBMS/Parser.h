@@ -1,5 +1,6 @@
 
-
+#ifndef PARSER_H
+#define PARSER_H
 
 
 #include "EvaluationTree.h"
@@ -48,32 +49,42 @@ EvaluationTree::Node* parseAtomicExpr(TokenStream& ts);  //Done
 ConditionTree*        parseConditionTree(TokenStream& ts); //THINK
 
 //Parsse AttributeList
-EvalNodePointer           parseAttributeList(TokenStream& ts); //Done
+EvalNodePointer       parseAttributeList(TokenStream& ts); //Done
 
 //Parse Attribute 
-EvalNodePointer           parseAttributeName(TokenStream& ts); //Done
+EvalNodePointer       parseAttributeName(TokenStream& ts); //Done
 
 EvaluationTree*    parseCommand(TokenStream& ts); //Done
 
-EvalNodePointer    parseOpen(TokenStream& ts);
+EvalNodePointer    parseOpen(TokenStream& ts); //Done
 
-EvalNodePointer    parseClose(TokenStream& ts);
+EvalNodePointer    parseClose(TokenStream& ts); //Done
 
-EvalNodePointer    parseWrite(TokenStream& ts);
+EvalNodePointer    parseWrite(TokenStream& ts); //Done
 
-EvalNodePointer    parseExit(TokenStream& ts);
+EvalNodePointer    parseExit(TokenStream& ts); //Done
 
-EvalNodePointer    parseShow(TokenStream& ts);
+EvalNodePointer    parseShow(TokenStream& ts); //Done
 
-EvalNodePointer    parseCreate(TokenStream& ts);
+EvalNodePointer    parseCreate(TokenStream& ts); //Done
 
-EvalNodePointer    parseUpdate(TokenStream& ts);
+EvalNodePointer    parseUpdate(TokenStream& ts);//Done
 
-EvalNodePointer    parseInsert(TokenStream& ts);
+EvalNodePointer    parseInsert(TokenStream& ts); //Done
 
-EvalNodePointer    parseDelete(TokenStream& ts);
+EvalNodePointer    parseDelete(TokenStream& ts); //Done
 
-EvalNodePointer    parseTypedAttributeList(TokenStream& ts);
+EvalNodePointer    parseTypedAttributeList(TokenStream& ts); //Done
 
-EvalNodePointer    parseType(TokenStream& ts);
+EvalNodePointer    parseType(TokenStream& ts); //Done
 
+EvalNodePointer    parseAttributeValuePairNode(TokenStream& ts); //Done
+
+EvalNodePointer    parseLiteralList(TokenStream& ts); //Done
+
+
+ConditionTree::Node* parseDisjunction(TokenStream& ts); //Done
+
+ConditionTree::Node* parseConjunction(TokenStream& ts); //Done
+
+#endif

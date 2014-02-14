@@ -2,6 +2,7 @@
 #define COND_TREE_H
 
 #include <string>
+#include <vector>
 
 //TODO I SHOULD TYPE THIS
 const std::string OPERATOR     = "OPERATOR";
@@ -33,8 +34,7 @@ public:
 	private:
 		std::string value;    
 		std::string type; //Is the value a literal (string or int), operand , or table type
-		Node*       leftChild;
-		Node*       rightChild;
+		std::vector<Node*> children;
 		Node*       parent;
 
 	public:
@@ -42,18 +42,17 @@ public:
 		std::string getValue()     const;
 		std::string getType()      const;
 		Node*       getParent()    const;
-		Node*       getLeftChild() const;
-		Node*       getRightChild()const;
-		Node*       setLeftChild(std::string v, std::string t);
-		Node*       setRightChild(std::string v, std::string t);   
+		Node*       addChild(std::string v, std::string t);
+		Node*       addChild(Node* n);
 		//Node*     setParent(std::string v, std::string t);
+		std::vector<Node*> getChildern();
 	};
 
 private:
 	Node* root;
 public:
 	ConditionTree( std::string value , std::string type);
-	
+	ConditionTree(Node* n);
 	Node* getRoot();
 	//Node* setRoot( std::string v , std::string t)
 };

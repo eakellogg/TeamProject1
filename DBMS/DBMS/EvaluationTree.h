@@ -22,9 +22,12 @@ const static string ATTRIBUTE_LIST = "ATTRIBUTE_LIST";
 const static string ATTRIBUTE = "ATTRIBUTE";
 
 
+
 const static string QUERY_OPERATOR = "QUERY_OPERATOR";
 const static string COMMAND_OPERATOR = "COMMAND_OPERATOR";
-
+const static string ATTRIBUTE_TYPE_PAIR_LIST = "ATTRIBUTE_TYPE_PAIR_LIST";
+const static string LITERAL_LIST = "LITERAL_LIST";
+const static string ATTRIBUTE_VALUE_PAIR_LIST = "ATTRIBTUE_VALUE_PAIR_LIST";
 
 //NODE VALUES
 const static string PLACEMENT_SYMBOL = "<-";
