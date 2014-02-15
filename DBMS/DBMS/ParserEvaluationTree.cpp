@@ -14,10 +14,12 @@ EvaluationTree::Node::Node(Node* parent, string type, void* value){
 }
 EvaluationTree::Node::~Node(){
 	
-	delete value;
+	if (value != NULL)
+		delete value;
 	for (int i = 0; i < children.size(); i++)
 	{
-		delete children[0];
+		if (children[i] != NULL)
+			delete children[i];
 	}
 }
 void EvaluationTree::Node::setParent(Node* parent){

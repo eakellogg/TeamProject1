@@ -50,32 +50,34 @@ EvaluationTree::Node* parseAtomicExpr(TokenStream& ts);  //Done
 ConditionTree*        parseConditionTree(TokenStream& ts); //Done and Tested
 
 //Parsse AttributeList
-EvalNodePointer       parseAttributeList(TokenStream& ts); //Done
+EvalNodePointer       parseAttributeList(TokenStream& ts); //Done and Tested
 
 //Parse Attribute 
-EvalNodePointer       parseAttributeName(TokenStream& ts); //Done
+EvalNodePointer       parseAttributeName(TokenStream& ts); //Done 
 
-EvaluationTree*    parseCommand(TokenStream& ts); //Done
+EvaluationTree*    parseCommand(TokenStream& ts); //Done and Tested
 
-EvalNodePointer    parseOpen(TokenStream& ts); //Done
+EvalNodePointer    parseOpen(TokenStream& ts); //Done and Tested 
 
-EvalNodePointer    parseClose(TokenStream& ts); //Done
+EvalNodePointer    parseClose(TokenStream& ts); //Done and Tested
 
-EvalNodePointer    parseWrite(TokenStream& ts); //Done
+EvalNodePointer    parseWrite(TokenStream& ts); //Done and Tested
 
-EvalNodePointer    parseExit(TokenStream& ts); //Done
+EvalNodePointer    parseExit(TokenStream& ts); //Done and Tested
 
-EvalNodePointer    parseShow(TokenStream& ts); //Done
+EvalNodePointer    parseShow(TokenStream& ts); //Done waiting for atomic expr
 
-EvalNodePointer    parseCreate(TokenStream& ts); //Done
+EvalNodePointer    parseCreate(TokenStream& ts); //Done and Tested
 
-EvalNodePointer    parseUpdate(TokenStream& ts);//Done
+EvalNodePointer    parseUpdate(TokenStream& ts);//Done and Tested
 
-EvalNodePointer    parseInsert(TokenStream& ts); //Done
+EvalNodePointer    parseInsert(TokenStream& ts); //Done almost all tested
 
-EvalNodePointer    parseDelete(TokenStream& ts); //Done 
+EvalNodePointer    parseDelete(TokenStream& ts); //Done and Tested
 
-EvalNodePointer    parseTypedAttributeList(TokenStream& ts); //Done
+
+//Should this fail if no pairs found? Help
+EvalNodePointer    parseTypedAttributeList(TokenStream& ts); //Done and Tested
 
 EvalNodePointer    parseType(TokenStream& ts); //Done  and Tested
 
