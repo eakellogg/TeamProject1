@@ -4,13 +4,13 @@
 #include <string>
 /*
 This is the file with ALL CONSTANTS
-It needs to be oraganized and commeneted on where needed
 */
 
 using namespace std;
 
-const static string COMMAND_OPERATOR = "COMMAND_OPERATOR"; //Type
-// Values for COMMAND_OPERATOR they also are teh value of symbols 
+const static string COMMAND_OPERATOR = "COMMAND_OPERATOR"; //Type of command
+
+// Values for COMMAND_OPERATOR; they also are the value of symbols 
 const static string CLOSE = "CLOSE";
 const static string CREATE_TABLE = "CREATE TABLE";
 const static string DELETE = "DELETE FROM";
@@ -25,12 +25,11 @@ const static string VALUES_FROM = "VALUES FROM";
 const static string VALUES_FROM_RELATION = "VALUES FROM RELATION";
 const static string WHERE = "WHERE";
 const static string WRITE = "WRITE";
+//--------------------------------------------
 
 
+const static string EXPR = "EXPRESION"; //Type of expression
 
-//of type query_command
-
-const static string EXPR = "EXPRESION"; //Type 
 //Values for EXPR Nodes
 const static string SELECTION_EXPR = "SELECTION";
 const static string PROJECTION_EXPR = "PROJECTION";
@@ -42,7 +41,8 @@ const static string JOIN_EXPR = "JOIN_EXPR";
 //--------------------------------------------
 
 
-const static string OPERATOR = "OPERATOR"; //Type
+const static string OPERATOR = "OPERATOR"; //Type of operator
+
 //Types of operators 
 const static string EQUALS = "==";
 const static string NOT_EQUAL = "!=";
@@ -53,20 +53,24 @@ const static string GREATER_THAN = ">";
 const static string GREATER_EQUAL = ">=";
 const static string OR = "||";
 const static string AND = "&&";
+//--------------------------------------------
+
 
 //Values for operands when evaluated
 const std::string VARIABLE = "VARIBLE";
 const std::string UNKNOWN = "UNKNOWN";
 const std::string TRUE = "TRUE";
 const std::string FALSE = "FALSE";
-//Any string literal or int literal
+//--------------------------------------------
 
 
-const static string IDENTIFIER = "IDENTIFIER"; //Type
+const static string IDENTIFIER = "IDENTIFIER"; //Type of identifier
 //And identifier can be any string
 
+
 //---------------------------------------
-const static string SYMBOL = "SYMBOL"; //Type
+const static string SYMBOL = "SYMBOL"; //Type of symbol
+
 //values for symbols
 const static string TYPE = "TYPE";
 const static string OPEN_PAREN = "(";
@@ -81,7 +85,6 @@ const static string JOIN = "JOIN";
 const static string UNION = "+";
 const static string DIFFERENCE = "-";
 const static string PRODUCT = "*";
-
 //---------------------------------------
 
 
@@ -89,6 +92,7 @@ const static string PRODUCT = "*";
 const static string STRING_LITERAL = "STRING_LITERAL";//Type
 const static string INT_LITERAL    = "STRING_INT"; //Type
 //Values can be any string
+//--------------------------------------------
 
 
 //NODE TYPES
@@ -97,9 +101,9 @@ const static string PARSE_FAILURE = "PARSE_FAILURE"; //Type any parse failure
 const static string RELATION_NAME = "RELATION_NAME"; //Type
 //A relation name can be any identifier
 
-
 const static string QUERY = "QUERY"; //Type
 //A query node will have two arguements, first a relation name, second an atomicExpression
+//--------------------------------------------
 
 
 //ConditionTree
@@ -109,7 +113,6 @@ typedef vector< string > AttributeList;
 const static string ATTRIBUTE_LIST = "ATTRIBUTE_LIST";
 
 const static string ATTRIBUTE = "ATTRIBUTE";
-
 
 typedef vector< tuple < string, string > > AttributeTypePairList; //type , name
 const static string ATTRIBUTE_TYPE_PAIR_LIST = "ATTRIBUTE_TYPE_PAIR_LIST"; 
