@@ -1,19 +1,19 @@
 #ifndef EVALUATION_TREE_H
 #define EVALUATION_TREE_H
 
-
 #include <string>
 #include <vector>
 #include "Lexer.h"
-
-
 
 class EvaluationTree{
 
 public:
 	~EvaluationTree();
+	EvaluationTree(Node* root);
+	Node* getRoot();
+	
+	// Node is a subclass of EvaluationTree
 	class Node{
-
 	public:
 		Node(Node* parent, string type, void* value);
 		Node* getParent();
@@ -31,14 +31,9 @@ public:
 		string type;
 
 	};
-
-	EvaluationTree(Node* root);
-	Node* getRoot();
-
+	
 private:
 	Node* root;
-
-
 };
 
 #endif EVALUATION_TREE_H
