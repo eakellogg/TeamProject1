@@ -5,103 +5,99 @@
 #include <iostream>
 
 typedef ConditionTree::Node Node;
+
+
+// parse a query, return an evaluation tree pointer
 EvaluationTree* parseQuery(TokenStream& ts){
 
 	EvaluationTree::Node* leftChild = parseRelationName(ts);
 	EvaluationTree::Node* root;
 
-
+	// if leftChild is a relation
 	if (leftChild->getType() == RELATION_NAME)
 	{
-
-		//cout << "A" << endl;
 		Token token = ts.getToken();
-		//cout << "Just found a " << token.getValue() << endl;
+		
+		// if token is not an arrow
 		if (token.getValue() != ARROW)
 		{	
-
 			ts.pushToken(token);
 			delete leftChild;
 			string* value = new string("No arrow found, failed to parse query");
 			root = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-			return new EvaluationTree(root);
+			return new EvaluationTree(root); // return the failure
 		}
 		else
 		{
-			//cout << "B" << endl;
 			string* value = new string( token.getValue() );
 			root = new EvaluationTree::Node(NULL, QUERY, (void*)value);
-
-
+			
 			EvaluationTree::Node* rightChild = parseExpresion(ts);
-			//cout << "Just parsed an expresion " << rightChild->getType() << endl;
+			
+			// if token is not an expression
 			if (rightChild->getType() != EXPR)
 			{
-				//cout << "C" << endl;
 				delete leftChild;
 				delete rightChild;
-				//cout << "CC" << endl;
-
 				string* value = new string("No expr found for right argument of query");
 				root = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-				return new EvaluationTree(root);
+				return new EvaluationTree(root); // return the failure
 			}
 			else
 			{
-
-
 				root->addChild(leftChild);//----------------------------------------
 				root->addChild(rightChild); //--------------------------------------
-
 				EvaluationTree* tree = new EvaluationTree(root);
-				return tree;
+				return tree; // return the tree to be evaluated
 			}
 		}
 	}
-	
 	else
 	{
-
 		delete leftChild;
 
 		EvaluationTree* tree = parseCommand(ts);
+		
+		// if the type of the passed tree is failure
 		if ( tree->getRoot()->getType() == PARSE_FAILURE)
 		{
 			delete tree;
 			string* value = new string("No query found, then no command found parse failure");
 			root = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-			return new EvaluationTree(root);
+			return new EvaluationTree(root); // return the failure
 
 		}
 		else
-			return tree;
+			return tree; // return the tree to be evaluated
 	}
-	
 	return NULL;
-
 }
 
-EvaluationTree::Node* parseRelationName(TokenStream& ts){
 
+// parse a relation, return a node pointer
+EvaluationTree::Node* parseRelationName(TokenStream& ts){
 	
 	EvaluationTree::Node* result;
-
 	Token t = ts.getToken();
+	
+	// if the token is an identifier
 	if ( t.getType() == IDENTIFIER ){
 		
 		string* relation_name = new string( t.getValue() );
-		result = new EvaluationTree::Node(NULL,RELATION_NAME, (void*)(relation_name));
-		return result;
+		result = new EvaluationTree::Node(NULL, RELATION_NAME, (void*)(relation_name));
+		return result; // return the tree to be evaluated
 	}
 	else{
 		ts.pushToken(t);
 		string* value = new string("Couldn't parse an relation name");
-		result = new EvaluationTree::Node(NULL ,PARSE_FAILURE, (void*)value);
-		return result;
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
+		return result; // return the failure
 	}
 	
 }
 
+
+// parse an expression, return a node pointer
 EvaluationTree::Node* parseExpresion(TokenStream& ts){
 
 	EvaluationTree::Node* result;
@@ -111,8 +107,7 @@ EvaluationTree::Node* parseExpresion(TokenStream& ts){
 		return result;
 	delete result;
 	
-	result = parseProjection(ts); //Tyre parsing a projetion
-	//cout << "Just tried getting an projection found " << result->getType() << endl;
+	result = parseProjection(ts); //Try parsing a projetion
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
@@ -122,103 +117,103 @@ EvaluationTree::Node* parseExpresion(TokenStream& ts){
 		return result;
 	delete result;
 	
-	
-	result = parseUnion(ts);
+	result = parseUnion(ts); //Try parsing a union
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
 
-	result = parseDifference(ts);
+	result = parseDifference(ts); //Try parsing a difference
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
 
-	result = parseProduct(ts);
+	result = parseProduct(ts); //Try parsing a product
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
 
-	result = parseNaturalJoin(ts);
+	result = parseNaturalJoin(ts); //Try parsing a natural join
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
 
-	result = parseAtomicExpr(ts);
+	result = parseAtomicExpr(ts); //Try parsing an atomic expression
 	if (result->getType() == EXPR)
 		return result;
+		
 	else{
-
 		string* value = new string("failed to parse an expresion");
 		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, value);
-		return result;
+		return result; // return the failure
 	}
 }
 
+
+// parse a selection, return a node pointer
 EvaluationTree::Node* parseSelection(TokenStream& ts){
 
 	EvaluationTree::Node* result;
-
 	Token t = ts.getToken();
-	//cout << "Inside secltion looking for select found " << t.getValue() << endl;
+	
+	// if the token does not equal select
 	if (t.getValue() != SELECT){
-		
 		ts.pushToken(t);
 		string* value = new string("Couldn't parse selection, no select token");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-
-		return result;
+		return result; // return the failure
 	}
 	
 	t = ts.getToken();
-	//cout << "Inside of selection looking for ( found a " << t.getValue() << endl;
+
+	// if the token does not equal an open parentheses
 	if (t.getValue() != OPEN_PAREN){
 		ts.pushToken(t);
 		string* value = new string("Couldn't parse selection, no (");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-
-		return result;
+		return result; // return the failure
 	}
 
 	ConditionTree* condtree = parseConditionTree(ts);
-	//cout << "Inside of selection looking for condition found a " << condtree->getRoot()->getType() << endl;
+	
+	// if the type of the passed tree is failure
 	if (condtree->getRoot()->getType() == PARSE_FAILURE){
 		delete condtree;
 		string* value = new string("Couldn't parse selection, no condition");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-
-		return result;
+		return result; // return the failure
 	}
 
 	t = ts.getToken();
-	//cout << "Inside of selection looking for ) found a " << t.getValue() << endl;
+
+	// if the token does not equal a close parentheses
 	if (t.getValue() != CLOSE_PAREN){
 			ts.pushToken(t);
-
 			string* value = new string("Couldn't parse selection, no )");
 			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-
-			return result;
+			return result; // return the failure
 	}
+	
 	EvalNodePointer leftChild = new EvalNode(NULL, CONDITION_TREE, (void*)(condtree));
-
 	EvalNodePointer rightChild = parseAtomicExpr(ts);
-	//cout << "ZZZZZZZZZZZInside of selection looking for and expresion found a " << rightChild->getType() << endl;
+
+	// if the type of the child is failure
 	if (rightChild->getType() == PARSE_FAILURE)
 	{
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
 		delete rightChild;
 		result = new EvalNode(NULL, PARSE_FAILURE, value);
-		return result;
+		return result; // return the failure
 	}
+	
 	string* value = new string(SELECTION_EXPR);
 	result = new EvalNode(NULL, EXPR, (void*)value);
-	result->addChild(leftChild); //---------------------------------------------
-	result->addChild(rightChild); //--------------------------------------------
-	
-	return result;
-
+	result->addChild(leftChild); 
+	result->addChild(rightChild);
+	return result; // return the node
 }
 
+
+// parse a projection, return a node pointer
 EvalNodePointer parseProjection(TokenStream& ts){
 
 	EvalNodePointer result;
