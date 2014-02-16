@@ -109,7 +109,7 @@ const static string QUERY = "QUERY"; //Type
 //ConditionTree
 const static string CONDITION_TREE = "CONDITION_TREE";
 
-typedef vector< string > AttributeList;
+typedef vector< string > AttributeList; //attributes
 const static string ATTRIBUTE_LIST = "ATTRIBUTE_LIST";
 
 const static string ATTRIBUTE = "ATTRIBUTE";
@@ -117,10 +117,10 @@ const static string ATTRIBUTE = "ATTRIBUTE";
 typedef vector< tuple < string, string > > AttributeTypePairList; //type , name
 const static string ATTRIBUTE_TYPE_PAIR_LIST = "ATTRIBUTE_TYPE_PAIR_LIST"; 
 
-typedef vector< tuple< string, string > > LiteralList; //Type , value
+typedef vector< tuple< string, string > > LiteralList; //type, value
 const static string LITERAL_LIST = "LITERAL_LIST";
 
-typedef vector< tuple< string, string> > AttributeValuePairList;   //attributename , value 
+typedef vector< tuple< string, string> > AttributeValuePairList; //attributename , value 
 const static string ATTRIBUTE_VALUE_PAIR_LIST = "ATTRIBTUE_VALUE_PAIR_LIST"; 
 
 
