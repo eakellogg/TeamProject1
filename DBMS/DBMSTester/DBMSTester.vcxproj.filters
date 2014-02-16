@@ -29,5 +29,11 @@
     <ClCompile Include="Test_Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Test_Condition_Tree_Eval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComplexParserTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

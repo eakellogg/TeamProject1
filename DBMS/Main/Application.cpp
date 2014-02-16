@@ -1,9 +1,87 @@
 #include "Engine.h"
 #include "Table.h"
+#include "TokenStream.h"
+#include "Parser.h"
 
 int main()
 {
-	try {
+
+	TokenStream ts;
+	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+	ts.pushToken(Token(INT_LITERAL, "10"));
+	ts.pushToken(Token(SYMBOL, COMMA));
+	ts.pushToken(Token(STRING_LITERAL, "Hello, World"));
+	ts.pushToken(Token(SYMBOL, COMMA));
+	ts.pushToken(Token(INT_LITERAL, "20"));
+	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+	ts.pushToken(Token(SYMBOL, VALUES_FROM));
+	ts.pushToken(Token(IDENTIFIER, "Table1"));
+	ts.pushToken(Token(SYMBOL, INSERT));
+
+	EvalNodePointer result = parseInsert(ts);
+
+	cout << result->getType() << endl;
+	/*
+	TokenStream ts;
+
+	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+	ts.pushToken(Token(IDENTIFIER, "dots_to_points"));
+	ts.pushToken(Token(SYMBOL, PRODUCT));
+	ts.pushToken(Token(IDENTIFIER, "points"));
+
+	ts.pushToken(Token(SYMBOL, OPEN_PAREN)); //Above -  (points * dots_to_points ))
+
+	EvalNodePointer tree = parseAtomicExpr(ts);
+	
+	cout << tree->getType() << endl;
+	*/
+	//advanced_query <- project(x) (select(y == y2) (points * dots_to_points));
+	
+	/*
+	TokenStream ts;
+
+	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+	ts.pushToken(Token(IDENTIFIER, "dots_to_points"));
+	ts.pushToken(Token(SYMBOL, PRODUCT));
+	ts.pushToken(Token(IDENTIFIER, "points"));
+
+	ts.pushToken(Token(SYMBOL, OPEN_PAREN)); //Above -  (points * dots_to_points ))
+
+
+	//------------------------------------------------------
+	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+	ts.pushToken(Token(IDENTIFIER, "y2"));
+	ts.pushToken(Token(SYMBOL, EQUALS));
+	ts.pushToken(Token(IDENTIFIER, "y"));
+
+	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+	ts.pushToken(Token(SYMBOL, SELECT));     //Above -  (select (y == y2 )
+	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+	//----------------------------------------------------------------------
+	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+	ts.pushToken(Token(IDENTIFIER, "x"));
+
+	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+
+	ts.pushToken(Token(SYMBOL, PROJECT));     //Above - project (x) 
+	//-------------------------------------------------------------------
+
+	ts.pushToken(Token(SYMBOL, ARROW));
+	ts.pushToken(Token(IDENTIFIER, "avanced_query"));
+
+	EvaluationTree* tree = parseQuery(ts);
+
+	EvalNodePointer root = tree->getRoot();
+
+	cout << root->getType() << endl;
+	*/
+	//try {
+		/*
 		// create information to put into table to prepare testing
 		Attribute* namea = new Attribute(STRING_TYPE, "Zach Brown");
 		Attribute* nameb = new Attribute(STRING_TYPE, "Jacob Zerr");
@@ -108,5 +186,6 @@ int main()
 		cout << error << endl;
 		return 1;
 	}
+	*/
 	return 0;
 }
