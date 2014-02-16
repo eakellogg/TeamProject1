@@ -8,8 +8,6 @@ typedef ConditionTree::Node Node;
 EvaluationTree* parseQuery(TokenStream& ts){
 
 	EvaluationTree::Node* leftChild = parseRelationName(ts);
-	//cout << "Just parsed relationName found " << leftChild->getType() << " "
-		//<< (* static_cast<string*>( leftChild->getValue() ) ) << endl;
 	EvaluationTree::Node* root;
 
 
