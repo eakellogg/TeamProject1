@@ -2,10 +2,11 @@
 #include "Table.h"
 #include "TokenStream.h"
 #include "Parser.h"
+#include "Constants.h"
 
 int main()
 {
-
+	/*
 	TokenStream ts;
 	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
 	ts.pushToken(Token(INT_LITERAL, "10"));
@@ -21,7 +22,7 @@ int main()
 	EvalNodePointer result = parseInsert(ts);
 
 	cout << result->getType() << endl;
-	/*
+	
 	TokenStream ts;
 
 	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
@@ -35,10 +36,10 @@ int main()
 	EvalNodePointer tree = parseAtomicExpr(ts);
 	
 	cout << tree->getType() << endl;
-	*/
+	
 	//advanced_query <- project(x) (select(y == y2) (points * dots_to_points));
 	
-	/*
+	
 	TokenStream ts;
 
 	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
@@ -80,8 +81,8 @@ int main()
 
 	cout << root->getType() << endl;
 	*/
-	//try {
-		/*
+	try {
+		
 		// create information to put into table to prepare testing
 		Attribute* namea = new Attribute(STRING_TYPE, "Zach Brown");
 		Attribute* nameb = new Attribute(STRING_TYPE, "Jacob Zerr");
@@ -121,7 +122,8 @@ int main()
 		vector<Attribute*> person2 = vector<Attribute*>{nameb, cityb, stateb};
 		vector<Attribute*> person3 = vector<Attribute*>{named, cityc, statec};
 
-		Engine testEngine = Engine();
+		DBMS* dbms = new DBMS();
+		Engine testEngine = Engine(dbms);
 
 		testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
 		testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
@@ -138,24 +140,24 @@ int main()
 
 		Table* tbla = testEngine.getTables()[0];
 		Table* tblb = testEngine.getTables()[1];
-
+		
 		ConditionTree t(OR, OPERATOR);
 		ConditionTree::Node* n = t.getRoot();
 
-		ConditionTree::Node* firstEQ = n->setLeftChild(EQUAL, OPERATOR);
-		firstEQ->setLeftChild("Zach Brown", LITERAL_STRING);
-		firstEQ->setRightChild("name", VARIABLE);
+		ConditionTree::Node* firstEQ = n->addChild(EQUALS, OPERATOR);
+		firstEQ->addChild("Zach Brown", STRING_LITERAL);
+		firstEQ->addChild("name", VARIABLE);
 
-		ConditionTree::Node* secondEQ = n->setRightChild(EQUAL, OPERATOR);
-		secondEQ->setLeftChild("Jacob Zerr", LITERAL_STRING);
-		secondEQ->setRightChild("name", VARIABLE);
-
+		ConditionTree::Node* secondEQ = n->addChild(EQUALS, OPERATOR);
+		secondEQ->addChild("Jacob Zerr", STRING_LITERAL);
+		secondEQ->addChild("name", VARIABLE);
+		
 		// test each relational algebra method
 		Table* tblc = NULL;
 
-		cout << "selection:" << endl;
-		tblc = testEngine.selection(tbla, t);
-		tblc->printTable();
+		//cout << "selection:" << endl;
+		//tblc = testEngine.selection(tbla, t);
+		//tblc->printTable();
 
 		cout << "projection:" << endl;
 		vector<string> wantedColumns = {"name", "age"};
@@ -181,11 +183,23 @@ int main()
 		cout << "natural join:" << endl;
 		tblc = testEngine.naturalJoin(tbla, tblb);
 		tblc->printTable();
+
+		vector<string> fileLines;
+		fileLines = testEngine.openFile("students");
+		for (int i = 0; i < fileLines.size(); i++) {
+			cout << fileLines[i] << endl;
+		}
+		//testEngine.writeFile(tbla);
+		testEngine.insertInto(testEngine.findTable("students"), student4, columnTypesA);
+		//testEngine.writeFile(tbla);
+		testEngine.closeFile(tbla);
+		//testEngine.writeFile(tblb);
+		//testEngine.closeFile(tblb);
 	}
 	catch (const char* error) {
 		cout << error << endl;
 		return 1;
 	}
-	*/
+	
 	return 0;
 }

@@ -78,6 +78,14 @@ public:
 	// calculates the cross product of the two given tables and returns a new table with the result
 	Table* crossProduct(Table* first, Table* secondTable); // see CrossProduct.cpp
 
+	// opens the file represented by tableName; reads the table into the database
+	vector<string> openFile(string tableName);
+
+	// closes an open file, saving all changes that occured since opening; removes the table from the database
+	void closeFile(Table* table);
+
+	// writes a new file for a table, overwritting an already existing file with the same name if there is one
+	void writeFile(Table* table);
 
 	/*********************************************************************************
 		helper functions

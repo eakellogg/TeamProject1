@@ -9,8 +9,6 @@ class EvaluationTree{
 public:
 	class Node;
 	~EvaluationTree();
-	EvaluationTree(Node* root);
-	Node* getRoot();
 	
 	// Node is a subclass of EvaluationTree
 	class Node{
@@ -32,6 +30,9 @@ public:
 
 	};
 	
+	EvaluationTree(Node* root);
+	Node* getRoot();
+
 private:
 	Node* root;
 };
