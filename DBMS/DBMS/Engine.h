@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef ENGINE_H
-#define ENGINE_H
-
 #include <string>
 #include <iostream>
 #include <tuple>
@@ -11,11 +8,20 @@
 #include "ConditionTree.h"
 #include "Table.h"
 #include "Attribute.h"
+#include "DBMS.h"
+
+#ifndef ENGINE_H
+#define ENGINE_H
+
+
+class DBMS;
 
 using namespace std;
 
 class Engine {
 	vector<Table*> tables;
+
+	DBMS* master; //A pointer to the DBMS containing this engine
 
 public:
 	/*********************************************************************************
@@ -23,7 +29,7 @@ public:
 	*********************************************************************************/
 
 	//constructor
-	Engine();
+	Engine( DBMS* master );
 
 	/*********************************************************************************
 		non-modifying functions / accessor methods

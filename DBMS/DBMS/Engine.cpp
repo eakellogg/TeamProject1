@@ -10,7 +10,7 @@ using namespace std;
 
 
 	//constructor
-	Engine::Engine()
+	Engine::Engine(DBMS* master) : master(master)
 	{	}
 
 

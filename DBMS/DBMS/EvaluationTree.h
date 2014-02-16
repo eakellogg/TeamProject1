@@ -6,8 +6,8 @@
 #include "Lexer.h"
 
 class EvaluationTree{
-
 public:
+	class Node;
 	~EvaluationTree();
 	EvaluationTree(Node* root);
 	Node* getRoot();
