@@ -388,11 +388,13 @@ namespace DBMSTester
 			TokenStream ts;
 			ts.pushToken(Token("JUNK", "THEEND"));
 
+			ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
 			ts.pushToken(Token(INT_LITERAL, "10"));
 			ts.pushToken(Token(SYMBOL, COMMA));
 			ts.pushToken(Token(STRING_LITERAL, "Hello, World"));
 			ts.pushToken(Token(SYMBOL, COMMA));
 			ts.pushToken(Token(INT_LITERAL, "20"));
+			ts.pushToken(Token(SYMBOL, OPEN_PAREN));
 
 			ts.pushToken(Token(SYMBOL, VALUES_FROM));
 			ts.pushToken(Token(IDENTIFIER, "Table1"));
@@ -411,6 +413,39 @@ namespace DBMSTester
 			Assert::AreEqual(LITERAL_LIST.c_str(), (*children)[1]->getType().c_str());
 
 			Assert::AreEqual(1, ts.getCount() );
+
+
+
+			TokenStream ts2;
+
+			ts2.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+			ts2.pushToken(Token(INT_LITERAL, "4"));
+			ts2.pushToken(Token(SYMBOL, COMMA));
+			ts2.pushToken(Token(STRING_LITERAL, "cat"));
+			ts2.pushToken(Token(SYMBOL, COMMA));
+			ts2.pushToken(Token(STRING_LITERAL, "Joe"));
+
+			ts2.pushToken(Token(SYMBOL, OPEN_PAREN));
+
+			ts2.pushToken(Token(SYMBOL, VALUES_FROM)); //Above Values From ("hammer" , 3 , 10 );
+
+
+			ts2.pushToken(Token(IDENTIFIER, "animals"));
+
+			ts2.pushToken(Token(SYMBOL, INSERT)); //Above INSERT INTO animals //
+
+			result = parseInsert(ts2);
+
+			Assert::AreEqual(COMMAND_OPERATOR.c_str(), result->getType().c_str());
+
+			children = result->getChildren();
+
+			Assert::AreEqual(RELATION_NAME.c_str(), (*children)[0]->getType().c_str());
+
+			Assert::AreEqual(LITERAL_LIST.c_str(), (*children)[1]->getType().c_str());
+
+			Assert::AreEqual(0, ts2.getCount());
 
 
 			/*
@@ -629,8 +664,9 @@ namespace DBMSTester
 
 		TEST_METHOD(PARSE_COMMAND)
 		{
+			
 			TokenStream ts;
-
+			
 			ts.pushToken(Token("JUNK", "THEEND"));
 			ts.pushToken(Token(IDENTIFIER, "Table1"));
 			ts.pushToken(Token(SYMBOL, OPEN));
@@ -701,7 +737,7 @@ namespace DBMSTester
 			ts.pushToken(Token(IDENTIFIER, "Table1"));
 
 			ts.pushToken(Token(SYMBOL, CREATE_TABLE));
-
+			
 		    result = parseCreate(ts);
 
 			Assert::AreEqual(COMMAND_OPERATOR.c_str(), result->getType().c_str());
@@ -716,7 +752,7 @@ namespace DBMSTester
 
 
 			Assert::AreEqual(1, ts.getCount());
-
+			
 			ts.pushToken(Token(STRING_LITERAL, "Bye"));
 			ts.pushToken(Token(OPERATOR, EQUALS));
 			ts.pushToken(Token(STRING_LITERAL, "Hello"));
@@ -774,23 +810,26 @@ namespace DBMSTester
 
 			Assert::AreEqual(1, ts.getCount());
 
-
-
+			
+			ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+			
 			ts.pushToken(Token(INT_LITERAL, "10"));
 			ts.pushToken(Token(SYMBOL, COMMA));
 			ts.pushToken(Token(STRING_LITERAL, "Hello, World"));
 			ts.pushToken(Token(SYMBOL, COMMA));
 			ts.pushToken(Token(INT_LITERAL, "20"));
-
+			ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+			
 			ts.pushToken(Token(SYMBOL, VALUES_FROM));
+
 			ts.pushToken(Token(IDENTIFIER, "Table1"));
 			ts.pushToken(Token(SYMBOL, INSERT));
 
-			result = parseInsert(ts);
+			 result = parseInsert(ts);
 
 
 
-			Assert::AreEqual(COMMAND_OPERATOR.c_str(), result->getType().c_str());
+			Assert::AreEqual(COMMAND_OPERATOR.c_str(), result->getType().c_str() );
 
 			children = result->getChildren();
 
@@ -799,6 +838,7 @@ namespace DBMSTester
 			Assert::AreEqual(LITERAL_LIST.c_str(), (*children)[1]->getType().c_str());
 
 			Assert::AreEqual(1, ts.getCount());
+			
 
 			ts.pushToken(Token(STRING_LITERAL, "Bye"));
 			ts.pushToken(Token(OPERATOR, EQUALS));
@@ -828,7 +868,7 @@ namespace DBMSTester
 
 			result = parseDelete(ts);
 
-			Assert::AreEqual(COMMAND_OPERATOR.c_str(), result->getType().c_str());
+			Assert::AreEqual( COMMAND_OPERATOR.c_str() , result->getType().c_str());
 
 			children = result->getChildren();
 
@@ -837,6 +877,7 @@ namespace DBMSTester
 			Assert::AreEqual(CONDITION_TREE.c_str(), (*children)[1]->getType().c_str());
 
 			Assert::AreEqual(1, ts.getCount());
+			
 		}
 
 
@@ -1186,10 +1227,6 @@ namespace DBMSTester
 			Assert::AreEqual(1, ts.getCount());
 
 		}
-		TEST_METHOD(PARSE_QUERY)
-		{
-
-		}
 		TEST_METHOD(PARSE_ATTRIBUTE_NAME)
 		{
 			TokenStream ts;
@@ -1204,6 +1241,20 @@ namespace DBMSTester
 			Assert::AreEqual( "AGE",  (*value).c_str() );
 
 			Assert::AreEqual(1, ts.getCount());
+		}
+		TEST_METHOD(PARSE_TEST_TOKEN_STREAM)
+		{
+			TokenStream ts;
+
+			ts.pushToken(Token("GARBAGE", "NOTHING"));
+			ts.pushToken(Token(IDENTIFIER, "AGE"));
+
+			TokenStream copy = ts;
+			copy.getToken();
+			copy.getToken();
+
+			Assert::AreEqual(2, ts.getCount() );
+
 		}
 	};
 }

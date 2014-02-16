@@ -8,47 +8,78 @@ typedef ConditionTree::Node Node;
 EvaluationTree* parseQuery(TokenStream& ts){
 
 	EvaluationTree::Node* leftChild = parseRelationName(ts);
+	//cout << "Just parsed relationName found " << leftChild->getType() << " "
+		//<< (* static_cast<string*>( leftChild->getValue() ) ) << endl;
+	EvaluationTree::Node* root;
+
 
 	if (leftChild->getType() == RELATION_NAME)
 	{
 
-		string parentType = QUERY;
-
+		//cout << "A" << endl;
 		Token token = ts.getToken();
+		//cout << "Just found a " << token.getValue() << endl;
 		if (token.getValue() != ARROW)
+		{	
+
+			ts.pushToken(token);
+			delete leftChild;
+			string* value = new string("No arrow found, failed to parse query");
+			root = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+			return new EvaluationTree(root);
+		}
+		else
 		{
-			//TODO
-			//I'm not great with exceptions I need ideas
-			//throw error;
+			//cout << "B" << endl;
+			string* value = new string( token.getValue() );
+			root = new EvaluationTree::Node(NULL, QUERY, (void*)value);
+
+
+			EvaluationTree::Node* rightChild = parseExpresion(ts);
+			//cout << "Just parsed an expresion " << rightChild->getType() << endl;
+			if (rightChild->getType() != EXPR)
+			{
+				//cout << "C" << endl;
+				delete leftChild;
+				delete rightChild;
+				//cout << "CC" << endl;
+
+				string* value = new string("No expr found for right argument of query");
+				root = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+				return new EvaluationTree(root);
+			}
+			else
+			{
+
+
+				root->addChild(leftChild);//----------------------------------------
+				root->addChild(rightChild); //--------------------------------------
+
+				EvaluationTree* tree = new EvaluationTree(root);
+				return tree;
+			}
 		}
-
-		string* value = new string(token.getValue());
-		EvaluationTree::Node* root = new EvaluationTree::Node(NULL, QUERY, (void*)value);
-
-		root->addChild(leftChild);//----------------------------------------
-
-		EvaluationTree::Node* rightChild = parseExpresion(ts);
-
-		if (rightChild->getType() != EXPR){
-			//TODO
-			//THROW ERROR
-		}
-
-		root->addChild(rightChild); //--------------------------------------
-
-		EvaluationTree* tree = new EvaluationTree(root);
-		return tree;
 	}
+	
 	else
 	{
-		EvaluationTree* tree = parseCommand(ts);
-		if (tree->getRoot()->getType() == PARSE_FAILURE)
-		{
-			///FAILURE
-		}
-		return tree;
-	}
 
+		delete leftChild;
+
+		EvaluationTree* tree = parseCommand(ts);
+		if ( tree->getRoot()->getType() == PARSE_FAILURE)
+		{
+			delete tree;
+			string* value = new string("No query found, then no command found parse failure");
+			root = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+			return new EvaluationTree(root);
+
+		}
+		else
+			return tree;
+	}
+	
+	return NULL;
 
 }
 
@@ -66,7 +97,8 @@ EvaluationTree::Node* parseRelationName(TokenStream& ts){
 	}
 	else{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL ,PARSE_FAILURE, (void*)(new string("Couldn't parse an relation name")));
+		string* value = new string("Couldn't parse an relation name");
+		result = new EvaluationTree::Node(NULL ,PARSE_FAILURE, (void*)value);
 		return result;
 	}
 	
@@ -82,6 +114,7 @@ EvaluationTree::Node* parseExpresion(TokenStream& ts){
 	delete result;
 	
 	result = parseProjection(ts); //Tyre parsing a projetion
+	//cout << "Just tried getting an projection found " << result->getType() << endl;
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
@@ -90,7 +123,8 @@ EvaluationTree::Node* parseExpresion(TokenStream& ts){
 	if (result->getType() == EXPR)
 		return result;
 	delete result;
-
+	
+	
 	result = parseUnion(ts);
 	if (result->getType() == EXPR)
 		return result;
@@ -116,7 +150,8 @@ EvaluationTree::Node* parseExpresion(TokenStream& ts){
 		return result;
 	else{
 
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse an expresion");
+		string* value = new string("failed to parse an expresion");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, value);
 		return result;
 	}
 }
@@ -126,37 +161,50 @@ EvaluationTree::Node* parseSelection(TokenStream& ts){
 	EvaluationTree::Node* result;
 
 	Token t = ts.getToken();
+	//cout << "Inside secltion looking for select found " << t.getValue() << endl;
 	if (t.getValue() != SELECT){
 		
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse selection, no select token"));
+		string* value = new string("Couldn't parse selection, no select token");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+
 		return result;
 	}
 	
 	t = ts.getToken();
+	//cout << "Inside of selection looking for ( found a " << t.getValue() << endl;
 	if (t.getValue() != OPEN_PAREN){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse selection, no ("));
+		string* value = new string("Couldn't parse selection, no (");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+
 		return result;
 	}
 
 	ConditionTree* condtree = parseConditionTree(ts);
+	//cout << "Inside of selection looking for condition found a " << condtree->getRoot()->getType() << endl;
 	if (condtree->getRoot()->getType() == PARSE_FAILURE){
 		delete condtree;
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse a condition Tree "));
+		string* value = new string("Couldn't parse selection, no condition");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+
 		return result;
 	}
 
 	t = ts.getToken();
+	//cout << "Inside of selection looking for ) found a " << t.getValue() << endl;
 	if (t.getValue() != CLOSE_PAREN){
 			ts.pushToken(t);
-			result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse selection, no )"));
+
+			string* value = new string("Couldn't parse selection, no )");
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+
 			return result;
 	}
 	EvalNodePointer leftChild = new EvalNode(NULL, CONDITION_TREE, (void*)(condtree));
 
 	EvalNodePointer rightChild = parseAtomicExpr(ts);
-	
+	//cout << "ZZZZZZZZZZZInside of selection looking for and expresion found a " << rightChild->getType() << endl;
 	if (rightChild->getType() == PARSE_FAILURE)
 	{
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
@@ -177,21 +225,25 @@ EvalNodePointer parseProjection(TokenStream& ts){
 
 	EvalNodePointer result;
 	Token t = ts.getToken();
+	//cout << "Inside projection found a " << t.getValue() << endl;
 	if (t.getValue() != PROJECT){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse projection, no project"));
+		string* value = new string("Couldn't parse projection, no project");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	t = ts.getToken();
-	
+	//cout << "inside projection looking for a ( found a" << t.getValue() << endl;
 	if (t.getValue() != OPEN_PAREN){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse projection, no ("));
+		string* value = new string("Couldn't parse projection, no (");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	EvalNodePointer leftChild = parseAttributeList(ts);
+	//cout << "Inside projection looked for a attribute list found a " << leftChild->getType() << endl;
 	if (leftChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((leftChild->getValue()))));
@@ -201,14 +253,16 @@ EvalNodePointer parseProjection(TokenStream& ts){
 	}
 
 	t = ts.getToken();
-
+	//cout << "Inside projection looking for ) found " << t.getValue() << endl;
 	if (t.getValue() != CLOSE_PAREN){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse projection, no )"));
+		string* value = new string("Couldn't parse projection, no )");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	EvalNodePointer rightChild = parseAtomicExpr(ts);
+	//cout << "inside projeciont looking for atomic expr found a " << rightChild->getType() << endl;
 	if (rightChild->getType() == PARSE_FAILURE){
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
 		delete rightChild;
@@ -231,7 +285,8 @@ EvalNodePointer parseRenaming(TokenStream& ts){
 	Token t = ts.getToken();
 	if (t.getValue() != RENAME){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse projection, no rename"));
+		string* value = new string("Couldn't parse projection, no rename");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
@@ -239,7 +294,8 @@ EvalNodePointer parseRenaming(TokenStream& ts){
 
 	if (t.getValue() != OPEN_PAREN){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse renaming, no ("));
+		string* value = new string("Couldn't parse projection, no (");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
@@ -256,7 +312,8 @@ EvalNodePointer parseRenaming(TokenStream& ts){
 
 	if (t.getValue() != CLOSE_PAREN){
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse renaming, no )"));
+		string* value = new string("Couldn't parse projection, no )");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
@@ -280,8 +337,10 @@ EvalNodePointer parseRenaming(TokenStream& ts){
 EvalNodePointer parseUnion(TokenStream& ts){
 
 	EvalNodePointer result;
+	
+	TokenStream copyTS = ts;
 
-	EvalNodePointer leftChild = parseAtomicExpr(ts);
+	EvalNodePointer leftChild = parseAtomicExpr(copyTS);
 	if (leftChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((leftChild->getValue()))));
@@ -290,14 +349,15 @@ EvalNodePointer parseUnion(TokenStream& ts){
 		return result;
 	}
 
-	Token t = ts.getToken();
+	Token t = copyTS.getToken();
 	if (t.getValue() != UNION){
-		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse union, no UNION symbole"));
+		copyTS.pushToken(t);
+		string* value = new string("Couldn't parse union, no UNION symbol");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
-	EvalNodePointer rightChild = parseAtomicExpr(ts);
+	EvalNodePointer rightChild = parseAtomicExpr(copyTS);
 	if (rightChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
@@ -308,6 +368,7 @@ EvalNodePointer parseUnion(TokenStream& ts){
 	}
 
 
+	ts = copyTS;
 	string* value = new string(UNION_EXPR);
 	result = new EvalNode(NULL, EXPR, (void*)value);
 	result->addChild(leftChild);//---------------------
@@ -319,8 +380,8 @@ EvalNodePointer parseUnion(TokenStream& ts){
 EvalNodePointer parseDifference(TokenStream& ts){
 	
 	EvalNodePointer result;
-
-	EvalNodePointer leftChild = parseAtomicExpr(ts);
+	TokenStream copyTS = ts;
+	EvalNodePointer leftChild = parseAtomicExpr(copyTS);
 	if (leftChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((leftChild->getValue()))));
@@ -329,14 +390,15 @@ EvalNodePointer parseDifference(TokenStream& ts){
 		return result;
 	}
 
-	Token t = ts.getToken();
+	Token t = copyTS.getToken();
 	if (t.getValue() != DIFFERENCE){
-		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse difference, no DIFFERENCE symbol"));
+		copyTS.pushToken(t);
+		string* value = new string("Couldn't parse difference, no DIFFERENCE symbol");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
-	EvalNodePointer rightChild = parseAtomicExpr(ts);
+	EvalNodePointer rightChild = parseAtomicExpr(copyTS);
 	if (rightChild->getType() == PARSE_FAILURE ){
 
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
@@ -346,7 +408,7 @@ EvalNodePointer parseDifference(TokenStream& ts){
 		return result;
 	}
 
-
+	ts = copyTS;
 	string* value = new string(DIFFERENCE_EXPR);
 	result = new EvalNode(NULL, EXPR, (void*)value);
 	result->addChild(leftChild);//---------------------
@@ -358,8 +420,8 @@ EvalNodePointer parseDifference(TokenStream& ts){
 EvalNodePointer parseProduct(TokenStream& ts){
 
 	EvalNodePointer result;
-
-	EvalNodePointer leftChild = parseAtomicExpr(ts);
+	TokenStream copyTS = ts;
+	EvalNodePointer leftChild = parseAtomicExpr(copyTS);
 	if (leftChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((leftChild->getValue()))));
@@ -368,14 +430,15 @@ EvalNodePointer parseProduct(TokenStream& ts){
 		return result;
 	}
 
-	Token t = ts.getToken();
+	Token t = copyTS.getToken();
 	if (t.getValue() != PRODUCT){
-		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse PRODUCT, no PRODUCT symbol"));
+		copyTS.pushToken(t);
+		string* value = new string("Couldn't parse PRODUCT, no PRODUCT symbol");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
-	EvalNodePointer rightChild = parseAtomicExpr(ts);
+	EvalNodePointer rightChild = parseAtomicExpr(copyTS);
 	if (rightChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
@@ -386,6 +449,7 @@ EvalNodePointer parseProduct(TokenStream& ts){
 	}
 
 
+	ts = copyTS;
 	string* value = new string(PRODUCT_EXPR);
 	result = new EvalNode(NULL, EXPR, (void*)value);
 	result->addChild(leftChild);//---------------------
@@ -397,8 +461,8 @@ EvalNodePointer parseProduct(TokenStream& ts){
 EvalNodePointer parseNaturalJoin(TokenStream& ts){
 
 	EvalNodePointer result;
-
-	EvalNodePointer leftChild = parseAtomicExpr(ts);
+	TokenStream copyTS = ts;
+	EvalNodePointer leftChild = parseAtomicExpr(copyTS);
 	if (leftChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((leftChild->getValue()))));
@@ -407,14 +471,15 @@ EvalNodePointer parseNaturalJoin(TokenStream& ts){
 		return result;
 	}
 
-	Token t = ts.getToken();
+	Token t = copyTS.getToken();
 	if (t.getValue() != JOIN){
-		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse natural join, no join symbol"));
+		copyTS.pushToken(t);
+		string* value = new string("Couldn't parse natural join, no join symbol");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)(value));
 		return result;
 	}
 
-	EvalNodePointer rightChild = parseAtomicExpr(ts);
+	EvalNodePointer rightChild = parseAtomicExpr(copyTS);
 	if (rightChild->getType() == PARSE_FAILURE){
 
 		string* value = new string((*static_cast<string*>((rightChild->getValue()))));
@@ -425,6 +490,7 @@ EvalNodePointer parseNaturalJoin(TokenStream& ts){
 	}
 
 
+	ts = copyTS;
 	string* value = new string(JOIN_EXPR);
 	result = new EvalNode(NULL, EXPR, (void*)value);
 	result->addChild(leftChild);//---------------------
@@ -432,45 +498,55 @@ EvalNodePointer parseNaturalJoin(TokenStream& ts){
 	return result;//------------------------------------------
 
 }
-
 //Parse an Atomic-Expr
 EvalNodePointer parseAtomicExpr(TokenStream& ts){
+	
 
 	EvalNodePointer result = NULL;
-	
 	result = parseRelationName(ts);
-	if (result->getType() == RELATION_NAME){
-		return result;
+	string* value = static_cast<string*>(result->getValue());
+	if (result->getType() != RELATION_NAME){
+
+		string* value = new string((*static_cast<string*>((result->getValue()))));
+		delete result;
 	}
-	delete result;
+	else
+		return result;
+
 
 	Token t = ts.getToken();
 	if (t.getValue() != OPEN_PAREN){
 
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse atomic expr, no ("));
+		string* value = new string("");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
-	result = parseExpresion(ts);
-	if (result->getType() == PARSE_FAILURE){
+		result = parseExpresion(ts);
+		
+		if (result->getType() == PARSE_FAILURE){
 
-		string* value = new string((*static_cast<string*>((result->getValue()))));
-		delete result;
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*) value);
-		return result;
+			string* value = new string((*static_cast<string*>((result->getValue()))));
+			delete result;
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+			return result;
+		}
+
+		t = ts.getToken();
+		if (t.getValue() != CLOSE_PAREN){
+
+			ts.pushToken(t);
+			string* value = new string((*static_cast<string*>((result->getValue()))));
+			delete result;
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+			return result;
+		}
+		else
+			return result;
+
 	}
 
-	t = ts.getToken();
-	if (t.getValue() != CLOSE_PAREN){
-		ts.pushToken(t);
-		delete result;
-		result = new EvalNode(NULL, PARSE_FAILURE, (void*)("Couldn't parse atomic expr, no )"));
-		return result;
-	}
-	
-	return result;
-}
 	
 
 
@@ -699,32 +775,30 @@ EvalNodePointer           parseAttributeName(TokenStream& ts){
 
 EvaluationTree*    parseCommand(TokenStream& ts){
 
-	EvaluationTree::Node* result;
-	result = parseOpen(ts); //Try parsing a selection
+	EvalNodePointer result = NULL;
+	
+	
+	result = parseOpen(ts); //Try parsing a Open
 	if (result->getType() == COMMAND_OPERATOR)
 		return  new EvaluationTree(result);
 	delete result;
 
-	result = parseClose(ts); //Tyre parsing a projetion
+	result = parseClose(ts); //Try parsing a Close
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	delete result;
-
-	result = parseWrite(ts); //Try parsing a rename
+	result = parseWrite(ts); //Try parsing a Write
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	delete result;
-
-	result = parseExit(ts);
+	result = parseExit(ts); //Try parsing an Exit
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	delete result;
-
 	result = parseShow(ts);
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	delete result;
-
 	result = parseCreate(ts);
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
@@ -734,13 +808,15 @@ EvaluationTree*    parseCommand(TokenStream& ts){
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	delete result;
-
+	
 	result = parseDelete(ts);
-	if (result->getType() == COMMAND_OPERATOR)
+	if (  result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	else{
-
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse a command");
+		
+		delete result;
+		string* value = new string("failed to parse a command");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return new EvaluationTree( result );
 	}
 }
@@ -754,14 +830,16 @@ EvalNodePointer    parseOpen(TokenStream& ts){
 	if (t.getValue() != OPEN)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse open");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value );
 		return result;
 	}
 
 	EvalNodePointer relationNode = parseRelationName(ts);
 	if (relationNode->getType() == PARSE_FAILURE){
 		delete relationNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse open");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -780,14 +858,16 @@ EvalNodePointer    parseClose(TokenStream& ts){
 	if (t.getValue() != CLOSE)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse close");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	EvalNodePointer relationNode = parseRelationName(ts);
 	if (relationNode->getType() == PARSE_FAILURE){
 		delete relationNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse close");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -806,7 +886,8 @@ EvalNodePointer    parseWrite(TokenStream& ts){
 	if (t.getValue() != WRITE)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse write");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -814,7 +895,8 @@ EvalNodePointer    parseWrite(TokenStream& ts){
 	if (relationNode->getType() == PARSE_FAILURE){
 		
 		delete relationNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse write");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -833,7 +915,8 @@ EvalNodePointer    parseExit(TokenStream& ts){
 	if (t.getValue() != EXIT)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse open");
+		string* value = new string("Failed to parse Exit");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -850,14 +933,16 @@ EvalNodePointer    parseShow(TokenStream& ts){
 	if (t.getValue() != SHOW)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse show");
+		string* value = new string("Failed to parse show");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	EvalNodePointer relationNode = parseRelationName(ts);
 	if (relationNode->getType() == PARSE_FAILURE){
 		delete relationNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse show");
+		string* value = new string("Failed to parse show");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -876,14 +961,16 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 	if (t.getValue() != CREATE_TABLE)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse create");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	EvalNodePointer relationNode = parseRelationName(ts);
 	if (relationNode->getType() == PARSE_FAILURE){
 		delete relationNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse create");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -891,7 +978,8 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 	if (t.getValue() != OPEN_PAREN)
 	{
 		ts.pushToken(t);
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse create, no (");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -901,7 +989,8 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 		delete relationNode;
 		//string* value = new string( static_cast<string>( listNode->getValue() ) );
 		delete listNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse create");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -911,7 +1000,8 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 		ts.pushToken(t);
 		delete relationNode;
 		delete listNode;
-		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, "Failed to parse create, no )");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 	t = ts.getToken();
@@ -920,7 +1010,8 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 		delete relationNode;
 		delete listNode;
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no PRIMARY KEY");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 	t = ts.getToken();
@@ -929,7 +1020,8 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 		delete relationNode;
 		delete listNode;
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, (");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -939,7 +1031,8 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 		delete relationNode;
 		delete listNode;
 		delete attributeListNode;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse create");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 	t = ts.getToken();
@@ -948,11 +1041,12 @@ EvalNodePointer    parseCreate(TokenStream& ts){
 		delete relationNode;
 		delete listNode;
 		delete attributeListNode;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no )");
+		string* value = new string("Failed to parse crate");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
-	string* value = new string(SHOW);
+	string* value = new string(CREATE_TABLE);
 	result = new EvalNode(NULL, COMMAND_OPERATOR, (void*)value);
 	result->addChild(relationNode);
 	result->addChild(listNode);
@@ -968,7 +1062,8 @@ EvalNodePointer    parseUpdate(TokenStream& ts){
 	if (t.getValue() != UPDATE){
 
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse update");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -986,7 +1081,8 @@ EvalNodePointer    parseUpdate(TokenStream& ts){
 
 		delete relationName;
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse close");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -995,7 +1091,8 @@ EvalNodePointer    parseUpdate(TokenStream& ts){
 
 		delete relationName;
 		delete atrributeValuePairNode;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse close");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -1006,7 +1103,8 @@ EvalNodePointer    parseUpdate(TokenStream& ts){
 		delete relationName;
 		delete atrributeValuePairNode;
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse close");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -1018,7 +1116,8 @@ EvalNodePointer    parseUpdate(TokenStream& ts){
 		delete relationName;
 		delete atrributeValuePairNode;
 		delete conditionNode;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse close");
+		result = new EvaluationTree::Node(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -1033,37 +1132,61 @@ EvalNodePointer    parseUpdate(TokenStream& ts){
 EvalNodePointer    parseInsert(TokenStream& ts){
 
 	EvalNodePointer result = NULL;
-
 	Token t = ts.getToken();
 	if (t.getValue() != INSERT){
 
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse Insert, no Insert");
+		string* value = new string("Failed to parse Insert, no Insert");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*) value );
 		return result;
 	}
-
 	EvalNodePointer relationName = parseRelationName(ts);
+	
 	if (relationName->getType() == PARSE_FAILURE){
 		delete relationName;
-
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse insert, no relationName");
+		string* value = new string("Failed to parse insert, no relationName");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	t = ts.getToken();
 	if (t.getValue() != VALUES_FROM){
-
 		ts.pushToken(t);
 	}
 	else{
+		cout << "A" << endl;
+		t = ts.getToken();
+		if (t.getValue() != OPEN_PAREN)
+		{
+			ts.pushToken(t);
+			delete relationName;
+			string* value = new string("Failed to parse insert, no literalList");
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+			return result;
+		}
 		EvalNodePointer literalList = parseLiteralList(ts);
 		if (literalList->getType() == PARSE_FAILURE){
 			delete relationName;
 			delete literalList;
-			result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse insert, no literalList");
+			string* value = new string("Failed to parse insert, no literalList");
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 			return result;
 		}
-		
+
+
+		t = ts.getToken();
+
+		if (t.getValue() != CLOSE_PAREN)
+		{
+
+			ts.pushToken(t);
+			delete literalList;
+			delete relationName;
+			string* value = new string("Failed to parse insert, no literalList");
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+		}
+
+
 		string* value = new string(INSERT);
 		result = new EvalNode(NULL, COMMAND_OPERATOR, (void*)value);
 		result->addChild(relationName);
@@ -1071,7 +1194,6 @@ EvalNodePointer    parseInsert(TokenStream& ts){
 		return result;
 
 	}
-
 	t = ts.getToken();
 	if (t.getValue() != VALUES_FROM_RELATION){
 
@@ -1082,10 +1204,11 @@ EvalNodePointer    parseInsert(TokenStream& ts){
 		if (expr->getType() == PARSE_FAILURE){
 			delete relationName;
 			delete expr;
-			result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse insert, no expr");
+			string* value = new string("Failed to parse insert, no expr");
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+
 			return result;
 		}
-
 		string* value = new string(INSERT);
 		result = new EvalNode(NULL, COMMAND_OPERATOR, (void*)value);
 		result->addChild(relationName);
@@ -1093,6 +1216,7 @@ EvalNodePointer    parseInsert(TokenStream& ts){
 
 
 	}
+	
 	return result;
 
 }
@@ -1106,14 +1230,17 @@ EvalNodePointer    parseDelete(TokenStream& ts){
 	if (t.getValue() != DELETE){
 
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse insert, no literalList");
+		string* value = new string("Failed to parse delete, no DELETE");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
 	EvalNodePointer relationName = parseRelationName(ts);
 	if (relationName->getType() == PARSE_FAILURE){
 		delete relationName;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse insert, no expr");
+		string* value = new string("Failed to parse delelte, no relation");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+
 		return result;
 	}
 
@@ -1122,7 +1249,8 @@ EvalNodePointer    parseDelete(TokenStream& ts){
 
 		ts.pushToken(t);
 		delete relationName;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse delete, no WHERE");
+		string* value = new string("Failed to parse delete, no WHERE");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -1133,7 +1261,8 @@ EvalNodePointer    parseDelete(TokenStream& ts){
 
 		delete relationName;
 		delete conditionNode;
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse create, no attibuteList");
+		string* value = new string("Failed to parse create, no attibuteList");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 
@@ -1164,11 +1293,12 @@ EvalNodePointer    parseTypedAttributeList(TokenStream& ts){
 
 			if ( (type->getType() == PARSE_FAILURE))
 			{
-				//delete node;
-				//delete type;
+				delete node;
+				delete type;
 
-				//delete attributetypelist;
-				result = new EvalNode(NULL, PARSE_FAILURE, "Failure to parse pair when one is expected");
+				delete attributetypelist;
+				string* value = new string("Failure to parse pair when one is expected");
+				result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 				return result;
 			}
 			else
@@ -1188,7 +1318,8 @@ EvalNodePointer    parseTypedAttributeList(TokenStream& ts){
 
 			//delete node;
 			//delete attributetypelist;
-			result = new EvalNode(NULL, PARSE_FAILURE, "Failure to parse pair when one is expected");
+			string* value = new string("Failure to parse pair when one is expected");
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 			return result;
 		}
 
@@ -1218,7 +1349,8 @@ EvalNodePointer    parseType(TokenStream& ts){
 	if (t.getType() != TYPE){
 
 		ts.pushToken(t);
-		result = new EvalNode(NULL, PARSE_FAILURE, "Failed to parse type, no type");
+		string* value = new string("Failed to parse type, no type");
+		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
 		return result;
 	}
 

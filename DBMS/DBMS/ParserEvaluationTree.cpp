@@ -2,7 +2,8 @@
 
 #include "EvaluationTree.h"
 
-
+#include <iostream>
+using namespace std;
 //---------------------------------------
 /*      EvaluationTree::Node methods*/
 
@@ -13,7 +14,7 @@ EvaluationTree::Node::Node(Node* parent, string type, void* value){
 	this->value = value;
 }
 EvaluationTree::Node::~Node(){
-	
+
 	if (value != NULL)
 		delete value;
 	for (int i = 0; i < children.size(); i++)
@@ -21,6 +22,7 @@ EvaluationTree::Node::~Node(){
 		if (children[i] != NULL)
 			delete children[i];
 	}
+	
 }
 void EvaluationTree::Node::setParent(Node* parent){
 	this->parent = parent;
@@ -35,7 +37,7 @@ void* EvaluationTree::Node::getValue(){
 	return value;
 }
 string EvaluationTree::Node::getType(){
-	return type;
+		return type;
 }
 void  EvaluationTree::Node::addChild(string type, void* value){
 	children.push_back( new Node( this , type, value));
@@ -55,7 +57,8 @@ EvaluationTree::EvaluationTree(Node* root){
 	this->root = root;
 }
 EvaluationTree::~EvaluationTree(){
-	delete root;
+	if ( root!= NULL)
+		delete root;
 }
 
 
