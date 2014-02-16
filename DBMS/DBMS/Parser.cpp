@@ -1207,292 +1207,296 @@ EvalNodePointer parseUpdate(TokenStream& ts){
 
 
 // parse an insert, return a node pointer
-EvalNodePointer    parseInsert(TokenStream& ts){
+EvalNodePointer parseInsert(TokenStream& ts){
 
 	EvalNodePointer result = NULL;
 	Token t = ts.getToken();
+	
+	// if the token does not equal insert
 	if (t.getValue() != INSERT){
-
 		ts.pushToken(t);
 		string* value = new string("Failed to parse Insert, no Insert");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*) value );
 		return result;
 	}
+	
 	EvalNodePointer relationName = parseRelationName(ts);
 	
+	// if the type of the node is failure
 	if (relationName->getType() == PARSE_FAILURE){
 		delete relationName;
 		string* value = new string("Failed to parse insert, no relationName");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-		return result;
+		return result; // return the failure
 	}
 
 	t = ts.getToken();
+	
+	// if the token does not equal values from
 	if (t.getValue() != VALUES_FROM){
 		ts.pushToken(t);
 	}
 	else{
-		cout << "A" << endl;
 		t = ts.getToken();
+		
+		// if the token does not equal an open parentheses
 		if (t.getValue() != OPEN_PAREN)
 		{
 			ts.pushToken(t);
 			delete relationName;
 			string* value = new string("Failed to parse insert, no literalList");
 			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-			return result;
+			return result; // return the failure
 		}
+		
 		EvalNodePointer literalList = parseLiteralList(ts);
+		
+		// if the type of the node is failure
 		if (literalList->getType() == PARSE_FAILURE){
 			delete relationName;
 			delete literalList;
 			string* value = new string("Failed to parse insert, no literalList");
 			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-			return result;
+			return result; // return the failure
 		}
 
-
 		t = ts.getToken();
-
+	
+		// if the token does not equal a close parentheses
 		if (t.getValue() != CLOSE_PAREN)
 		{
-
 			ts.pushToken(t);
 			delete literalList;
 			delete relationName;
 			string* value = new string("Failed to parse insert, no literalList");
-			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
+			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value); // return the failure
 		}
-
 
 		string* value = new string(INSERT);
 		result = new EvalNode(NULL, COMMAND_OPERATOR, (void*)value);
 		result->addChild(relationName);
 		result->addChild(literalList);
-		return result;
+		return result; // return the failure
 
 	}
+	
 	t = ts.getToken();
+	
+	// if the token does not equal values from relation
 	if (t.getValue() != VALUES_FROM_RELATION){
-
 		ts.pushToken(t);
 	}
 	else{
 		EvalNodePointer expr = parseExpresion(ts);
+		
+		// if the type of the node eqauls failure
 		if (expr->getType() == PARSE_FAILURE){
 			delete relationName;
 			delete expr;
 			string* value = new string("Failed to parse insert, no expr");
 			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-
-			return result;
+			return result; // return the failure
 		}
+		
 		string* value = new string(INSERT);
 		result = new EvalNode(NULL, COMMAND_OPERATOR, (void*)value);
 		result->addChild(relationName);
 		result->addChild(expr);
-
-
 	}
-	
-	return result;
 
+	return result; // return the node
 }
 
 
-EvalNodePointer    parseDelete(TokenStream& ts){
+// parse a delete, return a node pointer
+EvalNodePointer parseDelete(TokenStream& ts){
 
 	EvalNodePointer result;
-
 	Token t = ts.getToken();
+	
+	// if the token does not equal delete
 	if (t.getValue() != DELETE){
-
 		ts.pushToken(t);
 		string* value = new string("Failed to parse delete, no DELETE");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-		return result;
+		return result; // return the failure
 	}
 
 	EvalNodePointer relationName = parseRelationName(ts);
+	
+	// if the type of the node equals failure
 	if (relationName->getType() == PARSE_FAILURE){
 		delete relationName;
 		string* value = new string("Failed to parse delelte, no relation");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-
-		return result;
+		return result; // return the failure
 	}
 
 	t = ts.getToken();
+	
+	// if the token does not equal where
 	if (t.getValue() != WHERE){
-
 		ts.pushToken(t);
 		delete relationName;
 		string* value = new string("Failed to parse delete, no WHERE");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-		return result;
+		return result; // return the failure
 	}
 
 	ConditionTree* tree = parseConditionTree(ts);
 	EvalNodePointer conditionNode = new EvalNode(NULL, CONDITION_TREE, (void*)tree);
 
+	// if the type of the root is failure
 	if (tree->getRoot()->getType() == PARSE_FAILURE){
-
 		delete relationName;
 		delete conditionNode;
 		string* value = new string("Failed to parse create, no attibuteList");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-		return result;
+		return result; // return the result
 	}
 
 	string* value = new string(DELETE);
 	result = new EvalNode(NULL, COMMAND_OPERATOR, (void*)value);
 	result->addChild(relationName);
 	result->addChild(conditionNode);
-	return result;
-
+	return result; // return the node
 }
 
-EvalNodePointer    parseTypedAttributeList(TokenStream& ts){
+
+// parse a typed attribute list, return a node pointer
+EvalNodePointer parseTypedAttributeList(TokenStream& ts){
 
 	EvalNodePointer result;
 	vector< tuple<string , string> >* attributetypelist = new vector< tuple<string , string> >();
-
-
 	EvalNodePointer node;
 	EvalNodePointer type;
-
 	bool keepGoing = true;
+	
 	do{
-
 		node = parseAttributeName(ts);
+		
+		// if the type of the node is failure
 		if ((node->getType() != PARSE_FAILURE))
 		{
 			type = parseType(ts);
-
+	
+			// if the type is failure
 			if ( (type->getType() == PARSE_FAILURE))
 			{
 				delete node;
 				delete type;
-
 				delete attributetypelist;
 				string* value = new string("Failure to parse pair when one is expected");
 				result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-				return result;
+				return result; // return the failure
 			}
 			else
 			{
 				string* valueAtt = new string((*static_cast<string*>(node->getValue())));
 				string* valueType = new string((*static_cast<string*> (type->getValue())));
-
 				attributetypelist->push_back(make_tuple((*valueType), (*valueAtt)));
-
 				delete valueAtt;
 				delete valueType;
-
 			}
 		}
 		else
 		{
-
-			//delete node;
-			//delete attributetypelist;
 			string* value = new string("Failure to parse pair when one is expected");
 			result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-			return result;
+			return result; // return the failure
 		}
 
-	
-
 		Token t = ts.getToken();
+		
+		// if the token does not equal comma
 		if (t.getValue() != COMMA)
 		{
-
 			ts.pushToken(t);
 			keepGoing = false;
 		}
-
-
-
 	} while (keepGoing);
 
 	result = new EvalNode(NULL, ATTRIBUTE_TYPE_PAIR_LIST, (void*)attributetypelist);
-	return result;
+	return result; // return the node
 }
 
-EvalNodePointer    parseType(TokenStream& ts){
+
+// parse a type, return a node pointer
+EvalNodePointer parseType(TokenStream& ts){
 
 	EvalNodePointer result;
-
 	Token t = ts.getToken();
+	
+	// if the token does not equal type
 	if (t.getType() != TYPE){
-
 		ts.pushToken(t);
 		string* value = new string("Failed to parse type, no type");
 		result = new EvalNode(NULL, PARSE_FAILURE, (void*)value);
-		return result;
+		return result; // return the failure
 	}
 
 	string* value = new string(t.getValue());
 	result = new EvalNode(NULL, TYPE, value);
-	return result;
+	return result; // return the node
 }
 
-EvalNodePointer    parseAttributeValuePairNode(TokenStream& ts){
+
+// parse an attribute value pair node, return a node pointer
+EvalNodePointer parseAttributeValuePairNode(TokenStream& ts){
 
 	EvalNodePointer result;
-
 	vector< tuple<string, string> >* list = new vector< tuple<string, string>>();
-
 	Token t1 = ts.getToken();
 	Token t2 = ts.getToken();
 	Token t3 = ts.getToken();
+	
+	// while the three tokens are of the proper types
 	while ( (t1.getType() == IDENTIFIER) && (t2.getValue() == ASSIGNMENT) && (t3.getType() == INT_LITERAL || 
 		t3.getType() == STRING_LITERAL)){
 
 		list->push_back(make_tuple(t1.getValue(), t3.getValue()));
-		 t1 = ts.getToken();
-		 t2 = ts.getToken();
-		 t3 = ts.getToken();
+		t1 = ts.getToken();
+		t2 = ts.getToken();
+		t3 = ts.getToken();
 	}
+	// if type does not equal filler
 	if (t3.getType() != FILLER)
 		ts.pushToken(t3);
+	// if type does not equal filler
 	if (t2.getType() != FILLER)
 		ts.pushToken(t2);
 	ts.pushToken(t1);
 
-
 	result = new EvalNode(NULL, ATTRIBUTE_VALUE_PAIR_LIST, (void*)list);
-	return result;
+	return result; // return the node
 }
-EvalNodePointer    parseLiteralList(TokenStream& ts){
 
-	vector< tuple<string , string> >* list = new vector<tuple<string ,string> >(); //Strings inside don't need to be pointers
 
+// parse a literal list, return a node pointer
+EvalNodePointer parseLiteralList(TokenStream& ts){
+
+	vector< tuple<string , string> >* list = new vector<tuple<string ,string> >();
 	EvalNodePointer result;
-
 	Token t = ts.getToken();
 	bool continueON = true;
-	while ( (t.getType() == STRING_LITERAL || t.getType() == INT_LITERAL) && continueON) //Make this standard
+	
+	// while token is of correct type
+	while ( (t.getType() == STRING_LITERAL || t.getType() == INT_LITERAL) && continueON)
 	{
-
 		string type(t.getType());
 		string value(t.getValue());
-
 		list -> push_back(make_tuple(type, value));
-		
 		t = ts.getToken();
 
+		// if token does not equal a oomma
 		if (t.getValue() != COMMA){
-
 			ts.pushToken(t);
 			continueON = false;
 		}
 		else
 			t = ts.getToken();
-
 	}
 
 	result = new EvalNode(NULL, LITERAL_LIST, (void*)list);
-	return result;
-
+	return result; // return the node
 }
