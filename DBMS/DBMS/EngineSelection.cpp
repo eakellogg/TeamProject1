@@ -14,7 +14,10 @@ Table* Engine::selection(Table* oldTable, ConditionTree t){
 
 		string result;
 		oldTable->setCurrentRow(it->second);
+
+		
 		result = oldTable->EvalConditionTree(&t);
+
 		if (result == TRUE){
 			
 			vector<Attribute*> oldRow  = it->second;

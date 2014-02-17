@@ -7,7 +7,6 @@ Table* Engine::projection(Table* oldTable, vector<string> variables){
 
 
 
-	//TODO What should I name this?
 	vector<string> newTypes;
 	for (unsigned int i = 0; i < variables.size(); i++){
 
@@ -18,7 +17,7 @@ Table* Engine::projection(Table* oldTable, vector<string> variables){
 	vector<string> newKey;
 
 	for (unsigned int i = 0; i < variables.size(); i++){
-		for (int j = 0; j < oldTable->getKeyName().size(); j++) {
+		for (unsigned int j = 0; j < oldTable->getKeyName().size(); j++) {
 			if (variables[i] == oldTable->getKeyName()[j]) {
 				keyIncluded = true;
 				newKey.push_back(variables[i]);

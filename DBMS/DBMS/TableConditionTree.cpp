@@ -1,5 +1,6 @@
 #include "ConditionTree.h"
 
+#include <iostream>
 using namespace std;
 
 
@@ -13,10 +14,26 @@ ConditionTree::Node::Node(string t, string v, Node* p){
 	type   = t;
 	parent = p;
 }
+ConditionTree::Node::Node(Node& n){
+
+	value = n.value;
+	type = n.type;
+	//parent can't happen
+
+	for (int i = 0; i < n.children.size(); i++)
+	{
+		children.push_back(new Node(*n.children[i]));
+
+	}
+}
 ConditionTree::Node::~Node(){
 
-	for (int i = 0; i < children.size(); i++)
-		delete children[i];
+	int size = children.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (children[i] != NULL)
+			delete children[i];
+	}
 }
 
 string ConditionTree::Node::getValue() const { return value; }
@@ -43,11 +60,15 @@ std::vector<ConditionTree::Node*> ConditionTree::Node::getChildern(){
 //-----------------------------
 //ConditionTree Methods
 //----------------------------
-ConditionTree::ConditionTree(string value, string type){
-	root = new Node(value, type, NULL);
+ConditionTree::ConditionTree(string type, string value){
+	root = new Node(type, value, NULL);
 }
 ConditionTree::~ConditionTree(){
 	delete root;
+}
+ConditionTree::ConditionTree(ConditionTree& t)
+{
+	root = new Node((*t.getRoot()));
 }
 ConditionTree::ConditionTree(Node* n){
 	root = n;

@@ -138,7 +138,7 @@ EvaluationTree::Node* parseExpresion(TokenStream& ts){
 	delete result;
 
 	result = parseAtomicExpr(ts); //Try parsing an atomic expression
-	if (result->getType() == EXPR)
+	if (result->getType() == EXPR || result->getType() == RELATION_NAME)
 		return result;
 		
 	else{
@@ -526,6 +526,7 @@ EvalNodePointer parseAtomicExpr(TokenStream& ts){
 	
 	EvalNodePointer result = NULL;
 	result = parseRelationName(ts);
+
 	string* value = static_cast<string*>(result->getValue());
 	
 	// if the type of the result does not equal relation name
@@ -534,8 +535,9 @@ EvalNodePointer parseAtomicExpr(TokenStream& ts){
 		delete result;
 	}
 	else
+	{
 		return result;
-
+	}
 	Token t = ts.getToken();
 	
 	// if the token does not equal an open parentheses
@@ -839,7 +841,7 @@ EvaluationTree* parseCommand(TokenStream& ts){
 		return new EvaluationTree( result );
 	delete result;
 
-	result = parseInsert(ts); //Try parsing an Insert
+	result = parseInsert(ts); //Try
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
 	delete result;
@@ -1288,7 +1290,6 @@ EvalNodePointer parseInsert(TokenStream& ts){
 	}
 	else{
 		EvalNodePointer expr = parseExpresion(ts);
-		
 		// if the type of the node eqauls failure
 		if (expr->getType() == PARSE_FAILURE){
 			delete relationName;

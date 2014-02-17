@@ -14,7 +14,7 @@ void Engine::update(Table* table, vector< tuple<string, string> > namevarpairs, 
 
 	for (unsigned int i = 0; i < namevarpairs.size(); i++) 
 	{
-		for (int j = 0; j < table->getKeyName().size(); j++) {
+		for (unsigned int j = 0; j < table->getKeyName().size(); j++) {
 			if (get<0>(namevarpairs[i]) == table->getKeyName()[j])
 				keyChanged = true;
 		}

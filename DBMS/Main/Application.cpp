@@ -6,81 +6,6 @@
 
 int main()
 {
-	/*
-	TokenStream ts;
-	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
-	ts.pushToken(Token(INT_LITERAL, "10"));
-	ts.pushToken(Token(SYMBOL, COMMA));
-	ts.pushToken(Token(STRING_LITERAL, "Hello, World"));
-	ts.pushToken(Token(SYMBOL, COMMA));
-	ts.pushToken(Token(INT_LITERAL, "20"));
-	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
-	ts.pushToken(Token(SYMBOL, VALUES_FROM));
-	ts.pushToken(Token(IDENTIFIER, "Table1"));
-	ts.pushToken(Token(SYMBOL, INSERT));
-
-	EvalNodePointer result = parseInsert(ts);
-
-	cout << result->getType() << endl;
-	
-	TokenStream ts;
-
-	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
-
-	ts.pushToken(Token(IDENTIFIER, "dots_to_points"));
-	ts.pushToken(Token(SYMBOL, PRODUCT));
-	ts.pushToken(Token(IDENTIFIER, "points"));
-
-	ts.pushToken(Token(SYMBOL, OPEN_PAREN)); //Above -  (points * dots_to_points ))
-
-	EvalNodePointer tree = parseAtomicExpr(ts);
-	
-	cout << tree->getType() << endl;
-	
-	//advanced_query <- project(x) (select(y == y2) (points * dots_to_points));
-	
-	
-	TokenStream ts;
-
-	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
-	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
-
-	ts.pushToken(Token(IDENTIFIER, "dots_to_points"));
-	ts.pushToken(Token(SYMBOL, PRODUCT));
-	ts.pushToken(Token(IDENTIFIER, "points"));
-
-	ts.pushToken(Token(SYMBOL, OPEN_PAREN)); //Above -  (points * dots_to_points ))
-
-
-	//------------------------------------------------------
-	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
-
-	ts.pushToken(Token(IDENTIFIER, "y2"));
-	ts.pushToken(Token(SYMBOL, EQUALS));
-	ts.pushToken(Token(IDENTIFIER, "y"));
-
-	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
-	ts.pushToken(Token(SYMBOL, SELECT));     //Above -  (select (y == y2 )
-	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
-	//----------------------------------------------------------------------
-	ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
-
-	ts.pushToken(Token(IDENTIFIER, "x"));
-
-	ts.pushToken(Token(SYMBOL, OPEN_PAREN));
-
-	ts.pushToken(Token(SYMBOL, PROJECT));     //Above - project (x) 
-	//-------------------------------------------------------------------
-
-	ts.pushToken(Token(SYMBOL, ARROW));
-	ts.pushToken(Token(IDENTIFIER, "avanced_query"));
-
-	EvaluationTree* tree = parseQuery(ts);
-
-	EvalNodePointer root = tree->getRoot();
-
-	cout << root->getType() << endl;
-	*/
 	try {
 
 		// create information to put into table to prepare testing
@@ -142,24 +67,25 @@ int main()
 		Table* tbla = testEngine.getTables()[0];
 		Table* tblb = testEngine.getTables()[1];
 		
-		ConditionTree t(OR, OPERATOR);
+		ConditionTree t(OPERATOR, OR);
 		ConditionTree::Node* n = t.getRoot();
 
-		ConditionTree::Node* firstEQ = n->addChild(EQUALS, OPERATOR);
-		firstEQ->addChild("Zach Brown", STRING_LITERAL);
-		firstEQ->addChild("name", VARIABLE);
+		ConditionTree::Node* firstEQ = n->addChild(OPERATOR, EQUALS);
+		firstEQ->addChild(STRING_LITERAL, "Zach Brown");
+		firstEQ->addChild(VARIABLE, "name");
 
-		ConditionTree::Node* secondEQ = n->addChild(EQUALS, OPERATOR);
-		secondEQ->addChild("Jacob Zerr", STRING_LITERAL);
-		secondEQ->addChild("name", VARIABLE);
+		ConditionTree::Node* secondEQ = n->addChild(OPERATOR, EQUALS);
+		secondEQ->addChild(STRING_LITERAL, "Jacob Zerr");
+		secondEQ->addChild(VARIABLE, "name");
 		
 		// test each relational algebra method
 		Table* tblc = NULL;
 
-		//cout << "selection:" << endl;
-		//tblc = testEngine.selection(tbla, t);
-		//tblc->printTable();
+		cout << "selection:" << endl;
+		tblc = testEngine.selection(tbla, t);
+		tblc->printTable();
 
+		
 		cout << "projection:" << endl;
 		vector<string> wantedColumns = {"name", "age"};
 		tblc = testEngine.projection(tbla, wantedColumns);
@@ -196,6 +122,7 @@ int main()
 		testEngine.closeFile(tbla);
 		//testEngine.writeFile(tblb);
 		//testEngine.closeFile(tblb);
+		
 	}
 	catch (const char* error) {
 		cout << error << endl;

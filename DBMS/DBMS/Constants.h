@@ -57,7 +57,7 @@ const static string AND = "&&";
 
 
 //Values for operands when evaluated
-const std::string VARIABLE = "VARIBLE";
+const std::string VARIABLE = "VARIABLE";
 const std::string UNKNOWN = "UNKNOWN";
 const std::string TRUE = "TRUE";
 const std::string FALSE = "FALSE";

@@ -11,16 +11,18 @@ using namespace std;
 string Table::EvalConditionTree(ConditionTree* tree){
 
 	tuple<string, string> result = NodeEval(tree->getRoot());
-	return get<1>(result);
+
+	string value = get<1>(result);
+	return value;
 }
 
 
 //tuple< type , value > //NEED TO FIX
 tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 
+
 	string type = n->getType();
 	string value = n->getValue();
-
 	if (type == STRING_LITERAL || type == INT_LITERAL)
 	{
 		return make_tuple(type, value);
@@ -46,7 +48,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			else
 				return make_tuple(STRING_LITERAL, FALSE);
 		}
-		else if( value == NOT_EQUAL)
+		else if (value == NOT_EQUAL)
 		{
 			vector< Node* > children = n->getChildern();
 			// test inequality of the node's children
@@ -203,14 +205,14 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		{
 			bool  result = true;
 			vector<Node*> children = n->getChildern();
-			
+
 			// examine all children
 			for (int i = 0; i < children.size(); i++)
 			{
 				tuple<string, string> Result = NodeEval(children[i]);
 				string Type = get<0>(Result);
 				string Value = get<1>(Result);
-				
+
 				// if any have false value, the result is false
 				if (Value == FALSE)
 					result = false;
@@ -234,7 +236,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 				tuple<string, string> Result = NodeEval(children[i]);
 				string Type = get<0>(Result);
 				string Value = get<1>(Result);
-				
+
 				// if any have true value, the result is true
 				if (Value == TRUE)
 					result = true;
@@ -246,8 +248,10 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			else
 				return make_tuple(STRING_LITERAL, FALSE);
 		}
+	}
 		else if (type == VARIABLE)
 		{
+		//	cout << "got inside of variable " << endl;
 			Attribute* attribute = getVariable(value);
 
 			string newType;
@@ -273,7 +277,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			return make_tuple(newType, newValue);
 		}
 		else return make_tuple(PARSE_FAILURE, UNKNOWN);
-	}
+	//cout << "Problem shouldn't have gotten here " << endl;
 }
 
 
