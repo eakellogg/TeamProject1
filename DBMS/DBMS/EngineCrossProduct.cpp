@@ -46,8 +46,8 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 			newColumnTypes.push_back(secondTable->getTypeOfColumn(secondTableColumns[j]));
 	}
 
-	string newKey = firstTable->getTableName() + secondTable->getTableName();
-	newColumnTitles.push_back(newKey);
+	vector<string> newKey = { firstTable->getTableName() + secondTable->getTableName() };
+	newColumnTitles.push_back(newKey[0]);
 	newColumnTypes.push_back("int");
 
 	// new table to add data to

@@ -66,10 +66,10 @@ Table* Engine::setDifference(Table* firstTable, Table* secondTable) {
 		newColumnTypes.push_back(firstTable->getTypeOfColumn(firstTableColumns[i]));
 	}
 
-	string newKey = firstTable->getKeyName();
+	vector<string> newKey = firstTable->getKeyName();
 
 	// new table to add data to
-	Table* newTable = new Table("Union Table", newKey, newColumnTypes, newColumnTitles);
+	Table* newTable = new Table("Difference Table", newKey, newColumnTypes, newColumnTitles);
 
 	map<string, vector<Attribute*>> firstTableData = firstTable->getData();
 	map<string, vector<Attribute*>> secondTableData = secondTable->getData();

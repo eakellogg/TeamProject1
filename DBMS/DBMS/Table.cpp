@@ -9,7 +9,7 @@ using namespace std;
 *********************************************************************************/
 
 
-	Table::Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles)
+	Table::Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles)
 		:tableName(tableName), keyName(keyName), columnTypes(columnTypes), columnTitles(columnTitles)
 	{	}
 
@@ -41,7 +41,7 @@ using namespace std;
 
 	string Table::getTableName() { return tableName; }
 
-	string Table::getKeyName() { return keyName; }
+	vector<string> Table::getKeyName() { return keyName; }
 
 	map< string, vector<Attribute*> > Table::getData() { return data; }
 
@@ -61,8 +61,11 @@ using namespace std;
 	void Table::addRow(vector<Attribute*> row, vector<string> columnTypes) {
 		if (checkMatchingTypes(columnTypes)) {
 			currentRow = row;
-			string key = getVariable(keyName)->getValue();
-			data.insert(make_pair(key, row));
+			string fullKey;
+			for (int i = 0; i < keyName.size(); i++) {
+				fullKey += getVariable(keyName[i])->getValue();
+			}
+			data.insert(make_pair(fullKey, row));
 			return;
 		}
 		throw "types do not match";
@@ -83,10 +86,12 @@ using namespace std;
 	//rename a column. If that column is the key, update keyName.
 	void Table::renameColumn(int column, string name) {
 		try {
-			if (columnTitles[column] == keyName) {
-				keyName = name;
+			for (int i = 0; i < keyName.size(); i++) {
+				if (columnTitles[column] == keyName[i]) {
+					keyName[i] = name;
+				}
+				columnTitles[column] = name;
 			}
-			columnTitles[column] = name;
 		}
 		catch (out_of_range) {
 			throw "column does not exist";
@@ -95,9 +100,13 @@ using namespace std;
 
 
 	// find and return a specific row in the table
-	vector<Attribute*> Table::getRow(string key) {
+	vector<Attribute*> Table::getRow(vector<string> key) {
 		try {
-			return data.at(key);
+			string fullKey;
+			for (int i = 0; i < key.size(); i++) {
+				fullKey += key[i];
+			}
+			return data.at(fullKey);
 		}
 		catch (out_of_range) {
 			throw "key does not exist";
@@ -106,9 +115,13 @@ using namespace std;
 
 
 	// find and return a specific item in a specific row in the table
-	Attribute* Table::getItem(string key, string columnName) {
+	Attribute* Table::getItem(vector<string> key, string columnName) {
 		try {
-			currentRow = data.at(key);
+			string fullKey;
+			for (int i = 0; i < key.size(); i++) {
+				fullKey += key[i];
+			}
+			currentRow = data.at(fullKey);
 		}
 		catch (out_of_range) {
 			throw "key does not exist";

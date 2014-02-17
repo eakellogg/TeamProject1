@@ -43,13 +43,16 @@ public:
 	*********************************************************************************/
 
 	// create a table with the row types and column titles given
-	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
+	void createTable(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 	// delete a table from the database
 	void dropTable(Table* table);
 
 	// insert a row into the table with the proper name
 	void insertInto(Table* table, vector<Attribute*> row, vector<string> columnTypes);
+
+	// insert a table into another table
+	void insertInto(Table* tablea, Table* tableb);
 
 	// change the variables listed to their new values, if the row in the table meets the condition
 	void update(Table* table, vector< tuple<string, string> > namevarpairs, ConditionTree t);

@@ -41,8 +41,8 @@ namespace DBMSTester
 
 		TEST_METHOD(TestMethod1)
 		{
-			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("studentsbad", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("studentsbad", vector<string>{"name"}, columnTypesA, columnTitlesA);
 
 			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);

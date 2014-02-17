@@ -30,9 +30,11 @@ using namespace std;
 *********************************************************************************/
 
 	// create a table with the row types and column titles given
-	void Engine::createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles) {
-		if (find(columnTitles.begin(), columnTitles.end(), keyName) == columnTitles.end()) {
-			throw "key name does not match any column, table not created";
+	void Engine::createTable(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles) {
+		for (int i = 0; i < keyName.size(); i++) {
+			if (find(columnTitles.begin(), columnTitles.end(), keyName[i]) == columnTitles.end()) {
+				throw "key name does not match any column, table not created";
+			}
 		}
 		tables.push_back(new Table(tableName, keyName, columnTypes, columnTitles));
 	}
@@ -54,6 +56,31 @@ using namespace std;
 	// insert a row into the table with the proper name
 	void Engine::insertInto(Table* table, vector<Attribute*> row, vector<string> columnTypes) {
 		table->addRow(row, columnTypes);
+	}
+
+
+	// insert a row into the table with the proper name
+	void Engine::insertInto(Table* tablea, Table* tableb) {
+
+		for (int i = 0; i < tablea->getColumnTitles().size(); i++) {
+			if (tablea->getColumnTitles()[i] != tableb->getColumnTitles()[i]) {
+				throw "tables cannot be added";
+			}
+			if (tablea->getColumnTypes()[i] != tableb->getColumnTypes()[i]) {
+				throw "tables cannot be added";
+			}
+		}
+
+		map< string, vector<Attribute*> > data = tableb->getData();
+		for (map< string, vector<Attribute*> >::iterator it = data.begin(); it != data.end(); it++) {
+			vector<Attribute*> newRow;
+			vector<Attribute*> tempRow = it->second;
+			for (int j = 0; j < tempRow.size(); j++) {
+				Attribute* newAttribute = new Attribute(tempRow[j]->getType(), tempRow[j]->getValue());
+				newRow.push_back(newAttribute);
+			}
+			tablea->addRow(newRow, tablea->getColumnTypes());
+		}
 	}
 
 
@@ -116,7 +143,7 @@ using namespace std;
 			}
 			outfile << ", ";
 		}
-		outfile << ") PRIMARY KEY (" << table->getKeyName() << ");\n";
+		outfile << ") PRIMARY KEY (" << table->getKeyName()[0] << ");\n";
 
 		auto data = table->getData();
 		auto iterator = data.begin();

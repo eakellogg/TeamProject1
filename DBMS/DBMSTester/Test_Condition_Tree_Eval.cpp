@@ -43,7 +43,7 @@ namespace DBMSTester
 			ConditionTree* t = parseConditionTree(ts);
 
 
-			Table table("DUMMY", "AGE", vector<string>{ INT_LITERAL }, vector<string>{"AGE"});
+			Table table("DUMMY", vector<string>{"AGE"}, vector<string>{ INT_LITERAL }, vector<string>{"AGE"});
 
 			string boolean = table.EvalConditionTree(t);
 
@@ -55,7 +55,7 @@ namespace DBMSTester
 
 			ts.pushToken(Token("JUNK", "THEEND"));//End
 
-			
+
 			//------------------------------------------------------------------------------
 			/*
 			ts.pushToken(Token(STRING_LITERAL, "Bye"));
@@ -69,10 +69,10 @@ namespace DBMSTester
 			ts.pushToken(Token(STRING_LITERAL, "Hello"));
 			*/
 
-			
+
 
 			//ts.pushToken(Token(OPERATOR, AND)); //This ands right side will be a disjunction
-			
+
 			ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
 
 			ts.pushToken(Token(STRING_LITERAL, "Bye"));
@@ -84,9 +84,9 @@ namespace DBMSTester
 			ts.pushToken(Token(STRING_LITERAL, "Bye"));
 			ts.pushToken(Token(OPERATOR, EQUALS));
 			ts.pushToken(Token(STRING_LITERAL, "Hello"));
-			
+
 			ts.pushToken(Token(SYMBOL, OPEN_PAREN));
-			
+
 			/*
 			ts.pushToken(Token(OPERATOR, AND));
 
@@ -96,17 +96,17 @@ namespace DBMSTester
 			*/
 
 
-	
+
 
 			ConditionTree* t = parseConditionTree(ts);
 
 			ConditionTree::Node* root = t->getRoot();
 			Assert::AreEqual(OPERATOR.c_str(), root->getType().c_str());
-			
 
 
 
-			Table table("DUMMY", "AGE", vector<string>{ INT_LITERAL }, vector<string>{"AGE"});
+
+			Table table("DUMMY", vector<string>{"AGE"}, vector<string>{ INT_LITERAL }, vector<string>{"AGE"});
 
 			string boolean = table.EvalConditionTree(t);
 

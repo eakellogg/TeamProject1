@@ -82,7 +82,7 @@ int main()
 	cout << root->getType() << endl;
 	*/
 	try {
-		
+
 		// create information to put into table to prepare testing
 		Attribute* namea = new Attribute(STRING_TYPE, "Zach Brown");
 		Attribute* nameb = new Attribute(STRING_TYPE, "Jacob Zerr");
@@ -125,9 +125,10 @@ int main()
 		DBMS* dbms = new DBMS();
 		Engine testEngine = Engine(dbms);
 
-		testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
-		testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
-		testEngine.createTable("otherstudents", "age", columnTypesA, columnTitlesA);
+		testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+		testEngine.createTable("people", vector<string>{"state"}, columnTypesB, columnTitlesB);
+		testEngine.createTable("otherstudents", vector<string>{"age"}, columnTypesA, columnTitlesA);
+		testEngine.createTable("otherstudentstest", vector<string>{"age"}, columnTypesA, columnTitlesA);
 
 		testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 		testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);

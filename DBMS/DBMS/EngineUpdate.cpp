@@ -14,8 +14,10 @@ void Engine::update(Table* table, vector< tuple<string, string> > namevarpairs, 
 
 	for (unsigned int i = 0; i < namevarpairs.size(); i++) 
 	{
-		if (get<0>(namevarpairs[i]) == table->getKeyName())
-			keyChanged = true;
+		for (int j = 0; j < table->getKeyName().size(); j++) {
+			if (get<0>(namevarpairs[i]) == table->getKeyName()[j])
+				keyChanged = true;
+		}
 	}
 
 	for (map< string, vector<Attribute* > >::iterator it = data.begin(); it != data.end(); it++) 
@@ -71,7 +73,6 @@ void Engine::update(Table* table, vector< tuple<string, string> > namevarpairs, 
 			}
 		}
 		for (unsigned int i = 0; i < rowstoremove.size(); i++){
-
 			table->deleteRow(rowstoremove[i]);
 		}
 	}
