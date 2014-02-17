@@ -204,7 +204,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					Table* expressionTable = Evaluate(&expressionTree);
 					if (expressionTable != NULL)
 					{
-						//OPEN COMMAND FROM NATHAN
+						vector<string> queries = DBMS->openFile(expressionTable->getTableName());
+						//WHAT NOW??
 					}
 				}
 				throw("Wrong values in OPEN");
@@ -219,7 +220,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					Table* expressionTable = Evaluate(&expressionTree);
 					if (expressionTable != NULL)
 					{
-						//WRITE COMMAND FROM NATHAN
+						DBMS->writeFile(expressionTable);
+						return NULL;
 					}
 				}
 				throw("Wrong values in WRITE");
@@ -234,7 +236,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					Table* expressionTable = Evaluate(&expressionTree);
 					if (expressionTable != NULL)
 					{
-						//CLOSE COMMAND FROM NATHAN
+						DBMS->closeFile(expressionTable);
+						return NULL;
 					}
 				}
 				throw("Wrong values in CLOSE");
@@ -254,7 +257,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					Table* expressionTable = Evaluate(&expressionTree);
 					if (expressionTable != NULL)
 					{
-						//SHOW COMMAND FROM NATHAN
+						//WAITING ON SHOW TABLE COMMAND
 					}
 				}
 				throw("Wrong values in SHOW");
