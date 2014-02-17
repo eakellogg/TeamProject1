@@ -178,7 +178,7 @@ namespace TableTester
 			vector< tuple<string, string> > namevarpairs;
 			namevarpairs.push_back(make_tuple("Name", "Emily"));
 
-			ConditionTree t(EQUALS, OPERATOR);
+			ConditionTree t(OPERATOR, EQUALS);
 			ConditionTree::Node* n = t.getRoot();
 
 			n->addChild("Name", VARIABLE);
@@ -215,7 +215,7 @@ namespace TableTester
 			engine.createTable("TestTable", vector<string>{"Name"}, columnTypes, columnNames);
 			engine.insertInto(engine.getTables()[0], row, columnTypes);
 			
-			ConditionTree t(EQUALS, OPERATOR);
+			ConditionTree t(OPERATOR, EQUALS);
 			ConditionTree::Node* n = t.getRoot();
 
 			n->addChild("Name", VARIABLE);
@@ -227,7 +227,7 @@ namespace TableTester
 
 			map< string, vector<Attribute*> > data = table->getData();
 			map< string, vector<Attribute*> >::iterator it = data.begin();
-			
+
 			bool result = false;
 			if (it == data.end())
 				result = true;
@@ -256,7 +256,7 @@ namespace TableTester
 			vector< tuple<string, string> > namevarpairs;
 			namevarpairs.push_back(make_tuple("Name", "BOB"));
 
-			ConditionTree t(EQUALS, OPERATOR);
+			ConditionTree t(OPERATOR, EQUALS);
 			ConditionTree::Node* n = t.getRoot();
 			
 			n->addChild("Name", VARIABLE);
@@ -270,8 +270,7 @@ namespace TableTester
 			Assert::IsTrue(data.size() > 0); // not true
 			vector< Attribute* > ats = it->second; // not a valid operation - it doesnt have second
 			
-			Assert::AreEqual(ats[0]->getValue().c_str(), "BOB"); // not true
-			
+			Assert::AreEqual(ats[0]->getValue().c_str(), "BOB"); // not true		
 		}
 
 		//************************************************************************************************************

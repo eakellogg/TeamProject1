@@ -257,7 +257,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					Table* expressionTable = Evaluate(&expressionTree);
 					if (expressionTable != NULL)
 					{
-						//WAITING ON SHOW TABLE COMMAND
+						DBMS->show(expressionTable);
+						return NULL;
 					}
 				}
 				throw("Wrong values in SHOW");

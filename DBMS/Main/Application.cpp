@@ -50,7 +50,7 @@ int main()
 		DBMS* dbms = new DBMS();
 		Engine testEngine = Engine(dbms);
 
-		testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+		testEngine.createTable("students", vector<string>{"name", "age"}, columnTypesA, columnTitlesA);
 		testEngine.createTable("people", vector<string>{"state"}, columnTypesB, columnTitlesB);
 		testEngine.createTable("otherstudents", vector<string>{"age"}, columnTypesA, columnTitlesA);
 		testEngine.createTable("otherstudentstest", vector<string>{"age"}, columnTypesA, columnTitlesA);
@@ -67,15 +67,15 @@ int main()
 		Table* tbla = testEngine.getTables()[0];
 		Table* tblb = testEngine.getTables()[1];
 		
-		ConditionTree t(OPERATOR, OR);
+		ConditionTree t(OPERATOR, AND);
 		ConditionTree::Node* n = t.getRoot();
 
-		ConditionTree::Node* firstEQ = n->addChild(OPERATOR, EQUALS);
-		firstEQ->addChild(STRING_LITERAL, "Zach Brown");
-		firstEQ->addChild(VARIABLE, "name");
+		ConditionTree::Node* firstEQ = n->addChild(OPERATOR, GREATER_EQUAL);
+		firstEQ->addChild(INT_LITERAL, "0");
+		firstEQ->addChild(VARIABLE, "age");
 
-		ConditionTree::Node* secondEQ = n->addChild(OPERATOR, EQUALS);
-		secondEQ->addChild(STRING_LITERAL, "Jacob Zerr");
+		ConditionTree::Node* secondEQ = n->addChild(OPERATOR, NOT_EQUAL);
+		secondEQ->addChild(STRING_LITERAL, "Victoria Elliott");
 		secondEQ->addChild(VARIABLE, "name");
 		
 		// test each relational algebra method
@@ -111,7 +111,7 @@ int main()
 		tblc->printTable();
 
 		vector<string> fileLines;
-		//fileLines = testEngine.openFile("students");
+		fileLines = testEngine.openFile("students");
 		for (int i = 0; i < fileLines.size(); i++) {
 			cout << fileLines[i] << endl;
 		}

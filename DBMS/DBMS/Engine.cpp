@@ -33,6 +33,7 @@ using namespace std;
 	void Engine::createTable(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles) {
 		for (int i = 0; i < keyName.size(); i++) {
 			if (find(columnTitles.begin(), columnTitles.end(), keyName[i]) == columnTitles.end()) {
+				cout << keyName[i];
 				throw "key name does not match any column, table not created";
 			}
 		}
@@ -143,7 +144,15 @@ using namespace std;
 			}
 			outfile << ", ";
 		}
-		outfile << ") PRIMARY KEY (" << table->getKeyName()[0] << ");\n";
+		outfile << ") PRIMARY KEY (";
+		
+		for (int i = 0; i < table->getKeyName().size(); i++) {
+			outfile << table->getKeyName()[i];
+			if (i == table->getKeyName().size() - 1)
+				break;
+			outfile << ", ";
+		}
+		outfile << ");\n";
 
 		auto data = table->getData();
 		auto iterator = data.begin();
@@ -169,6 +178,12 @@ using namespace std;
 			iterator++;
 		}
 		outfile.close();
+	}
+
+
+	// show a relation by printing the table representing it
+	void Engine::show(Table* table) {
+		table->printTable();
 	}
 
 

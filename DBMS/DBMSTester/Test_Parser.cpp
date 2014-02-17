@@ -5,6 +5,7 @@
 #include "TokenStream.h"
 #include <tuple>
 #include "Table.h"
+#include "Evaluator.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -1255,6 +1256,55 @@ namespace DBMSTester
 
 			Assert::AreEqual(2, ts.getCount() );
 
+		}
+
+		TEST_METHOD(Eval_Test) {
+			TokenStream ts;
+			ts.pushToken(Token("GARBAGE", "Nothing"));
+			ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+			ts.pushToken(Token(IDENTIFIER, "name"));
+			ts.pushToken(Token(SYMBOL, COMMA));
+			ts.pushToken(Token(IDENTIFIER, "age"));
+
+			ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+			// Attribute name list
+
+			ts.pushToken(Token(SYMBOL, PRIMARY_KEY));
+
+			ts.pushToken(Token(SYMBOL, CLOSE_PAREN));
+
+			ts.pushToken(Token(TYPE, STRING_LITERAL));
+			ts.pushToken(Token(IDENTIFIER, "school"));
+			ts.pushToken(Token(SYMBOL, COMMA));
+			ts.pushToken(Token(TYPE, STRING_LITERAL));
+			ts.pushToken(Token(IDENTIFIER, "name"));
+			ts.pushToken(Token(SYMBOL, COMMA));
+			ts.pushToken(Token(TYPE, INT_LITERAL));
+			ts.pushToken(Token(IDENTIFIER, "age"));
+
+			ts.pushToken(Token(SYMBOL, OPEN_PAREN));
+			// type-attribute-list
+
+			ts.pushToken(Token(IDENTIFIER, "Table1"));
+
+			ts.pushToken(Token(SYMBOL, CREATE_TABLE));
+
+			EvalNodePointer result = parseCreate(ts);
+			EvaluationTree* tree = new EvaluationTree(result);
+
+			DBMS* dbms = new DBMS;
+			Engine* engine = new Engine(dbms);
+			Evaluator eval = Evaluator(engine);
+
+			eval.Evaluate(tree);
+			Assert::AreEqual((int)engine->getTables().size(), 1);
+			Assert::AreEqual(engine->getTables()[0]->getTableName().c_str(), "Table1");
+
+			vector<string> titles{ "age", "name", "school" };
+			for (int i = 0; i < engine->getTables()[0]->getColumnTitles().size(); i++) {
+				Assert::AreEqual(engine->getTables()[0]->getColumnTitles()[i], titles[i]);
+			}
 		}
 	};
 }

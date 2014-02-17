@@ -90,6 +90,9 @@ public:
 	// writes a new file for a table, overwritting an already existing file with the same name if there is one
 	void writeFile(Table* table);
 
+	// show a relation by printing the table representing it
+	void show(Table* table);
+
 	/*********************************************************************************
 		helper functions
 	*********************************************************************************/
