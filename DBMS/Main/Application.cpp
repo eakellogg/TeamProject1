@@ -84,7 +84,6 @@ int main()
 		cout << "selection:" << endl;
 		tblc = testEngine.selection(tbla, t);
 		tblc->printTable();
-
 		
 		cout << "projection:" << endl;
 		vector<string> wantedColumns = {"name", "age"};
@@ -112,11 +111,11 @@ int main()
 		tblc->printTable();
 
 		vector<string> fileLines;
-		fileLines = testEngine.openFile("students");
+		//fileLines = testEngine.openFile("students");
 		for (int i = 0; i < fileLines.size(); i++) {
 			cout << fileLines[i] << endl;
 		}
-		//testEngine.writeFile(tbla);
+		testEngine.writeFile(tbla);
 		testEngine.insertInto(testEngine.findTable("students"), student4, columnTypesA);
 		//testEngine.writeFile(tbla);
 		testEngine.closeFile(tbla);
