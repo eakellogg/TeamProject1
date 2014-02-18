@@ -1,11 +1,14 @@
 
 #include "DBMS.h"
 #include "Engine.h"
-
+#include "lexer.h"
+#include "EvaluationTree.h"
+#include "Evaluator.h"
 #ifndef QH_H
 #define QH_H
 
 class Engine;
+class Evaluator;
 
 class QueryHandler{
 
@@ -18,7 +21,7 @@ public:
 
 private:
 	Engine* engine; //A pointer to the engine who will do all the table manipulation
-
+	Evaluator* eval;
 };
 
 #endif

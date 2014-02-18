@@ -2,6 +2,7 @@
 
 
 #include <string>
+#include <vector>
 /*
 This is the file with ALL CONSTANTS
 */
@@ -10,7 +11,7 @@ using namespace std;
 
 const static string COMMAND_OPERATOR = "COMMAND_OPERATOR"; //Type of command
 
-// Values for COMMAND_OPERATOR; they also are the value of symbols 
+// Values for COMMAND_OPERATOR; they also are the value of symbols
 const static string CLOSE = "CLOSE";
 const static string CREATE_TABLE = "CREATE TABLE";
 const static string DELETE = "DELETE FROM";
@@ -43,7 +44,7 @@ const static string JOIN_EXPR = "JOIN_EXPR";
 
 const static string OPERATOR = "OPERATOR"; //Type of operator
 
-//Types of operators 
+//Types of operators
 const static string EQUALS = "==";
 const static string NOT_EQUAL = "!=";
 const static string LESS_THAN = "<";
@@ -56,7 +57,7 @@ const static string AND = "&&";
 //--------------------------------------------
 
 
-//Values for operands when evaluated
+// Values for operands when evaluated
 const std::string VARIABLE = "VARIABLE";
 const std::string UNKNOWN = "UNKNOWN";
 const std::string TRUE = "TRUE";
@@ -65,13 +66,17 @@ const std::string FALSE = "FALSE";
 
 
 const static string IDENTIFIER = "IDENTIFIER"; //Type of identifier
-//And identifier can be any string
+// An identifier can be any string
+// Starts with a letter, can contain letters, numbers, and underscores
 
+
+const static string INTEGER = "INTEGER";
+const static string VAR_CHAR = "VARCHAR";
 
 //---------------------------------------
 const static string SYMBOL = "SYMBOL"; //Type of symbol
 
-//values for symbols
+// Values for symbols
 const static string TYPE = "TYPE";
 const static string OPEN_PAREN = "(";
 const static string CLOSE_PAREN = ")";
@@ -88,25 +93,25 @@ const static string PRODUCT = "*";
 //---------------------------------------
 
 
-//Literals
+// Literals
 const static string STRING_LITERAL = "STRING_LITERAL";//Type
-const static string INT_LITERAL    = "STRING_INT"; //Type
-//Values can be any string
+const static string INT_LITERAL = "STRING_INT"; //Type
+// Values can be any string
 //--------------------------------------------
 
 
-//NODE TYPES
+// NODE TYPES
 const static string PARSE_FAILURE = "PARSE_FAILURE"; //Type any parse failure
 
 const static string RELATION_NAME = "RELATION_NAME"; //Type
-//A relation name can be any identifier
+// A relation name can be any identifier
 
 const static string QUERY = "QUERY"; //Type
-//A query node will have two arguements, first a relation name, second an atomicExpression
+// A query node will have two arguements, first a relation name, second an atomicExpression
 //--------------------------------------------
 
 
-//ConditionTree
+// ConditionTree
 const static string CONDITION_TREE = "CONDITION_TREE";
 
 typedef vector< string > AttributeList; //attributes
@@ -115,12 +120,12 @@ const static string ATTRIBUTE_LIST = "ATTRIBUTE_LIST";
 const static string ATTRIBUTE = "ATTRIBUTE";
 
 typedef vector< tuple < string, string > > AttributeTypePairList; //type , name
-const static string ATTRIBUTE_TYPE_PAIR_LIST = "ATTRIBUTE_TYPE_PAIR_LIST"; 
+const static string ATTRIBUTE_TYPE_PAIR_LIST = "ATTRIBUTE_TYPE_PAIR_LIST";
 
 typedef vector< tuple< string, string > > LiteralList; //type, value
 const static string LITERAL_LIST = "LITERAL_LIST";
 
-typedef vector< tuple< string, string> > AttributeValuePairList; //attributename , value 
-const static string ATTRIBUTE_VALUE_PAIR_LIST = "ATTRIBTUE_VALUE_PAIR_LIST"; 
+typedef vector< tuple< string, string> > AttributeValuePairList; //attributename , value
+const static string ATTRIBUTE_VALUE_PAIR_LIST = "ATTRIBTUE_VALUE_PAIR_LIST";
 
 

@@ -2,27 +2,21 @@
 
 
 #include "TokenStream.h"
-
-
 QueryHandler::QueryHandler(Engine* e){
 
 	engine = e;
-
+	eval = new Evaluator(e);
 }
 
 
 Table* QueryHandler::query(string query){
 
-	/* WAITING ON LEXER AND EVALU TO un commnet out
-	this is api!!!!!!!!!!!!!!!!!!!!!!!!
-
-		TokenStream ts = Lexer.lex( query );
-		EvaluationTree* tree = parserQuery(ts);
-
-		Table* tablePointer = Evaluator.eval( engine , tree );
-
-		return tablePointer
-	*/
-	//Just to compile
-	return NULL;
+	cout << "Trying to lex" << endl;
+	TokenStream ts = (lex( query)); //Is there a copy constructor?
+	cout << "Finished lexing" << endl;
+	EvaluationTree* tree = parseQuery(ts);
+	cout << "Finished parsing" << endl;
+	Table* tablePointer = eval->Evaluate(tree);
+	cout << "Finished evaluation" << endl;
+	return tablePointer;
 }
