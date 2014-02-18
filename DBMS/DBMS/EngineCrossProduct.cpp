@@ -11,7 +11,7 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 		newRow.push_back(firstTable->getVariable(newColumnTitles[i]));
 	}
 	// get all needed data from second table
-	for (int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size() - 1; j++) {
+	for (int j = firstTable->getColumnTitles().size(); j < newColumnTitles.size(); j++) {
 		newRow.push_back(secondTable->getVariable(newColumnTitles[j]));
 	}
 
@@ -20,9 +20,9 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 		keyName = "0" + keyName;
 	}
 
-	Attribute* identifier = new Attribute("int", keyName);
-	newRow.push_back(identifier);
-
+	//Attribute* identifier = new Attribute("int", keyName);
+	//newRow.push_back(identifier);
+	cout << newRow.size();
 	return newRow;
 }
 
@@ -47,11 +47,11 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 	}
 
 	vector<string> newKey = { firstTable->getTableName() + secondTable->getTableName() };
-	newColumnTitles.push_back(newKey[0]);
-	newColumnTypes.push_back("int");
+	//newColumnTitles.push_back(newKey[0]);
+	//newColumnTypes.push_back("int");
 
 	// new table to add data to
-	Table* newTable = new Table("New Table", newKey, newColumnTypes, newColumnTitles);
+	Table* newTable = new Table("New Table", firstTable->getKeyName(), newColumnTypes, newColumnTitles);
 
 	int firstTableOffset = 0;
 	int secondTableOffset = 0;
@@ -77,5 +77,6 @@ Table* Engine::crossProduct(Table* firstTable, Table* secondTable) {
 		secondTableOffset = 0;
 		firstTableOffset++;
 	}
+	newTable->printTable();
 	return newTable;
 }

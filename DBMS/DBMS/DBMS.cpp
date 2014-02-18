@@ -26,7 +26,6 @@ DBMS::DBMS()
 	 //The DBMS will run each string in the commands vector through its parserunit as if a user was 
 	 //executing each line as a query
 	 void  DBMS::load(vector<string> commands){
-
 		 for (int i = 0; i < commands.size(); i++)
 		 {
 			 qh->query(commands[i]);

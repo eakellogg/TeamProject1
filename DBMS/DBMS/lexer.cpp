@@ -1,3 +1,4 @@
+
 #include "Lexer.h"
 
 using namespace std;
@@ -106,19 +107,24 @@ TokenStream lex(string input) {
 			find_symbol(input, front, ts, UNION);
 			break;
 		case '-':
-			find_symbol(input, front, ts, DIFFERENCE);		//need to check if its for a negative number
+			if (isdigit(input.at(1))) {
+				find_int_literal(input, front, ts);
+			}
+			else {
+				find_symbol(input, front, ts, DIFFERENCE);
+			}
 			break;
 		case '*':
 			find_symbol(input, front, ts, PRODUCT);
 			break;
 		case '=':
 			if (!find_equals(input, front, ts)) {
-				//error("'=' is an invalid entry");			//--------------------------
+				//error("'=' is an invalid entry");	//--------------------------
 			}
 			break;
 		case '!':
 			if (!find_notEquals(input, front, ts)) {
-				//error("'!' is an invalid entry");			//------------------------
+				//error("'!' is an invalid entry");	//------------------------
 			}
 			break;
 		case '<':
@@ -129,12 +135,12 @@ TokenStream lex(string input) {
 			break;
 		case '|':
 			if (!find_or(input, front, ts)) {
-				//error("'|' is an invalid entry");			//-------------------------
+				//error("'|' is an invalid entry");	//-------------------------
 			}
 			break;
 		case '&':
 			if (!find_and(input, front, ts)) {
-				//error("'&' is an invalid entry");			//-------------------------
+				//error("'&' is an invalid entry");	//-------------------------
 			}
 			break;
 		case '(':
@@ -160,7 +166,7 @@ TokenStream lex(string input) {
 			break;
 		}
 	}
-	return ts;				//how to do this correctly????
+	return ts;	//how to do this correctly????
 }
 
 
@@ -194,7 +200,7 @@ bool find_int(string& input, size_t& position, TokenStream& ts) {
 }
 
 
-//so the value will be "VARCHAR(20)" or comprable string				//----------------------------
+//so the value will be "VARCHAR(20)" or comprable string	//----------------------------
 bool find_varchar(string& input, size_t& position, TokenStream& ts) {
 
 	if (VAR_CHAR == input.substr(position, VAR_CHAR.size())) {
@@ -211,7 +217,7 @@ bool find_varchar(string& input, size_t& position, TokenStream& ts) {
 				curr_pos = open_p + 1;
 			}
 			if (value.size() <= VAR_CHAR.size()) {
-				//no digits inside the parenthesis found						//is this check needed?
+				//no digits inside the parenthesis found	//is this check needed?
 				return false;
 			}
 			else {
@@ -312,16 +318,16 @@ bool find_string_literal(string& input, size_t& position, TokenStream& ts) {
 		//shouldn't happen because this function is only called if the current char is "
 		return false;
 	}
-	size_t curr_pos = position + 1;		//to account for the "
+	size_t curr_pos = position + 1;	//to account for the "
 	size_t end_quot = input.find('"', curr_pos);
 	if (end_quot == string::npos) {
 		//no ending quotation mark found
 		return false;
 	}
 	else {
-		size_t string_length = end_quot - curr_pos;						//check that this is correct
+		size_t string_length = end_quot - curr_pos;	//check that this is correct
 		string value = input.substr(curr_pos, string_length);
-		size_t space_used = end_quot - position + 1;				//may need to have a + 1 or -1 to do correctly
+		size_t space_used = end_quot - position + 1;	//may need to have a + 1 or -1 to do correctly
 		ts.addToken(Token(STRING_LITERAL, value));
 		input.erase(position, space_used);
 		return true;
@@ -333,6 +339,11 @@ void find_int_literal(string& input, size_t& position, TokenStream& ts) {
 	//this could probably be fixed fairly easily
 	size_t curr_pos = position;
 	string value;
+
+	//pull in the first char, - or digit
+	value += input.at(curr_pos);
+	++curr_pos;
+
 	while (isdigit(input.at(curr_pos))) {
 		value += input.at(curr_pos);
 		++curr_pos;
