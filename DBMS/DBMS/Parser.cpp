@@ -841,9 +841,14 @@ EvaluationTree* parseCommand(TokenStream& ts){
 		return new EvaluationTree( result );
 	delete result;
 
-	result = parseInsert(ts); //Try
+	result = parseInsert(ts); //Try to parse a Insert
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
+	delete result;
+
+	result = parseUpdate(ts); //Try to parse an Update
+	if (result->getType() == COMMAND_OPERATOR)
+		return new EvaluationTree(result);
 	delete result;
 	
 	result = parseDelete(ts);
@@ -1164,7 +1169,7 @@ EvalNodePointer parseUpdate(TokenStream& ts){
 	}
 
 	EvalNodePointer atrributeValuePairNode = parseAttributeValuePairNode(ts);
-	
+
 	// if the type of the node equals failure
 	if ( atrributeValuePairNode->getType() ==  PARSE_FAILURE){
 		delete relationName;
@@ -1204,6 +1209,7 @@ EvalNodePointer parseUpdate(TokenStream& ts){
 	result->addChild(relationName);
 	result->addChild(atrributeValuePairNode);
 	result->addChild(conditionNode);
+	cout << "here";
 	return result; // return the node
 }
 
@@ -1213,7 +1219,7 @@ EvalNodePointer parseInsert(TokenStream& ts){
 
 	EvalNodePointer result = NULL;
 	Token t = ts.getToken();
-	
+
 	// if the token does not equal insert
 	if (t.getValue() != INSERT){
 		ts.pushToken(t);
@@ -1233,11 +1239,11 @@ EvalNodePointer parseInsert(TokenStream& ts){
 	}
 
 	t = ts.getToken();
-	
+	cout << t.getValue();
 	// if the token does not equal values from
 	if (t.getValue() != VALUES_FROM){
 		ts.pushToken(t);
-	}
+	} 
 	else{
 		t = ts.getToken();
 		
@@ -1291,7 +1297,9 @@ EvalNodePointer parseInsert(TokenStream& ts){
 	else{
 		EvalNodePointer expr = parseExpresion(ts);
 		// if the type of the node eqauls failure
+		cout << "else";
 		if (expr->getType() == PARSE_FAILURE){
+			cout << "if";
 			delete relationName;
 			delete expr;
 			string* value = new string("Failed to parse insert, no expr");

@@ -11,12 +11,17 @@ QueryHandler::QueryHandler(Engine* e){
 
 Table* QueryHandler::query(string query){
 
-
-	TokenStream ts = (lex( query)); //Is there a copy constructor?
-
-	EvaluationTree* tree = parseQuery(ts);
-
-	Table* tablePointer = eval->Evaluate(tree);
-
-	return tablePointer;
+	try {
+		TokenStream ts = (lex(query)); //Is there a copy constructor?
+		cout << "lexed" << endl;
+		EvaluationTree* tree = parseQuery(ts);
+		cout << "parsed" << endl;
+		Table* tablePointer = eval->Evaluate(tree);
+		cout << "evaled" << endl;
+		return tablePointer;
+	}
+	catch (const char* error) {
+		cout << error;
+		return NULL;
+	}
 }

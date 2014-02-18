@@ -19,7 +19,7 @@ void Engine::update(Table* table, vector< tuple<string, string> > namevarpairs, 
 				keyChanged = true;
 		}
 	}
-
+	
 	for (map< string, vector<Attribute* > >::iterator it = data.begin(); it != data.end(); it++) 
 	{
 		table->setCurrentRow(it->second);

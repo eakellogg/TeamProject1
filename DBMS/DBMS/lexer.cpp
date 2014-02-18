@@ -84,8 +84,8 @@ TokenStream lex(string input) {
 			break;
 			//check for values from, then values from relation, then varchar
 		case 'V':
-			if (!find_symbol(input, front, ts, VALUES_FROM)) {
-				if (!find_symbol(input, front, ts, VALUES_FROM_RELATION)) {
+			if (!find_symbol(input, front, ts, VALUES_FROM_RELATION)) {
+				if (!find_symbol(input, front, ts, VALUES_FROM)) {
 					if (!find_varchar(input, front, ts)) {
 						lex_identifier(input, ts);
 					}
@@ -117,9 +117,11 @@ TokenStream lex(string input) {
 		case '*':
 			find_symbol(input, front, ts, PRODUCT);
 			break;
+		//if it is '==' then add a symbol token, if it's only '=' then its the assignment operator
 		case '=':
 			if (!find_equals(input, front, ts)) {
-				//error("'=' is an invalid entry");	//--------------------------
+				ts.addToken(Token(OPERATOR, ASSIGNMENT));
+				input.erase(front, ASSIGNMENT.size());
 			}
 			break;
 		case '!':
@@ -166,7 +168,7 @@ TokenStream lex(string input) {
 			break;
 		}
 	}
-	return ts;	//how to do this correctly????
+	return ts;	
 }
 
 
