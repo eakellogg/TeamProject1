@@ -57,7 +57,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			else
 				return make_tuple(STRING_LITERAL, TRUE);
 		}
-		else if (value == GREATER_THAN)
+		else if (value == LESS_THAN)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -93,7 +93,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			// something went wrong, return failure
 			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == LESS_THAN)
+		else if (value == GREATER_THAN)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -129,7 +129,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			// something went wrong, return failure
 			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == GREATER_EQUAL)
+		else if (value == LESS_EQUAL)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -165,7 +165,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			// something went wrong, return failure
 			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == LESS_EQUAL)
+		else if (value == GREATER_EQUAL)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];

@@ -102,7 +102,7 @@ using namespace std;
 		}
 
 		infile.close();
-		return fileLines;
+		master->(fileLines);
 	}
 
 	// closes an open file, saving all changes that occured since opening; removes the table from the database
