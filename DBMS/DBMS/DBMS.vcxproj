@@ -66,6 +66,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DBMS.cpp" />
+    <ClCompile Include="DBMSQueryHandler.cpp" />
+    <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserEvaluationTree.cpp" />
     <ClCompile Include="EngineRename.cpp" />
@@ -86,8 +89,12 @@
     <ClInclude Include="Attribute.h" />
     <ClInclude Include="ConditionEval.h" />
     <ClInclude Include="ConditionTree.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="DBMS.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EvaluationTree.h" />
+    <ClInclude Include="Evaluator.h" />
+    <ClInclude Include="QueryHandler.h" />
     <ClInclude Include="TokenStream.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />

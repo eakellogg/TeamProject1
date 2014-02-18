@@ -47,17 +47,18 @@ namespace TableTester
 		vector<Attribute*> person2 = vector<Attribute*>{nameb, cityb, stateb};
 		vector<Attribute*> person3 = vector<Attribute*>{named, cityc, statec};
 
-		Engine testEngine = Engine();
+		DBMS* dbms = new DBMS();
+		Engine testEngine = Engine(dbms);
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Creating_Table)
 		{
 			// should throw an error because badKey is not in the list of given column names
 			try{
-				testEngine.createTable("tableName", "badKey", columnTypesA, columnTitlesA);
+				testEngine.createTable("tableName", vector<string>{"badKey"}, columnTypesA, columnTitlesA);
 			}
 			catch (const char* error) {
 				// check error message equality
@@ -65,7 +66,7 @@ namespace TableTester
 			}
 
 			string tableName = "tableName";
-			testEngine.createTable(tableName, "name", columnTypesA, columnTitlesA);
+			testEngine.createTable(tableName, vector<string>{"name"}, columnTypesA, columnTitlesA);
 
 			// check name equality
 			Assert::AreEqual(tableName, testEngine.getTables()[0]->getTableName());
@@ -81,17 +82,17 @@ namespace TableTester
 			}
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Dropping_Table)
 		{
 			// verify number of tables
 			Assert::IsTrue(testEngine.getTables().size() == 0);
 
-			testEngine.createTable("tableName", "name", columnTypesA, columnTitlesA);
-			Table* badTable = new Table("otherTable", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("tableName", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			Table* badTable = new Table("otherTable", vector<string>{"name"}, columnTypesA, columnTitlesA);
 
 			// verify table was added correctly
 			Assert::IsTrue(testEngine.getTables().size() == 1);
@@ -111,14 +112,14 @@ namespace TableTester
 			Assert::IsTrue(testEngine.getTables().size() == 0);
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Insert_Into){
 			// verify number of tables
-			testEngine.createTable("tableName", "name", columnTypesA, columnTitlesA);
-			Table* badTable = new Table("otherTable", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("tableName", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			Table* badTable = new Table("otherTable", vector<string>{"name"}, columnTypesA, columnTitlesA);
 
 			Assert::IsTrue(testEngine.getTables().size() == 1); // one table
 			Assert::IsTrue(testEngine.getTables()[0]->getData().size() == 0); // table has no rows
@@ -156,12 +157,11 @@ namespace TableTester
 			}
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Update) {
-
 			vector<string> columnTypes;
 			columnTypes.push_back(STRING_TYPE);
 			vector<string> columnNames;
@@ -171,18 +171,18 @@ namespace TableTester
 			vector<Attribute*> row;
 			row.push_back(a);
 
-			Engine engine;
-			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			Engine engine(dbms);
+			engine.createTable("TestTable", vector<string>{"Name"}, columnTypes, columnNames);
 			engine.insertInto(engine.getTables()[0], row, columnTypes);
 
 			vector< tuple<string, string> > namevarpairs;
 			namevarpairs.push_back(make_tuple("Name", "Emily"));
 
-			ConditionTree t(EQUAL, OPERATOR);
+			ConditionTree t(OPERATOR, EQUALS);
 			ConditionTree::Node* n = t.getRoot();
 
-			n->setLeftChild("Name", VARIABLE);
-			n->setRightChild("BOB", LITERAL_STRING);
+			n->addChild("Name", VARIABLE);
+			n->addChild("BOB", STRING_LITERAL);
 
 			engine.update(engine.getTables()[0], namevarpairs, t);
 
@@ -193,15 +193,15 @@ namespace TableTester
 
 			vector< Attribute* > ats = it->second;
 
-			Assert::AreEqual(ats[0]->getValue().c_str(), "Emily");
+			Assert::AreEqual(ats[0]->getValue().c_str(), "Emily"); // not true
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Delete) {
-
+		
 			vector<string> columnTypes;
 			columnTypes.push_back(STRING_TYPE);
 			vector<string> columnNames;
@@ -211,16 +211,15 @@ namespace TableTester
 			vector<Attribute*> row;
 			row.push_back(a);
 
-			Engine engine;
-			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			Engine engine(dbms);
+			engine.createTable("TestTable", vector<string>{"Name"}, columnTypes, columnNames);
 			engine.insertInto(engine.getTables()[0], row, columnTypes);
-
-	
-			ConditionTree t(EQUAL, OPERATOR);
+			
+			ConditionTree t(OPERATOR, EQUALS);
 			ConditionTree::Node* n = t.getRoot();
 
-			n->setLeftChild("Name", VARIABLE);
-			n->setRightChild("BOB", LITERAL_STRING);
+			n->addChild("Name", VARIABLE);
+			n->addChild("BOB", STRING_LITERAL);
 
 			engine.deleteFrom(engine.getTables()[0], t);
 
@@ -232,52 +231,51 @@ namespace TableTester
 			bool result = false;
 			if (it == data.end())
 				result = true;
-			Assert::AreEqual(result, true);
+			Assert::AreEqual(result, true); // not true
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Test_Selection)
 		{
-			//TODO improve!
 			vector<string> columnTypes;
 			columnTypes.push_back(STRING_TYPE);
 			vector<string> columnNames;
 			columnNames.push_back("Name");
-
+			
 			Attribute* a = new Attribute(STRING_TYPE, "BOB");
 			vector<Attribute*> row;
 			row.push_back(a);
 
-			Engine engine;
-			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			Engine engine(dbms);
+			engine.createTable("TestTable", vector<string>{"Name"}, columnTypes, columnNames);
 			engine.insertInto(engine.getTables()[0], row, columnTypes);
-
+			
 			vector< tuple<string, string> > namevarpairs;
 			namevarpairs.push_back(make_tuple("Name", "BOB"));
 
-			ConditionTree t(EQUAL, OPERATOR);
+			ConditionTree t(OPERATOR, EQUALS);
 			ConditionTree::Node* n = t.getRoot();
-
-			n->setLeftChild("Name", VARIABLE);
-			n->setRightChild("BOB", LITERAL_STRING);
+			
+			n->addChild("Name", VARIABLE);
+			n->addChild("BOB", STRING_LITERAL);
 
 			Table* newTable = engine.selection(engine.getTables()[0], t);
-
-
+			
 			map< string, vector<Attribute*> > data = newTable->getData();
 			map< string, vector<Attribute*> >::iterator it = data.begin();
-
-			vector< Attribute* > ats = it->second;
-
-			Assert::AreEqual(ats[0]->getValue().c_str(), "BOB");
+			
+			Assert::IsTrue(data.size() > 0); // not true
+			vector< Attribute* > ats = it->second; // not a valid operation - it doesnt have second
+			
+			Assert::AreEqual(ats[0]->getValue().c_str(), "BOB"); // not true		
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Projection)
 		{
@@ -287,19 +285,19 @@ namespace TableTester
 			vector<string> columnNames;
 			columnNames.push_back("Name");
 			columnNames.push_back("Age");
-			
+
 			Attribute* a = new Attribute(STRING_TYPE, "BOB");
 			Attribute* b = new Attribute(INT_TYPE, "10");
 			vector<Attribute*> row;
 			row.push_back(a);
 			row.push_back(b);
 
-			Engine engine;
-			engine.createTable("TestTable", "Name", columnTypes, columnNames);
+			Engine engine(dbms);
+			engine.createTable("TestTable", vector<string>{"Name"}, columnTypes, columnNames);
 			engine.insertInto(engine.getTables()[0], row, columnTypes);
 
 			Table* newTable = engine.projection(engine.getTables()[0], vector<string>{"Age"});
-		
+
 			map< string, vector<Attribute*> > data = newTable->getData();
 			map< string, vector<Attribute*> >::iterator it = data.begin();
 
@@ -308,14 +306,14 @@ namespace TableTester
 			Assert::AreEqual(ats[0]->getValue().c_str(), "10");
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Rename) {
 			Assert::IsTrue(testEngine.getTables().size() == 0);
 			vector<string> newTitles = vector<string>{"nombre", "university", "age"};
-			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
+			testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
 
 			Table* renamedTable;
 			renamedTable = testEngine.rename(testEngine.getTables()[0], newTitles);
@@ -323,17 +321,17 @@ namespace TableTester
 			for (int i = 0; i < renamedTable->getColumnTitles().size(); i++) {
 				Assert::AreEqual(renamedTable->getColumnTitles()[i], newTitles[i]);
 			}
-			Assert::AreEqual(renamedTable->getKeyName(), newTitles[0]);
+			Assert::AreEqual(renamedTable->getKeyName()[0], newTitles[0]);
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Set_Union){
-			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("students2", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
+			testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("students2", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("badTable", vector<string>{"weight"}, badColumnTypes, badColumnTitles);
 
 			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
@@ -385,20 +383,20 @@ namespace TableTester
 			Assert::IsTrue(rowb[2]->getValue() == "18");
 			it++;
 
-			vector<Attribute*> rowc= it->second;
+			vector<Attribute*> rowc = it->second;
 			Assert::IsTrue(rowc[0]->getValue() == "Zach Brown");
 			Assert::IsTrue(rowc[1]->getValue() == "Texas A&M");
 			Assert::IsTrue(rowc[2]->getValue() == "20");
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Set_Difference){
-			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("students2", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
+			testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("students2", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("badTable", vector<string>{"weight"}, badColumnTypes, badColumnTitles);
 
 			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
@@ -444,13 +442,13 @@ namespace TableTester
 			Assert::IsTrue(rowa[2]->getValue() == "20");
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Cross_Product){
-			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
+			testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("people", vector<string>{"state"}, columnTypesB, columnTitlesB);
 
 			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);
@@ -529,14 +527,14 @@ namespace TableTester
 			Assert::IsTrue(rowd[6]->getValue() == "0000000003");
 		}
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
-//************************************************************************************************************
+		//************************************************************************************************************
 
 		TEST_METHOD(Natural_Join) {
-			testEngine.createTable("students", "name", columnTypesA, columnTitlesA);
-			testEngine.createTable("people", "state", columnTypesB, columnTitlesB);
-			testEngine.createTable("badTable", "weight", badColumnTypes, badColumnTitles);
+			testEngine.createTable("students", vector<string>{"name"}, columnTypesA, columnTitlesA);
+			testEngine.createTable("people", vector<string>{"state"}, columnTypesB, columnTitlesB);
+			testEngine.createTable("badTable", vector<string>{"weight"}, badColumnTypes, badColumnTitles);
 
 			testEngine.insertInto(testEngine.getTables()[0], student1, columnTypesA);
 			testEngine.insertInto(testEngine.getTables()[0], student2, columnTypesA);

@@ -64,8 +64,8 @@ Table* Engine::setUnion(Table* firstTable, Table* secondTable) {
 		newColumnTypes.push_back(firstTable->getTypeOfColumn(firstTableColumns[i]));
 	}
 
-	string newKey = firstTable->getKeyName();
-
+	vector<string> newKey = firstTable->getKeyName();
+	
 	// new table to add data to
 	Table* newTable = new Table("Union Table", newKey, newColumnTypes, newColumnTitles);
 

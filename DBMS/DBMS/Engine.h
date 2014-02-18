@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef ENGINE_H
-#define ENGINE_H
-
 #include <string>
 #include <iostream>
 #include <tuple>
@@ -11,11 +8,20 @@
 #include "ConditionTree.h"
 #include "Table.h"
 #include "Attribute.h"
+#include "DBMS.h"
+
+#ifndef ENGINE_H
+#define ENGINE_H
+
+
+class DBMS;
 
 using namespace std;
 
 class Engine {
 	vector<Table*> tables;
+
+	DBMS* master; //A pointer to the DBMS containing this engine
 
 public:
 	/*********************************************************************************
@@ -23,7 +29,7 @@ public:
 	*********************************************************************************/
 
 	//constructor
-	Engine();
+	Engine( DBMS* master );
 
 	/*********************************************************************************
 		non-modifying functions / accessor methods
@@ -37,13 +43,16 @@ public:
 	*********************************************************************************/
 
 	// create a table with the row types and column titles given
-	void createTable(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
+	void createTable(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 	// delete a table from the database
 	void dropTable(Table* table);
 
 	// insert a row into the table with the proper name
 	void insertInto(Table* table, vector<Attribute*> row, vector<string> columnTypes);
+
+	// insert a table into another table
+	void insertInto(Table* tablea, Table* tableb);
 
 	// change the variables listed to their new values, if the row in the table meets the condition
 	void update(Table* table, vector< tuple<string, string> > namevarpairs, ConditionTree t);
@@ -72,6 +81,17 @@ public:
 	// calculates the cross product of the two given tables and returns a new table with the result
 	Table* crossProduct(Table* first, Table* secondTable); // see CrossProduct.cpp
 
+	// opens the file represented by tableName; reads the table into the database
+	vector<string> openFile(string tableName);
+
+	// closes an open file, saving all changes that occured since opening; removes the table from the database
+	void closeFile(Table* table);
+
+	// writes a new file for a table, overwritting an already existing file with the same name if there is one
+	void writeFile(Table* table);
+
+	// show a relation by printing the table representing it
+	void show(Table* table);
 
 	/*********************************************************************************
 		helper functions

@@ -1,8 +1,9 @@
 #include <iostream>
 #include "Table.h"
-
+#include "Lexer.h"
+#include "EvaluationTree.h"
+typedef ConditionTree::Node Node;
 using namespace std;
-
 
 
 //Will return TRUE or FALSE
@@ -10,16 +11,19 @@ using namespace std;
 string Table::EvalConditionTree(ConditionTree* tree){
 
 	tuple<string, string> result = NodeEval(tree->getRoot());
-	return get<1>(result);
+
+	string value = get<1>(result);
+	return value;
 }
 
-//tuple< type , value >
+
+//tuple< type , value > //NEED TO FIX
 tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
+
 
 	string type = n->getType();
 	string value = n->getValue();
-
-	if (type == LITERAL_STRING || type == LITERAL_INT)
+	if (type == STRING_LITERAL || type == INT_LITERAL)
 	{
 		return make_tuple(type, value);
 	}
@@ -35,251 +39,248 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		const std::string OR = "||";
 		const std::string NOT = "!";
 		*/
-		if (value == EQUAL)
+		if (value == EQUALS)
 		{
-			if (get<1>(NodeEval(n->getLeftChild())) == get<1>(NodeEval(n->getRightChild())))
-				return make_tuple(LITERAL_STRING, TRUE);
+			vector< Node* > children = n->getChildern();
+			// test equality of the node's children
+			if (get<1>(NodeEval(children[0])) == get<1>(NodeEval(children[1])))
+				return make_tuple(STRING_LITERAL, TRUE);
 			else
-				return make_tuple(LITERAL_STRING, FALSE);
+				return make_tuple(STRING_LITERAL, FALSE);
 		}
-
-		else if (value == LESS)
+		else if (value == NOT_EQUAL)
 		{
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			ConditionTree::Node* rightChild = n->getRightChild();
+			vector< Node* > children = n->getChildern();
+			// test inequality of the node's children
+			if (get<1>(NodeEval(children[0])) == get<1>(NodeEval(children[1])))
+				return make_tuple(STRING_LITERAL, FALSE);
+			else
+				return make_tuple(STRING_LITERAL, TRUE);
+		}
+		else if (value == GREATER_THAN)
+		{
+			vector < Node* > children = n->getChildern();
+			ConditionTree::Node* leftChild = children[0];
+			ConditionTree::Node* rightChild = children[1];
 			tuple<string, string> leftResult = NodeEval(leftChild);
 			tuple<string, string> rightResult = NodeEval(rightChild);
 			string leftType = get<0>(leftResult);
 			string rightType = get<0>(rightResult);
 			string leftValue = get<1>(leftResult);
 			string rightValue = get<1>(rightResult);
-
+			// ensure comparison can be done
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			// in the case of a string
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			// in the case of an integer
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == -1)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			// something went wrong, return failure
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == GREATER)
+		else if (value == LESS_THAN)
 		{
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			ConditionTree::Node* rightChild = n->getRightChild();
+			vector < Node* > children = n->getChildern();
+			ConditionTree::Node* leftChild = children[0];
+			ConditionTree::Node* rightChild = children[1];
 			tuple<string, string> leftResult = NodeEval(leftChild);
 			tuple<string, string> rightResult = NodeEval(rightChild);
 			string leftType = get<0>(leftResult);
 			string rightType = get<0>(rightResult);
 			string leftValue = get<1>(leftResult);
 			string rightValue = get<1>(rightResult);
-
+			//ensure comparison can be done
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			// in the case of a string
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			// in the case of an integer
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == 1)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			// something went wrong, return failure
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == LESSEQUAL)
+		else if (value == GREATER_EQUAL)
 		{
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			ConditionTree::Node* rightChild = n->getRightChild();
+			vector < Node* > children = n->getChildern();
+			ConditionTree::Node* leftChild = children[0];
+			ConditionTree::Node* rightChild = children[1];
 			tuple<string, string> leftResult = NodeEval(leftChild);
 			tuple<string, string> rightResult = NodeEval(rightChild);
 			string leftType = get<0>(leftResult);
 			string rightType = get<0>(rightResult);
 			string leftValue = get<1>(leftResult);
 			string rightValue = get<1>(rightResult);
-
+			// ensure comparison can be done
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			// in the case of a string
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			// in the case of an integer
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == -1 || comparison == 0)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			// something went wrong, return failure
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if ( value == GREATEREQUAL)
+		else if (value == LESS_EQUAL)
 		{
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			ConditionTree::Node* rightChild = n->getRightChild();
+			vector < Node* > children = n->getChildern();
+			ConditionTree::Node* leftChild = children[0];
+			ConditionTree::Node* rightChild = children[1];
 			tuple<string, string> leftResult = NodeEval(leftChild);
 			tuple<string, string> rightResult = NodeEval(rightChild);
 			string leftType = get<0>(leftResult);
 			string rightType = get<0>(rightResult);
 			string leftValue = get<1>(leftResult);
 			string rightValue = get<1>(rightResult);
-
+			// ensure comparison can be done
 			if (leftType != rightType)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				return make_tuple(PARSE_FAILURE, "_TYPE_MISMATCH");
 			}
-			else if (leftType == LITERAL_STRING)
+			// in the case of a string
+			else if (leftType == STRING_LITERAL)
 			{
 				if (leftValue == rightValue)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else if (leftType == LITERAL_INT)
+			// in the case of an integer
+			else if (leftType == INT_LITERAL)
 			{
 				int comparison = compareStringInts(leftValue, rightValue);
 				if (comparison == 1 || comparison == 0)
-					return make_tuple(LITERAL_STRING, TRUE);
+					return make_tuple(STRING_LITERAL, TRUE);
 				else
-					return make_tuple(LITERAL_STRING, FALSE);
+					return make_tuple(STRING_LITERAL, FALSE);
 			}
-			else return make_tuple(FAILURE, UNKNOWN);
+			// something went wrong, return failure
+			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if ( value == AND)
+		else if (value == AND)
 		{
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			ConditionTree::Node* rightChild = n->getRightChild();
-			tuple<string, string> leftResult = NodeEval(leftChild);
-			tuple<string, string> rightResult = NodeEval(rightChild);
-			string leftType = get<0>(leftResult);
-			string rightType = get<0>(rightResult);
-			string leftValue = get<1>(leftResult);
-			string rightValue = get<1>(rightResult);
+			bool  result = true;
+			vector<Node*> children = n->getChildern();
 
-			if (leftType != rightType)
+			// examine all children
+			for (int i = 0; i < children.size(); i++)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				tuple<string, string> Result = NodeEval(children[i]);
+				string Type = get<0>(Result);
+				string Value = get<1>(Result);
+
+				// if any have false value, the result is false
+				if (Value == FALSE)
+					result = false;
 			}
-			else if ((leftValue == TRUE || leftValue == FALSE) && ( rightValue == TRUE || leftValue == FALSE ))
-			{
-				if ((leftValue == TRUE) && (rightValue == TRUE) )
-					return make_tuple(LITERAL_STRING, TRUE);
-				else
-					return make_tuple(LITERAL_STRING, FALSE);
-			}
-			else if (leftType == LITERAL_INT)
-			{
-				return make_tuple(FAILURE, "INT invalid operand for &&");
-			}
-			else return make_tuple(FAILURE, "Invalid operand for &&");
+
+			// return appropriate value based on value of result
+			if (result)
+				return make_tuple(STRING_LITERAL, TRUE);
+			else
+				return make_tuple(STRING_LITERAL, FALSE);
+
 		}
 		else if (value == OR)
 		{
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			ConditionTree::Node* rightChild = n->getRightChild();
-			tuple<string, string> leftResult = NodeEval(leftChild);
-			tuple<string, string> rightResult = NodeEval(rightChild);
-			string leftType = get<0>(leftResult);
-			string rightType = get<0>(rightResult);
-			string leftValue = get<1>(leftResult);
-			string rightValue = get<1>(rightResult);
+			bool  result = false;
+			vector<Node*> children = n->getChildern();
 
-			if (leftType != rightType)
+			// examine all children
+			for (int i = 0; i < children.size(); i++)
 			{
-				return make_tuple(FAILURE, "_TYPE_MISMATCH");
+				tuple<string, string> Result = NodeEval(children[i]);
+				string Type = get<0>(Result);
+				string Value = get<1>(Result);
+
+				// if any have true value, the result is true
+				if (Value == TRUE)
+					result = true;
 			}
-			else if ((leftValue == TRUE || leftValue == FALSE) && (rightValue == TRUE || rightValue == FALSE))
-			{
-				if ((leftValue == TRUE) || (rightValue == TRUE))
-					return make_tuple(LITERAL_STRING, TRUE);
-				else
-					return make_tuple(LITERAL_STRING, FALSE);
-			}
-			else if (leftType == LITERAL_INT)
-			{
-				return make_tuple(FAILURE, "INT invalid operand for ||");
-			}
-			else return make_tuple(FAILURE, "Invalid operand for ||");
+
+			// return appropriate value based on value of result
+			if (result)
+				return make_tuple(STRING_LITERAL, TRUE);
+			else
+				return make_tuple(STRING_LITERAL, FALSE);
 		}
-		else if (value == NOT)
-		{
-			if (n->getRightChild() != NULL)
-				return make_tuple(FAILURE, "NOT many only have one operand");
-			ConditionTree::Node* leftChild = n->getLeftChild();
-			tuple<string, string> leftResult = NodeEval(leftChild);
-			string leftType = get<0>(leftResult);
-			string leftValue = get<1>(leftResult);
-
-
-			 if ((leftValue == TRUE || leftValue == FALSE))
-			{
-				if ((leftValue == TRUE) )
-					return make_tuple(LITERAL_STRING, FALSE);
-				else
-					return make_tuple(LITERAL_STRING, TRUE);
-			}
-			else if (leftType == LITERAL_INT)
-			{
-				return make_tuple(FAILURE, "INT invalid operand for NOT");
-			}
-			else return make_tuple(FAILURE, "Invalid operand for NOT");
-		}
-		else return make_tuple(FAILURE, "Failed to match any operand");
-
 	}
-	else if ( type == VARIABLE)
-	{
-		Attribute* attribute = getVariable(value);
-
-		string newType;
-		string newValue;
-		newValue = attribute->getValue();
-		if (attribute->getType() == INT_TYPE)
+		else if (type == VARIABLE)
 		{
-			newType = LITERAL_INT;
+		//	cout << "got inside of variable " << endl;
+			Attribute* attribute = getVariable(value);
+			string newType;
+			string newValue;
+			newValue = attribute->getValue();
+			
+			// in the case of an integer
+			if (attribute->getType() == INT_LITERAL)
+			{
+				newType = INT_LITERAL;
+			}
+			// in the case of a string
+			else if (attribute->getType() == STRING_LITERAL)
+			{
+				newType = STRING_LITERAL;
+			}
+			// something went wrong, assign failure
+			else
+			{
+				newValue = "INVALID Varible Type";
+				newType = PARSE_FAILURE;
+			}
+			return make_tuple(newType, newValue);
 		}
-		else if (attribute->getType() == STRING_TYPE)
-		{
-			newType = LITERAL_STRING;
-		}
-		else
-		{
-			newValue = "INVALID Varible Type";
-			newType = FAILURE;
-		}
-		return make_tuple(newType, newValue);
-
-	}
-	else return make_tuple(FAILURE, UNKNOWN);
+		else return make_tuple(PARSE_FAILURE, UNKNOWN);
+	//cout << "Problem shouldn't have gotten here " << endl;
 }
 
 
+// compare integers that are stored as string types
 int Table::compareStringInts(string lv, string rv)
 {
 	int li = atoi(lv.c_str());

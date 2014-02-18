@@ -19,7 +19,7 @@ const static string STRING_TYPE = "STRING";
 
 class Table {
 	string tableName;
-	string keyName;
+	vector<string> keyName;
 	map< string, vector<Attribute*> > data; // the rows of the table
 	vector<string> columnTypes;
 	vector<string> columnTitles;
@@ -32,7 +32,7 @@ public:
 *********************************************************************************/
 
 
-	Table(string tableName, string keyName, vector<string> columnTypes, vector<string> columnTitles);
+	Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
 
 	Table(Table* table);
 
@@ -44,7 +44,7 @@ public:
 
 	string getTableName();
 
-	string getKeyName();
+	vector<string> getKeyName();
 
 	map< string, vector<Attribute*> > getData();
 
@@ -74,10 +74,10 @@ public:
 	void renameColumn(int column, string name);
 
 	// find and return a specific row in the table
-	vector<Attribute*> getRow(string key);
+	vector<Attribute*> getRow(vector<string> key);
 
 	// find and return a specific item in a specific row in the table
-	Attribute* getItem(string key, string columnName);
+	Attribute* getItem(vector<string> key, string columnName);
 
 	// takes in a column name, searches the current row, and returns the value of the column name
 	Attribute* getVariable(string columnName);

@@ -100,8 +100,8 @@ Table* Engine::naturalJoin(Table* firstTable, Table* secondTable) {
 		}
 	}
 	
-	string newKey = firstTable->getTableName() + secondTable->getTableName();
-	newColumnTitles.push_back(newKey);
+	vector<string> newKey = { firstTable->getTableName() + secondTable->getTableName() };
+	newColumnTitles.push_back(newKey[0]);
 	newColumnTypes.push_back("int");
 
 	// new table to add data to
