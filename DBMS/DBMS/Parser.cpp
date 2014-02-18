@@ -35,7 +35,7 @@ EvaluationTree* parseQuery(TokenStream& ts){
 			EvaluationTree::Node* rightChild = parseExpresion(ts);
 			
 			// if token is not an expression
-			if (rightChild->getType() != EXPR)
+			if (rightChild->getType() != EXPR && rightChild->getType() != RELATION_NAME)
 			{
 				delete leftChild;
 				delete rightChild;

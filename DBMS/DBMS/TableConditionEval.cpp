@@ -253,18 +253,17 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 		{
 		//	cout << "got inside of variable " << endl;
 			Attribute* attribute = getVariable(value);
-
 			string newType;
 			string newValue;
 			newValue = attribute->getValue();
 			
 			// in the case of an integer
-			if (attribute->getType() == INT_TYPE)
+			if (attribute->getType() == INT_LITERAL)
 			{
 				newType = INT_LITERAL;
 			}
 			// in the case of a string
-			else if (attribute->getType() == STRING_TYPE)
+			else if (attribute->getType() == STRING_LITERAL)
 			{
 				newType = STRING_LITERAL;
 			}

@@ -16,7 +16,7 @@ EvaluationTree::Node::Node(Node* parent, string type, void* value){
 
 // destructor for EvaluationTree::Node
 EvaluationTree::Node::~Node(){
-
+	/*
 	if (value != NULL)
 		delete value;
 	for (int i = 0; i < children.size(); i++)
@@ -24,7 +24,7 @@ EvaluationTree::Node::~Node(){
 		if (children[i] != NULL)
 			delete children[i];
 	}
-	
+	*/
 }
 
 // set the parent of the node
@@ -78,6 +78,6 @@ EvaluationTree::EvaluationTree(Node* root){
 
 // destructor for the evaluation tree
 EvaluationTree::~EvaluationTree(){
-	if ( root!= NULL)
-		delete root;
+	//if ( root!= NULL)
+		//delete root;
 }

@@ -12,6 +12,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 {
 	try {
 		EvaluationTree::Node* root = tree->getRoot();
+
 		if (root->getType() == QUERY){
 			EvaluationTree::Node* leftChild = (*(root->getChildren()))[0];
 			EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
@@ -24,7 +25,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					Table* expressionTable = Evaluate(&expressionTree);
 					string* value = (string*)(leftChild->getValue());
 					views.insert(make_pair(*value, expressionTable));
-					return NULL;
+					return expressionTable;
 				}
 			}
 			throw("Wrong QUERY types");
@@ -45,7 +46,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 						Table* expressionTable = Evaluate(&expressionTree);
 						if (expressionTable != NULL){
 							ConditionTree* condTree = (ConditionTree*)(leftChild->getValue());
-							return DBMS->selection(expressionTable, *condTree);
+							Table* tbl = DBMS->selection(expressionTable, *condTree);
+							return tbl;
 						}
 					}
 				}
@@ -195,6 +197,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 		if (root->getType() == COMMAND_OPERATOR)
 		{
 			string* value = (string*)(root->getValue());
+
 			if (*value == OPEN)
 			{
 				EvaluationTree::Node* child = (*(root->getChildren()))[0];
@@ -323,6 +326,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 			{
 				EvaluationTree::Node* childTableName = (*(root->getChildren()))[0];
 				EvaluationTree::Node* childCondTree = (*(root->getChildren()))[1];
+
 				if (childTableName->getType() == RELATION_NAME)
 				{
 					if (childCondTree->getType() == CONDITION_TREE)

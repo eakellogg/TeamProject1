@@ -7,8 +7,7 @@ Table* Engine::selection(Table* oldTable, ConditionTree t){
 
 	//TODO WHAT SHOULD I NAME THIS?
 	Table* newtable = new Table(oldTable->getTableName(), oldTable->getKeyName(), oldTable->getColumnTypes(), oldTable->getColumnTitles());
-
-
+	
 	for ( map< string, vector<Attribute*> >::iterator it = oldData.begin();
 		it != oldData.end(); it++) {
 
@@ -19,7 +18,7 @@ Table* Engine::selection(Table* oldTable, ConditionTree t){
 		result = oldTable->EvalConditionTree(&t);
 
 		if (result == TRUE){
-			
+	
 			vector<Attribute*> oldRow  = it->second;
 			vector<Attribute*> newRow;
 
