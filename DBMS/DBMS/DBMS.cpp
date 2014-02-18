@@ -3,7 +3,7 @@
 
 #include "DBMS.h"
 
-DBMS:DBMS()
+DBMS::DBMS()
 {
 		 engine = new Engine(this);
 		 qh = new QueryHandler(engine);

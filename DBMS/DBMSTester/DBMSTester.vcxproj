@@ -94,7 +94,6 @@
     </ClCompile>
     <ClCompile Include="TestInputOutput.cpp" />
     <ClCompile Include="Test_Condition_Tree_Eval.cpp" />
-    <ClCompile Include="Test_Lexer.cpp" />
     <ClCompile Include="Test_Parser.cpp" />
   </ItemGroup>
   <ItemGroup>

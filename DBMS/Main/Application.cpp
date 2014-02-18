@@ -8,8 +8,8 @@
 
 int main()
 {
-        try {
-
+      //  try {
+			/*
                 // create information to put into table to prepare testing
                 Attribute* namea = new Attribute(STRING_TYPE, "Zach Brown");
                 Attribute* nameb = new Attribute(STRING_TYPE, "Jacob Zerr");
@@ -129,7 +129,7 @@ int main()
                 cout << error << endl;
                 //return 1;
         }
-        
+        */
         bool goOn = true;
 
         DBMS dbms;

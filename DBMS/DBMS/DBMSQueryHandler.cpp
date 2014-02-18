@@ -5,7 +5,7 @@
 QueryHandler::QueryHandler(Engine* e){
 
 	engine = e;
-	eval = new Evaluator(e);
+	eval = new Evaluator(e , this);
 }
 
 

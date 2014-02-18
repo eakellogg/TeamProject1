@@ -21,7 +21,7 @@ public:
 	void  load(vector<string> commands);
 
 private:
-
+public:
 	Engine* engine;
 	QueryHandler* qh;
 

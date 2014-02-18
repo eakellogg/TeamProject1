@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Engine.h"
+#include "Table.h"
 #include <fstream>
 #include <iostream>
 
+class Table;
 using namespace std;
 
 /*********************************************************************************
@@ -102,7 +104,7 @@ using namespace std;
 		}
 
 		infile.close();
-		master->(fileLines);
+		master->load(fileLines );
 	}
 
 	// closes an open file, saving all changes that occured since opening; removes the table from the database

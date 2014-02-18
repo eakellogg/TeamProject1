@@ -3,6 +3,11 @@
 
 #include "Parser.h"
 #include "Engine.h"
+#include "QueryHandler.h"
+
+class Engine;
+class DBMS;
+class QueryHandler;
 
 //Evaluators take in the parsed tree and call the appropriate functions
 class Evaluator{
