@@ -25,11 +25,11 @@ class Table {
 	vector<string> columnTitles;
 	vector<Attribute*> currentRow;
 public:
+	Table(){}
 
-
-/*********************************************************************************
+	/*********************************************************************************
 	constructor
-*********************************************************************************/
+	*********************************************************************************/
 
 
 	Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
@@ -37,9 +37,9 @@ public:
 	Table(Table* table);
 
 
-/*********************************************************************************
+	/*********************************************************************************
 	non-modifying functions / accessor methods
-*********************************************************************************/
+	*********************************************************************************/
 
 
 	string getTableName();
@@ -59,9 +59,9 @@ public:
 	tuple<string, string> NodeEval(ConditionTree::Node* n);
 
 
-/*********************************************************************************
+	/*********************************************************************************
 	modifying functions
-*********************************************************************************/
+	*********************************************************************************/
 
 
 	// add a row to the table
@@ -81,11 +81,11 @@ public:
 
 	// takes in a column name, searches the current row, and returns the value of the column name
 	Attribute* getVariable(string columnName);
-	
 
-/*********************************************************************************
+
+	/*********************************************************************************
 	helper functions
-*********************************************************************************/
+	*********************************************************************************/
 
 
 	// reset the currentRow pointer to the beginning of the map
@@ -101,8 +101,8 @@ public:
 	bool checkMatchingTypes(vector<string> rowTypes);
 
 	// return the type associated with a column name
-	string getTypeOfColumn(string columnName); 
-	
+	string getTypeOfColumn(string columnName);
+
 	// print the table in an orderly format
 	void printTable();
 

@@ -7,7 +7,7 @@
 
 //Lex an inputted string
 //skip spaces
-TokenStream* lex(std::string input);				//waiting for everything else
+TokenStream lex(std::string input);				//waiting for everything else
 
 //if the symbol name is found, add the necessary token and return true, return false if not found
 // works for: SELECT, PROJECT, RENAME, CLOSE, CREATE_TABLE,
@@ -22,9 +22,6 @@ bool find_int(std::string& input, size_t& position, TokenStream& ts);
 
 //if "varchar(__)" is found, add the necessary token and return true
 bool find_varchar(std::string& input, size_t& position, TokenStream& ts);
-
-
-//function for lexing just things that arent alpha, digit, underscore???? --combining stuff centrally
 
 
 //if "==" is found, add the necessary token and return true
