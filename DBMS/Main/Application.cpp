@@ -3,7 +3,12 @@
 #include "TokenStream.h"
 #include "Parser.h"
 #include "Constants.h"
+<<<<<<< HEAD
 #include "Evaluator.h"
+=======
+#include "DBMS.h"
+
+>>>>>>> origin/lexer
 
 int main()
 {
@@ -67,7 +72,7 @@ int main()
 
 		Table* tbla = testEngine.getTables()[0];
 		Table* tblb = testEngine.getTables()[1];
-		
+
 		ConditionTree t(OPERATOR, AND);
 		ConditionTree::Node* n = t.getRoot();
 
@@ -78,17 +83,22 @@ int main()
 		ConditionTree::Node* secondEQ = n->addChild(OPERATOR, NOT_EQUAL);
 		secondEQ->addChild(STRING_LITERAL, "Victoria Elliott");
 		secondEQ->addChild(VARIABLE, "name");
-		
+
 		// test each relational algebra method
 		Table* tblc = NULL;
 
 		cout << "selection:" << endl;
 		tblc = testEngine.selection(tbla, t);
 		tblc->printTable();
-		
+
 		cout << "projection:" << endl;
+<<<<<<< HEAD
 		vector<string> wantedColumns = {"name", "school"};
 		tblc = testEngine.selection(testEngine.projection(tbla, wantedColumns),t);
+=======
+		vector<string> wantedColumns = { "name", "age" };
+		tblc = testEngine.projection(tbla, wantedColumns);
+>>>>>>> origin/lexer
 		tblc->printTable();
 
 		//cout << "rename:" << endl;
@@ -122,6 +132,7 @@ int main()
 		testEngine.closeFile(tbla);
 		//testEngine.writeFile(tblb);
 		//testEngine.closeFile(tblb);
+<<<<<<< HEAD
 		*/
 
 
@@ -226,12 +237,46 @@ tree = parseQuery(ts);
 eval.Evaluate(tree);
 
 engine->getTables()[0]->printTable();
+=======
+>>>>>>> origin/lexer
 
 	}
 	catch (const char* error) {
 		cout << error << endl;
-		return 1;
+		//return 1;
 	}
-	
+
+	bool goOn = true;
+
+	DBMS dbms;
+
+	while (goOn)
+	{
+
+		try{
+			cout << "Enter in the query" << endl;
+
+			string word;
+			cin >> word;
+			string line;
+			if (word == "QUIT")
+			{
+				break;
+			}
+			else
+			{
+				getline(cin, line);
+				line = word + line;
+				cout << line << endl;
+				Table table = dbms.query(line);
+			}
+			cout << "Finished QUery" << endl;
+		}
+		catch (const char* error) {
+			cout << error << endl;
+		}
+
+
+	}
 	return 0;
 }
