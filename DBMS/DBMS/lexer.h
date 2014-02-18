@@ -1,13 +1,23 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef LEXER_H
 #define LEXER_H
 
 #include <string>
+=======
+ #ifndef LEXER_H
+ #define LEXER_H
+ 
+#include <string>
+#include "Constants.h"
+
+>>>>>>> 7a0561666a8d64de68bae48f45c2ed8e11631541
 using namespace std;
 const static string DB_COMMAND = "DB_COMMAND";
 
+<<<<<<< HEAD
 // of type db_command :
 =======
  #ifndef LEXER_H
@@ -162,3 +172,7 @@ const static string AND = "&&";
 >>>>>>> bba805f00c659f73faf70a3dd5311c333f19e447
 =======
 >>>>>>> bba805f00c659f73faf70a3dd5311c333f19e447
+=======
+ 
+ #endif
+>>>>>>> 7a0561666a8d64de68bae48f45c2ed8e11631541
