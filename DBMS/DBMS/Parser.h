@@ -3,9 +3,8 @@
 
 
 #include "EvaluationTree.h"
-#include "TokenStream.h"
 #include "ConditionTree.h"
-#include "TokenStream.h"
+
 
 typedef EvaluationTree::Node* EvalNodePointer;
 typedef EvaluationTree::Node  EvalNode;
@@ -16,34 +15,34 @@ typedef ConditionTree::Node   CondNode;
 EvaluationTree* parseQuery(TokenStream& ts); //Done
 
 //Parse a relationname from the input stream
-EvaluationTree::Node* parseRelationName(TokenStream& ts); //Done and Tested
+EvalNodePointer parseRelationName(TokenStream& ts); //Done and Tested
 
 //Parse an expression
-EvaluationTree::Node* parseExpresion(TokenStream& ts); //Done 
+EvalNodePointer parseExpresion(TokenStream& ts); //Done 
 
 //Parse an selection
-EvaluationTree::Node* parseSelection(TokenStream& ts); //Done
+EvalNodePointer parseSelection(TokenStream& ts); //Done
 
 //Parse an projection
-EvaluationTree::Node* parseProjection(TokenStream& ts);  //Done
+EvalNodePointer parseProjection(TokenStream& ts);  //Done
 
 //Parse an renaming
-EvaluationTree::Node* parseRenaming(TokenStream& ts); //Done
+EvalNodePointer parseRenaming(TokenStream& ts); //Done
 
 //Parse an Union
-EvaluationTree::Node* parseUnion(TokenStream& ts);  //Done
+EvalNodePointer parseUnion(TokenStream& ts);  //Done
 
 //Parse an Difference
-EvaluationTree::Node* parseDifference(TokenStream& ts); //Done
+EvalNodePointer parseDifference(TokenStream& ts); //Done
 
 //Parse an Product
-EvaluationTree::Node* parseProduct(TokenStream& ts); //Done
+EvalNodePointer parseProduct(TokenStream& ts); //Done
 
 //Parse an NaturalJoin
-EvaluationTree::Node* parseNaturalJoin(TokenStream& ts);  //Done
+EvalNodePointer parseNaturalJoin(TokenStream& ts);  //Done
 
 //Parse an Atomic-Expr
-EvaluationTree::Node* parseAtomicExpr(TokenStream& ts);  //Done
+EvalNodePointer parseAtomicExpr(TokenStream& ts);  //Done
 
 //Parse an ConditionTree The root will be a of type failure if failed to parse
 ConditionTree*        parseConditionTree(TokenStream& ts); //Done and Tested
@@ -98,15 +97,15 @@ EvalNodePointer    parseAttributeValuePairNode(TokenStream& ts); //Done and Test
 EvalNodePointer    parseLiteralList(TokenStream& ts); //Done and Tested
 
 //Parse Disjunction
-ConditionTree::Node* parseDisjunction(TokenStream& ts); //Done and Tested
+CondNodePointer parseDisjunction(TokenStream& ts); //Done and Tested
 
 //Parse Conjunction
-ConditionTree::Node* parseConjunction(TokenStream& ts); //Done and Tested
+CondNodePointer parseConjunction(TokenStream& ts); //Done and Tested
 
 //Parse Comparison
-ConditionTree::Node* parseComparison(TokenStream& ts); //Done and Tested
+CondNodePointer parseComparison(TokenStream& ts); //Done and Tested
 
 //Parse Operand
-ConditionTree::Node* parseOperand(TokenStream& ts); //Done and Tested
+CondNodePointer parseOperand(TokenStream& ts); //Done and Tested
 
 #endif

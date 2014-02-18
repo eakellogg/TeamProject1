@@ -69,6 +69,7 @@
     <ClCompile Include="DBMS.cpp" />
     <ClCompile Include="DBMSQueryHandler.cpp" />
     <ClCompile Include="Evaluator.cpp" />
+    <ClCompile Include="lexer.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserEvaluationTree.cpp" />
     <ClCompile Include="EngineRename.cpp" />
