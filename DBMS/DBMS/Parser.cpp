@@ -1209,7 +1209,6 @@ EvalNodePointer parseUpdate(TokenStream& ts){
 	result->addChild(relationName);
 	result->addChild(atrributeValuePairNode);
 	result->addChild(conditionNode);
-	cout << "here";
 	return result; // return the node
 }
 
@@ -1239,7 +1238,6 @@ EvalNodePointer parseInsert(TokenStream& ts){
 	}
 
 	t = ts.getToken();
-	cout << t.getValue();
 	// if the token does not equal values from
 	if (t.getValue() != VALUES_FROM){
 		ts.pushToken(t);
@@ -1297,9 +1295,7 @@ EvalNodePointer parseInsert(TokenStream& ts){
 	else{
 		EvalNodePointer expr = parseExpresion(ts);
 		// if the type of the node eqauls failure
-		cout << "else";
 		if (expr->getType() == PARSE_FAILURE){
-			cout << "if";
 			delete relationName;
 			delete expr;
 			string* value = new string("Failed to parse insert, no expr");

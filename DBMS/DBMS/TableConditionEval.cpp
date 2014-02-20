@@ -251,7 +251,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 	}
 		else if (type == VARIABLE)
 		{
-		//	cout << "got inside of variable " << endl;
 			Attribute* attribute = getVariable(value);
 			string newType;
 			string newValue;
@@ -276,7 +275,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			return make_tuple(newType, newValue);
 		}
 		else return make_tuple(PARSE_FAILURE, UNKNOWN);
-	//cout << "Problem shouldn't have gotten here " << endl;
 }
 
 

@@ -22,7 +22,6 @@ static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vect
 
 	//Attribute* identifier = new Attribute("int", keyName);
 	//newRow.push_back(identifier);
-	cout << newRow.size();
 	return newRow;
 }
 

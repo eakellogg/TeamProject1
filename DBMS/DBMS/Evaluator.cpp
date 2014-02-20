@@ -14,10 +14,7 @@ Evaluator::Evaluator(Engine* dbms, QueryHandler* QH) : DBMS(dbms), queryHandle(Q
 Table* Evaluator::Evaluate(EvaluationTree* tree)
 {
 	try {
-		cout << "zerristrying";
 		EvaluationTree::Node* root = tree->getRoot();
-		cout << root->getType();
-		cout << root->getValue();
 
 		//if the sql input is a query
 		if (root->getType() == QUERY){
@@ -230,7 +227,6 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 		//if the sql input is a relation name
 		if (root->getType() == RELATION_NAME){
 			//first look if it is a query view in our local map
-			cout << views.size();
 			string* tableName = (string*)(root->getValue());
 			auto mapIter = views.find(*tableName);
 			if (mapIter != views.cend())
@@ -382,7 +378,6 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 			//if the sql input is a insert table command
 			if (*value == INSERT)
 			{
-				cout << "inserting";
 				EvaluationTree::Node* childTableName = (*(root->getChildren()))[0];
 				EvaluationTree::Node* childLiteralList = (*(root->getChildren()))[1];
 
