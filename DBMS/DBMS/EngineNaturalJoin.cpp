@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include <algorithm>
 
+using namespace std;
 
 /*********************************************************************************
 helper functions

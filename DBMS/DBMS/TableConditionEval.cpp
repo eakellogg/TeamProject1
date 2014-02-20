@@ -2,8 +2,12 @@
 #include "Table.h"
 #include "Lexer.h"
 #include "EvaluationTree.h"
-typedef ConditionTree::Node Node;
+#include "ConditionTree.h"
+
 using namespace std;
+
+typedef ConditionTree::Node Node;
+
 
 
 //Will return TRUE or FALSE
@@ -291,3 +295,4 @@ int Table::compareStringInts(string lv, string rv)
 	else
 		return 0;
 }
+

@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+using namespace std;
+
 // calculates the projection of the given table and returns a new table with the result
 Table* Engine::projection(Table* oldTable, vector<string> variables){
 

@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include "DBMS.h"
 
+using namespace std;
 
 int main()
 {  

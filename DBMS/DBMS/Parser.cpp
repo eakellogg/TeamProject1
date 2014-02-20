@@ -4,8 +4,9 @@
 #include <tuple>
 #include <iostream>
 
-typedef ConditionTree::Node Node;
+using namespace std;
 
+typedef ConditionTree::Node Node;
 
 // parse a query, return an evaluation tree pointer
 EvaluationTree* parseQuery(TokenStream& ts){

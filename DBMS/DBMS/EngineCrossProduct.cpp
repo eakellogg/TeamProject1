@@ -2,6 +2,8 @@
 
 #include "Engine.h"
 
+using namespace std;
+
 // make and return a new row with the naturally joined information
 static vector<Attribute*> fillNewRow(Table* firstTable, Table* secondTable, vector<string> newColumnTitles, int identifierCount) {
 	vector<Attribute*> newRow;

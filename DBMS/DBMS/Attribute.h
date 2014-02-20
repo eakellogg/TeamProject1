@@ -6,40 +6,43 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-// extended by varchar, int
-class Attribute {
-	string type;
-	string value;
+namespace std{
 
-public:
-/*********************************************************************************
-	constructor
-*********************************************************************************/
+	// extended by varchar, int
+	class Attribute {
+		string type;
+		string value;
 
-
-	Attribute(string type, string value)
-		:type(type), value(value)
-	{	}
+	public:
+		/*********************************************************************************
+			constructor
+			*********************************************************************************/
 
 
-/*********************************************************************************
-	non-modifying functions / accessor methods
-*********************************************************************************/
+		Attribute(string type, string value)
+			:type(type), value(value)
+		{	}
 
 
-	string getType() { return type; }
+		/*********************************************************************************
+			non-modifying functions / accessor methods
+			*********************************************************************************/
 
-	string getValue() { return value; }
+
+		string getType() { return type; }
+
+		string getValue() { return value; }
 
 
-/*********************************************************************************
-	modifying functions
-*********************************************************************************/
+		/*********************************************************************************
+			modifying functions
+			*********************************************************************************/
 
-	void setValue(string newValue) {
-		value = newValue;
-	}
-};
+		void setValue(string newValue) {
+			value = newValue;
+		}
+	};
+
+}
 
 #endif

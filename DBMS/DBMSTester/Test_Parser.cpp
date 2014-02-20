@@ -8,6 +8,7 @@
 #include "Evaluator.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace std;
 
 namespace DBMSTester
 {		

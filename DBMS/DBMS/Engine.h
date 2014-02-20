@@ -13,10 +13,9 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+namespace std{
 
 class DBMS;
-
-using namespace std;
 
 class Engine {
 	vector<Table*> tables;
@@ -101,5 +100,7 @@ public:
 	// search database for a table with matching name
 	Table* findTable(string tableName);
 };
+
+}
 
 #endif

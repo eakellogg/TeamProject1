@@ -3,6 +3,8 @@
 #include "Evaluator.h"
 #include "EvaluationTree.h"
 
+using namespace std;
+
 //Evalutor Constuctor takes in pointers to the engine and queryHandler that it works with
 //creates the map that will hold queries
 Evaluator::Evaluator(Engine* dbms, QueryHandler* QH) : DBMS(dbms), queryHandle(QH)

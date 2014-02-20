@@ -8,6 +8,7 @@
 #include "Constants.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace std;
 
 /*
 In this testing file, I have my parser parse some of the inputs found in the example input file. 

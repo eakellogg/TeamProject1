@@ -12,16 +12,19 @@ pseudo code of how it would work with the table as well -Zach Brown
 #include "ConditionTree.h"
 #include <tuple>
 #include <stdlib.h>
-using namespace std;
 
-int compareStringInts(string lv, string rv); //Returns 0 is equal, -1 if lv < rv and 1 if lv > rv
+namespace std{
+
+	int compareStringInts(string lv, string rv); //Returns 0 is equal, -1 if lv < rv and 1 if lv > rv
 
 
-//Will return TRUE or FALSE
-//Unless trees formated incorectly
-string EvalConditionTree(ConditionTree* tree);
+	//Will return TRUE or FALSE
+	//Unless trees formated incorectly
+	string EvalConditionTree(ConditionTree* tree);
 
-//tuple< type , value >
-tuple<string, string> NodeEval(ConditionTree::Node* n);
+	//tuple< type , value >
+	tuple<string, string> NodeEval(ConditionTree::Node* n);
+
+}
 
 #endif 

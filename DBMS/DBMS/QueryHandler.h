@@ -7,21 +7,24 @@
 #ifndef QH_H
 #define QH_H
 
-class Engine;
-class Evaluator;
+namespace std{
 
-class QueryHandler{
+	class Engine;
+	class Evaluator;
 
-public:
+	class QueryHandler{
 
-	QueryHandler(Engine* e);
+	public:
 
-	//This will return a pointer to the table the query creates
-	Table* query(string query);
+		QueryHandler(Engine* e);
 
-private:
-	Engine* engine; //A pointer to the engine who will do all the table manipulation
-	Evaluator* eval;
-};
+		//This will return a pointer to the table the query creates
+		Table* query(string query);
+
+	private:
+		Engine* engine; //A pointer to the engine who will do all the table manipulation
+		Evaluator* eval;
+	};
+}
 
 #endif

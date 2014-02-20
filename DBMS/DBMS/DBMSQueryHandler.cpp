@@ -1,7 +1,8 @@
 #include "QueryHandler.h"
-
-
 #include "TokenStream.h"
+
+using namespace std;
+
 QueryHandler::QueryHandler(Engine* e){
 
 	engine = e;

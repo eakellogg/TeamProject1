@@ -5,8 +5,8 @@
 #include <fstream>
 #include <iostream>
 
-class Table;
 using namespace std;
+class std::Table;
 
 /*********************************************************************************
 	constructor

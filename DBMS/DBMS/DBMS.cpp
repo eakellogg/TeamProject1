@@ -1,7 +1,6 @@
-
-
-
 #include "DBMS.h"
+
+using namespace std;
 
 DBMS::DBMS()
 {
