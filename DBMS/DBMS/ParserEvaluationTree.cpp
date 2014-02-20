@@ -16,6 +16,7 @@ EvaluationTree::Node::Node(Node* parent, string type, void* value){
 
 // destructor for EvaluationTree::Node
 EvaluationTree::Node::~Node(){
+	
 	/*
 	if (value != NULL)
 		delete value;
