@@ -11,11 +11,14 @@ TokenStream lex(std::string input);				//waiting for everything else
 
 //if the symbol name is found, add the necessary token and return true, return false if not found
 // works for: SELECT, PROJECT, RENAME, CLOSE, CREATE_TABLE,
-//DELETE, EXIT, INSERT, JOIN, OPEN, PRIMARY_KEY, SET, SHOW,
+//DELETE, INSERT, JOIN, OPEN, PRIMARY_KEY, SET, SHOW,
 //UPDATE, VALUES_FROM, VALUES_FROM_RELATION, WHERE, WRITE, 
-//UNION, DIFFERENCE, PRODUCT, OPEN_PAREN, CLOSE_PAREN,COMMA
+//UNION, DIFFERENCE, PRODUCT, OPEN_PAREN, COMMA
 bool find_symbol(std::string& input, size_t& position, TokenStream& ts, string symbol_name);
 
+//same functionality as find_symbol, but is safe for symbols at the end of the input
+// works for: EXIT, CLOSE_PAREN
+bool find_end_symbol(std::string& input, size_t& position, TokenStream& ts, string symbol_name);
 
 //if "INTEGER" is found, add the necessary token and return true
 bool find_int(std::string& input, size_t& position, TokenStream& ts);

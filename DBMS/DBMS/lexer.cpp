@@ -42,7 +42,7 @@ TokenStream lex(string input) {
 			}
 			break;
 		case 'E':
-			if (!find_symbol(input, front, ts, EXIT)) {
+			if (!find_end_symbol(input, front, ts, EXIT)) {
 				lex_identifier(input, ts);
 			}
 			break;
@@ -152,7 +152,7 @@ TokenStream lex(string input) {
 			find_symbol(input, front, ts, OPEN_PAREN);
 			break;
 		case ')':
-			find_symbol(input, front, ts, CLOSE_PAREN);
+			find_end_symbol(input, front, ts, CLOSE_PAREN);
 			break;
 		case ',':
 			find_symbol(input, front, ts, COMMA);
@@ -178,7 +178,6 @@ TokenStream lex(string input) {
 	return ts;	
 }
 
-
 bool find_symbol(string& input, size_t& position, TokenStream& ts, string symbol_name) {
 	if (symbol_name == input.substr(position, symbol_name.size())) {
 		size_t next = position + symbol_name.size();
@@ -191,6 +190,19 @@ bool find_symbol(string& input, size_t& position, TokenStream& ts, string symbol
 			//if an underscore follows the symbol name, then it is assumed that it is inside of an identifier and it is not the command
 			return false;
 		}
+	}
+	else {
+		return false;
+	}
+}
+
+//This function does not check if the next char is an underscore, which could cause failure for symbols at the end of the line
+bool find_end_symbol(string& input, size_t& position, TokenStream& ts, string symbol_name) {
+	if (symbol_name == input.substr(position, symbol_name.size())) {
+		size_t next = position + symbol_name.size();
+		ts.addToken(Token(SYMBOL, symbol_name));
+		input.erase(position, symbol_name.size());
+		return true;
 	}
 	else {
 		return false;
