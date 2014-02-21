@@ -87,11 +87,14 @@ using namespace std;
 	void Table::renameColumn(int column, string name) {
 		try {
 			for (int i = 0; i < keyName.size(); i++) {
+				cout << "!" << columnTitles[column] << " " << keyName[i] << " ";
 				if (columnTitles[column] == keyName[i]) {
+					cout << name << endl;
 					keyName[i] = name;
 				}
-				columnTitles[column] = name;
+				cout << endl;
 			}
+			columnTitles[column] = name;
 		}
 		catch (out_of_range) {
 			throw "column does not exist";
