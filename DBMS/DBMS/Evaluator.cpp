@@ -66,7 +66,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 						}
 					}
 				}
-				throw("Wrong types in selection");
+				//we now use selection to see if file already exists so string printed here is unwanted
+				throw("");
 			}
 
 			//if the sql input is a projection expression

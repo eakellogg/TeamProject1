@@ -94,7 +94,9 @@ class std::Table;
 		string tempLine;
 
 		if (!infile.is_open()) {
-			throw "the file does not exist";
+			//no string returned because we dont want things to print when
+			//checking if a file exists
+			throw "";
 		}
 
 		while (getline(infile, tempLine))

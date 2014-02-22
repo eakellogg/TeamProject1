@@ -9,6 +9,8 @@ using namespace std;
 *********************************************************************************/
 
 
+	Table::Table():tableName("EmptyTable"){	}
+
 	Table::Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles)
 		:tableName(tableName), keyName(keyName), columnTypes(columnTypes), columnTitles(columnTitles)
 	{	}

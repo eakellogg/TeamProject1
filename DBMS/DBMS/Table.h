@@ -25,12 +25,12 @@ namespace std{
 		vector<string> columnTitles;
 		vector<Attribute*> currentRow;
 	public:
-		Table(){}
 
 		/*********************************************************************************
 		constructor
 		*********************************************************************************/
 
+		Table();
 
 		Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
 
