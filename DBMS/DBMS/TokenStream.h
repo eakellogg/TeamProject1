@@ -3,28 +3,27 @@
 
 #include <iostream>
 #include <deque>
-using namespace std;
-const static string FILLER = "FILLER";
+const static std::string FILLER = "FILLER";
 
 
 class Token {
 public:
 	// return value of the token
-	string getValue(){
+	std::string getValue(){
 		return value;
 	}
 	
 	// trtuen type of the token
-	string getType(){
+	std::string getType(){
 		return type;
 	}
 	
 	// constructor for Token
-	Token( string type, string value) : value(value), type(type){}
+	Token( std::string type, std::string value) : value(value), type(type){}
 	
 private:
-	string value;
-	string type;
+	std::string value;
+	std::string type;
 
 };
 
@@ -63,7 +62,7 @@ public:
 	int getCount() { return tokens.size(); }
 	
 private:
-	deque<Token> tokens;
+	std::deque<Token> tokens;
 };
 
 #endif

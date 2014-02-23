@@ -4,8 +4,9 @@
 #include <tuple>
 #include <iostream>
 
-typedef ConditionTree::Node Node;
+using namespace std;
 
+typedef ConditionTree::Node Node;
 
 // parse a query, return an evaluation tree pointer
 EvaluationTree* parseQuery(TokenStream& ts){
@@ -841,9 +842,14 @@ EvaluationTree* parseCommand(TokenStream& ts){
 		return new EvaluationTree( result );
 	delete result;
 
-	result = parseInsert(ts); //Try
+	result = parseInsert(ts); //Try to parse a Insert
 	if (result->getType() == COMMAND_OPERATOR)
 		return new EvaluationTree( result );
+	delete result;
+
+	result = parseUpdate(ts); //Try to parse an Update
+	if (result->getType() == COMMAND_OPERATOR)
+		return new EvaluationTree(result);
 	delete result;
 	
 	result = parseDelete(ts);
@@ -1164,7 +1170,7 @@ EvalNodePointer parseUpdate(TokenStream& ts){
 	}
 
 	EvalNodePointer atrributeValuePairNode = parseAttributeValuePairNode(ts);
-	
+
 	// if the type of the node equals failure
 	if ( atrributeValuePairNode->getType() ==  PARSE_FAILURE){
 		delete relationName;
@@ -1213,7 +1219,7 @@ EvalNodePointer parseInsert(TokenStream& ts){
 
 	EvalNodePointer result = NULL;
 	Token t = ts.getToken();
-	
+
 	// if the token does not equal insert
 	if (t.getValue() != INSERT){
 		ts.pushToken(t);
@@ -1233,11 +1239,10 @@ EvalNodePointer parseInsert(TokenStream& ts){
 	}
 
 	t = ts.getToken();
-	
 	// if the token does not equal values from
 	if (t.getValue() != VALUES_FROM){
 		ts.pushToken(t);
-	}
+	} 
 	else{
 		t = ts.getToken();
 		

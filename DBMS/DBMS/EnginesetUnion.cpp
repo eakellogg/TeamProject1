@@ -2,6 +2,8 @@
 
 #include "Engine.h"
 
+using namespace std;
+
 //in order to use a union operation the tables must be compatible
 //they must have the same attributes
 static bool unionCompatible(Table* firstTable, Table* secondTable) {

@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)/DBMS;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Solevi\Desktop\TeamProject1\DBMS\FAKE_DBMS;$(SolutionDir)/DBMS;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -70,9 +70,12 @@
     <ProjectReference Include="..\DBMS\DBMS.vcxproj">
       <Project>{95ee883a-1bd0-4afb-b6e4-68c488512916}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\FAKE_DBMS\FAKE_DBMS.vcxproj">
+      <Project>{e5910e4a-c027-4c7a-be42-1180da9afaa3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="PrisonManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

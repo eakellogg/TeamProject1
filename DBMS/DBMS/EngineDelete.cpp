@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+using namespace std;
+
 // delete a table from the database
 void Engine::deleteFrom(Table* table, ConditionTree t){
 	//TODO This needs to remove the row and reinsert it if the key changes. 

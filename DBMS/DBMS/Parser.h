@@ -6,106 +6,107 @@
 #include "ConditionTree.h"
 
 
-typedef EvaluationTree::Node* EvalNodePointer;
-typedef EvaluationTree::Node  EvalNode;
-typedef ConditionTree::Node*  CondNodePointer;
-typedef ConditionTree::Node   CondNode;
 
-//Parse a query from the stream
-EvaluationTree* parseQuery(TokenStream& ts); //Done
+	typedef std::EvaluationTree::Node* EvalNodePointer;
+	typedef std::EvaluationTree::Node  EvalNode;
+	typedef std::ConditionTree::Node*  CondNodePointer;
+	typedef std::ConditionTree::Node   CondNode;
 
-//Parse a relationname from the input stream
-EvalNodePointer parseRelationName(TokenStream& ts); //Done and Tested
+	//Parse a query from the stream
+	std::EvaluationTree* parseQuery(TokenStream& ts); 
 
-//Parse an expression
-EvalNodePointer parseExpresion(TokenStream& ts); //Done 
+	//Parse a relationname from the input stream
+	EvalNodePointer parseRelationName(TokenStream& ts); 
 
-//Parse an selection
-EvalNodePointer parseSelection(TokenStream& ts); //Done
+	//Parse an expression
+	EvalNodePointer parseExpresion(TokenStream& ts);  
 
-//Parse an projection
-EvalNodePointer parseProjection(TokenStream& ts);  //Done
+	//Parse an selection
+	EvalNodePointer parseSelection(TokenStream& ts);
 
-//Parse an renaming
-EvalNodePointer parseRenaming(TokenStream& ts); //Done
+	//Parse an projection
+	EvalNodePointer parseProjection(TokenStream& ts); 
 
-//Parse an Union
-EvalNodePointer parseUnion(TokenStream& ts);  //Done
+	//Parse an renaming
+	EvalNodePointer parseRenaming(TokenStream& ts); 
 
-//Parse an Difference
-EvalNodePointer parseDifference(TokenStream& ts); //Done
+	//Parse an Union
+	EvalNodePointer parseUnion(TokenStream& ts); 
 
-//Parse an Product
-EvalNodePointer parseProduct(TokenStream& ts); //Done
+	//Parse an Difference
+	EvalNodePointer parseDifference(TokenStream& ts);
 
-//Parse an NaturalJoin
-EvalNodePointer parseNaturalJoin(TokenStream& ts);  //Done
+	//Parse an Product
+	EvalNodePointer parseProduct(TokenStream& ts); 
 
-//Parse an Atomic-Expr
-EvalNodePointer parseAtomicExpr(TokenStream& ts);  //Done
+	//Parse an NaturalJoin
+	EvalNodePointer parseNaturalJoin(TokenStream& ts);  
 
-//Parse an ConditionTree The root will be a of type failure if failed to parse
-ConditionTree*        parseConditionTree(TokenStream& ts); //Done and Tested
+	//Parse an Atomic-Expr
+	EvalNodePointer parseAtomicExpr(TokenStream& ts);  
 
-//Parse AttributeList
-EvalNodePointer       parseAttributeList(TokenStream& ts); //Done and Tested
+	//Parse an ConditionTree The root will be a of type failure if failed to parse
+	std::ConditionTree*        parseConditionTree(TokenStream& ts); 
 
-//Parse Attribute 
-EvalNodePointer       parseAttributeName(TokenStream& ts); //Done 
+	//Parse AttributeList
+	EvalNodePointer       parseAttributeList(TokenStream& ts); 
 
-//Parse Command
-EvaluationTree*    parseCommand(TokenStream& ts); //Done and Tested
+	//Parse Attribute 
+	EvalNodePointer       parseAttributeName(TokenStream& ts);  
 
-//Parse Open
-EvalNodePointer    parseOpen(TokenStream& ts); //Done and Tested 
+	//Parse Command
+	std::EvaluationTree*    parseCommand(TokenStream& ts); 
 
-//Parse Close
-EvalNodePointer    parseClose(TokenStream& ts); //Done and Tested
+	//Parse Open
+	EvalNodePointer    parseOpen(TokenStream& ts); 
 
-//Parse Write
-EvalNodePointer    parseWrite(TokenStream& ts); //Done and Tested
+	//Parse Close
+	EvalNodePointer    parseClose(TokenStream& ts);
 
-//Parse Write
-EvalNodePointer    parseExit(TokenStream& ts); //Done and Tested
+	//Parse Write
+	EvalNodePointer    parseWrite(TokenStream& ts); 
 
-//Parse Show
-EvalNodePointer    parseShow(TokenStream& ts); //Done waiting for atomic expr
+	//Parse Write
+	EvalNodePointer    parseExit(TokenStream& ts); 
 
-//Parse Create
-EvalNodePointer    parseCreate(TokenStream& ts); //Done and Tested
+	//Parse Show
+	EvalNodePointer    parseShow(TokenStream& ts); 
 
-//Parse Update
-EvalNodePointer    parseUpdate(TokenStream& ts);//Done and Tested
+	//Parse Create
+	EvalNodePointer    parseCreate(TokenStream& ts); 
 
-//Parse Insert
-EvalNodePointer    parseInsert(TokenStream& ts); //Done almost all tested
+	//Parse Update
+	EvalNodePointer    parseUpdate(TokenStream& ts);
 
-//Parse Delete
-EvalNodePointer    parseDelete(TokenStream& ts); //Done and Tested
+	//Parse Insert
+	EvalNodePointer    parseInsert(TokenStream& ts); 
 
-//Should this fail if no pairs found? Help
-//Parse a typed attribute list
-EvalNodePointer    parseTypedAttributeList(TokenStream& ts); //Done and Tested
+	//Parse Delete
+	EvalNodePointer    parseDelete(TokenStream& ts); 
 
-//Parse a Type
-EvalNodePointer    parseType(TokenStream& ts); //Done  and Tested
+	//Should this fail if no pairs found? Help
+	//Parse a typed attribute list
+	EvalNodePointer    parseTypedAttributeList(TokenStream& ts); 
 
-//Parse an attribute value pair node
-EvalNodePointer    parseAttributeValuePairNode(TokenStream& ts); //Done and Tested 
+	//Parse a Type
+	EvalNodePointer    parseType(TokenStream& ts); 
 
-//Parse a literal list
-EvalNodePointer    parseLiteralList(TokenStream& ts); //Done and Tested
+	//Parse an attribute value pair node
+	EvalNodePointer    parseAttributeValuePairNode(TokenStream& ts); 
 
-//Parse Disjunction
-CondNodePointer parseDisjunction(TokenStream& ts); //Done and Tested
+	//Parse a literal list
+	EvalNodePointer    parseLiteralList(TokenStream& ts); 
 
-//Parse Conjunction
-CondNodePointer parseConjunction(TokenStream& ts); //Done and Tested
+	//Parse Disjunction
+	CondNodePointer parseDisjunction(TokenStream& ts);
 
-//Parse Comparison
-CondNodePointer parseComparison(TokenStream& ts); //Done and Tested
+	//Parse Conjunction
+	CondNodePointer parseConjunction(TokenStream& ts); 
 
-//Parse Operand
-CondNodePointer parseOperand(TokenStream& ts); //Done and Tested
+	//Parse Comparison
+	CondNodePointer parseComparison(TokenStream& ts);
+
+	//Parse Operand
+	CondNodePointer parseOperand(TokenStream& ts); 
 
 #endif

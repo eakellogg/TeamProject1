@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+using namespace std;
+
 // proform a selection on the given table and return a new table with the result
 Table* Engine::selection(Table* oldTable, ConditionTree t){
 

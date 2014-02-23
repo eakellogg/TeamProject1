@@ -12,108 +12,110 @@
 #include "ConditionTree.h"
 #include "Attribute.h"
 
-using namespace std;
+namespace std{
 
-const static string INT_TYPE = "INT";
-const static string STRING_TYPE = "STRING";
+	const static string INT_TYPE = "INT";
+	const static string STRING_TYPE = "STRING";
 
-class Table {
-	string tableName;
-	vector<string> keyName;
-	map< string, vector<Attribute*> > data; // the rows of the table
-	vector<string> columnTypes;
-	vector<string> columnTitles;
-	vector<Attribute*> currentRow;
-public:
-	Table(){}
+	class Table {
+		string tableName;
+		vector<string> keyName;
+		map< string, vector<Attribute*> > data; // the rows of the table
+		vector<string> columnTypes;
+		vector<string> columnTitles;
+		vector<Attribute*> currentRow;
+	public:
 
-	/*********************************************************************************
-	constructor
-	*********************************************************************************/
+		/*********************************************************************************
+		constructor
+		*********************************************************************************/
 
+		Table();
 
-	Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
+		Table(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles);
 
-	Table(Table* table);
-
-
-	/*********************************************************************************
-	non-modifying functions / accessor methods
-	*********************************************************************************/
+		Table(Table* table);
 
 
-	string getTableName();
-
-	vector<string> getKeyName();
-
-	map< string, vector<Attribute*> > getData();
-
-	vector<string> getColumnTypes();
-
-	vector<string> getColumnTitles();
-
-	vector<Attribute*> getCurrentRow();
-
-	string EvalConditionTree(ConditionTree* tree);
-
-	tuple<string, string> NodeEval(ConditionTree::Node* n);
+		/*********************************************************************************
+		non-modifying functions / accessor methods
+		*********************************************************************************/
 
 
-	/*********************************************************************************
-	modifying functions
-	*********************************************************************************/
+		string getTableName();
+
+		vector<string> getKeyName();
+
+		map< string, vector<Attribute*> > getData();
+
+		vector<string> getColumnTypes();
+
+		vector<string> getColumnTitles();
+
+		vector<Attribute*> getCurrentRow();
+
+		string EvalConditionTree(ConditionTree* tree);
+
+		tuple<string, string> NodeEval(ConditionTree::Node* n);
 
 
-	// add a row to the table
-	void addRow(vector<Attribute*> row, vector<string> columnTypes);
-
-	// delete a row from the table
-	void deleteRow(string key);
-
-	// rename a column
-	void renameColumn(int column, string name);
-
-	// find and return a specific row in the table
-	vector<Attribute*> getRow(vector<string> key);
-
-	// find and return a specific item in a specific row in the table
-	Attribute* getItem(vector<string> key, string columnName);
-
-	// takes in a column name, searches the current row, and returns the value of the column name
-	Attribute* getVariable(string columnName);
+		/*********************************************************************************
+		modifying functions
+		*********************************************************************************/
 
 
-	/*********************************************************************************
-	helper functions
-	*********************************************************************************/
+		// add a row to the table
+		void addRow(vector<Attribute*> row, vector<string> columnTypes);
+
+		// delete a row from the table
+		void deleteRow(string key);
+
+		// rename a column
+		void renameColumn(int column, string name);
+
+		// find and return a specific row in the table
+		vector<Attribute*> getRow(vector<string> key);
+
+		// find and return a specific item in a specific row in the table
+		Attribute* getItem(vector<string> key, string columnName);
+
+		// takes in a column name, searches the current row, and returns the value of the column name
+		Attribute* getVariable(string columnName);
 
 
-	// reset the currentRow pointer to the beginning of the map
-	void resetCurrentRow();
+		/*********************************************************************************
+		helper functions
+		*********************************************************************************/
 
-	// set the currentRow pointer appropriately with regards to the offset passed
-	void setCurrentRow(int offset);
 
-	//set the currentRow point to this row object passed very dangerous!!! 
-	void setCurrentRow(vector<Attribute*>);
+		// reset the currentRow pointer to the beginning of the map
+		void resetCurrentRow();
 
-	// check to make sure the types of the table's rows and the passed types are equivalent
-	bool checkMatchingTypes(vector<string> rowTypes);
+		// set the currentRow pointer appropriately with regards to the offset passed
+		void setCurrentRow(int offset);
 
-	// return the type associated with a column name
-	string getTypeOfColumn(string columnName);
+		//set the currentRow point to this row object passed very dangerous!!! 
+		void setCurrentRow(vector<Attribute*>);
 
-	// print the table in an orderly format
-	void printTable();
+		// check to make sure the types of the table's rows and the passed types are equivalent
+		bool checkMatchingTypes(vector<string> rowTypes);
 
-	// limit string's length to the specified limit for proper formatting
-	string formatString(string tempName, unsigned int limit);
+		// return the type associated with a column name
+		string getTypeOfColumn(string columnName);
 
-	//Comparion of strings as if they were integers
-	int compareStringInts(string lv, string rv);
+		// print the table in an orderly format
+		void printTable();
 
-	// print the correct border for the table
-	void printBorder(int numAttributes);
-};
+		// limit string's length to the specified limit for proper formatting
+		string formatString(string tempName, unsigned int limit);
+
+		//Comparion of strings as if they were integers
+		int compareStringInts(string lv, string rv);
+
+		// print the correct border for the table
+		void printBorder(int numAttributes);
+	};
+
+}
 
 #endif

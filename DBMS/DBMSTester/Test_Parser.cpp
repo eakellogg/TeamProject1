@@ -8,6 +8,7 @@
 #include "Evaluator.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace std;
 
 namespace DBMSTester
 {		
@@ -1295,7 +1296,7 @@ namespace DBMSTester
 
 			DBMS* dbms = new DBMS;
 			Engine* engine = new Engine(dbms);
-			Evaluator eval = Evaluator(engine);
+			Evaluator eval = Evaluator(engine , dbms->qh );
 
 			eval.Evaluate(tree);
 			Assert::AreEqual((int)engine->getTables().size(), 1);

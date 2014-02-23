@@ -3,6 +3,8 @@
 #include "Evaluator.h"
 #include "EvaluationTree.h"
 
+using namespace std;
+
 //Evalutor Constuctor takes in pointers to the engine and queryHandler that it works with
 //creates the map that will hold queries
 Evaluator::Evaluator(Engine* dbms, QueryHandler* QH) : DBMS(dbms), queryHandle(QH)
@@ -64,7 +66,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 						}
 					}
 				}
-				throw("Wrong types in selection");
+				//we now use selection to see if file already exists so string printed here is unwanted
+				throw("");
 			}
 
 			//if the sql input is a projection expression
@@ -98,7 +101,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 				EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
 				//if the children are of the correct types
-				if (leftChild->getType() != ATTRIBUTE_LIST)
+				if (leftChild->getType() == ATTRIBUTE_LIST)
 				{
 					if (rightChild->getType() != PARSE_FAILURE)
 					{
@@ -122,7 +125,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 				EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
 				//if the children are of the correct types
-				if (leftChild->getType() == PARSE_FAILURE)
+				if (leftChild->getType() != PARSE_FAILURE)
 				{
 					if (rightChild->getType() != PARSE_FAILURE)
 					{
@@ -149,7 +152,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 				EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
 				//if the children are of the correct types
-				if (leftChild->getType() == PARSE_FAILURE)
+				if (leftChild->getType() != PARSE_FAILURE)
 				{
 					if (rightChild->getType() != PARSE_FAILURE)
 					{
@@ -176,7 +179,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 				EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
 				//if the children are of the correct types
-				if (leftChild->getType() == PARSE_FAILURE)
+				if (leftChild->getType() != PARSE_FAILURE)
 				{
 					if (rightChild->getType() != PARSE_FAILURE)
 					{
@@ -203,7 +206,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 				EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
 				//if the children are of the correct types
-				if (leftChild->getType() == PARSE_FAILURE)
+				if (leftChild->getType() != PARSE_FAILURE)
 				{
 					if (rightChild->getType() != PARSE_FAILURE)
 					{
@@ -253,19 +256,8 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 				//if the children are of the correct types
 				if (child->getType() == RELATION_NAME)
 				{
-					//pass a table pointer and recieve the queries from the file
-					//execute file queries using queryHandle pointer
-					EvaluationTree expressionTree = EvaluationTree(child);
-					Table* expressionTable = Evaluate(&expressionTree);
-					if (expressionTable != NULL)
-					{
-						vector<string> queries = DBMS->openFile(expressionTable->getTableName());
-						for (int i = 0; i < queries.size(); i++)
-						{
-							queryHandle->query(queries[i]);
-						}
-						return NULL;
-					}
+					DBMS->openFile(*(string*)child->getValue());
+					return NULL;
 				}
 				throw("Wrong values in OPEN");
 			}
@@ -282,6 +274,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					//return nothing
 					EvaluationTree expressionTree = EvaluationTree(child);
 					Table* expressionTable = Evaluate(&expressionTree);
+
 					if (expressionTable != NULL)
 					{
 						DBMS->writeFile(expressionTable);
@@ -309,7 +302,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 						return NULL;
 					}
 				}
-				throw("Wrong values in CLOSE");
+				//throw "Wrong values in CLOSE";
 			}
 
 			//if the sql input is a exit command
@@ -337,13 +330,14 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					//return nothing, table will be printed
 					EvaluationTree expressionTree = EvaluationTree(child);
 					Table* expressionTable = Evaluate(&expressionTree);
+	
 					if (expressionTable != NULL)
 					{
 						DBMS->show(expressionTable);
 						return NULL;
 					}
 				}
-				throw("Wrong values in SHOW");
+				throw "Wrong values in SHOW";
 			}
 
 			//if the sql input is a create table command
@@ -411,7 +405,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 
 						//pass in the table, values, and types to engine
 						DBMS->insertInto(insertTable, literalValues, literalTypes);
-
+						insertTable->printTable();
 						//return nothing
 						return NULL;
 					}
@@ -475,5 +469,6 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 	catch (const char* error)
 	{
 		cout << error;
+		return NULL;
 	}
 }

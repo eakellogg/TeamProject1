@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Engine.h"
+#include "Table.h"
 #include <fstream>
 #include <iostream>
 
 using namespace std;
+class std::Table;
 
 /*********************************************************************************
 	constructor
@@ -33,7 +35,6 @@ using namespace std;
 	void Engine::createTable(string tableName, vector<string> keyName, vector<string> columnTypes, vector<string> columnTitles) {
 		for (int i = 0; i < keyName.size(); i++) {
 			if (find(columnTitles.begin(), columnTitles.end(), keyName[i]) == columnTitles.end()) {
-				cout << keyName[i];
 				throw "key name does not match any column, table not created";
 			}
 		}
@@ -86,14 +87,16 @@ using namespace std;
 
 
 	// opens the file represented by tableName; reads the table into the database
-	vector<string> Engine::openFile(string tableName) {
+	void Engine::openFile(string tableName) {
 		vector<string> fileLines;
 
 		ifstream infile(tableName + ".db");
 		string tempLine;
 
 		if (!infile.is_open()) {
-			throw "the file does not exist";
+			//no string returned because we dont want things to print when
+			//checking if a file exists
+			throw "";
 		}
 
 		while (getline(infile, tempLine))
@@ -102,15 +105,21 @@ using namespace std;
 		}
 
 		infile.close();
-		return fileLines;
+		master->load(fileLines);
 	}
 
 	// closes an open file, saving all changes that occured since opening; removes the table from the database
 	void Engine::closeFile(Table* table) {
 		fstream outfile(table->getTableName() + ".db");
 
+		if (table == NULL) {
+			throw "the file does not exist";
+			return;
+		}
+
 		if (!outfile.is_open()) {
 			throw "the file does not exist";
+			return;
 		}
 
 		writeFile(table);
@@ -133,10 +142,10 @@ using namespace std;
 		outfile << "CREATE TABLE " << table->getTableName() << " (";
 		for (int i = 0; i < tempTypes.size(); i++) {
 			outfile << tempTitles[i];
-			if (tempTypes[i] == STRING_TYPE) {
+			if (tempTypes[i] == STRING_LITERAL) {
 				outfile << " VARCHAR(30)";
 			}
-			if (tempTypes[i] == INT_TYPE) {
+			if (tempTypes[i] == INT_LITERAL) {
 				outfile << " INTEGER";
 			}
 			if (i == tempTypes.size() - 1) {
@@ -157,16 +166,18 @@ using namespace std;
 		auto data = table->getData();
 		auto iterator = data.begin();
 		vector<Attribute*> tempRow;
+
 		// print the data for each row
 		for (unsigned int i = 0; i < data.size(); i++) {
 			tempRow = iterator->second;
 			outfile << "INSERT INTO " << table->getTableName() << " VALUES FROM (";
 			// print every individual row's data
+			
 			for (unsigned int j = 0; j < tempRow.size(); j++) {
-				if (tempRow[j]->getType() == STRING_TYPE) {
+				if (tempRow[j]->getType() == STRING_LITERAL) {
 					outfile << '"' << tempRow[j]->getValue() << '"';
 				}
-				if (tempRow[j]->getType() == INT_TYPE) {
+				if (tempRow[j]->getType() == INT_LITERAL) {
 					outfile << tempRow[j]->getValue();
 				}
 				if (j == tempRow.size() - 1) {
@@ -200,5 +211,6 @@ using namespace std;
 				return tables[i];
 			}
 		}
-		throw "table does not exist"; // throwing exception prevents needing checks for unfound tables in other functions
+		//throw "table does not exist"; // throwing exception prevents needing checks for unfound tables in other functions
+		return NULL;
 	}

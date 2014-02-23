@@ -3,26 +3,34 @@
 
 #include "Parser.h"
 #include "Engine.h"
+#include "QueryHandler.h"
 
-//Evaluators take in the parsed tree and call the appropriate functions
-class Evaluator{
+namespace std{
 
-	//holds the query views, maps from name to the table created
-	map<string, Table*> views;
+	class Engine;
+	class DBMS;
+	class QueryHandler;
 
-	//pointer to engine that it will be calling
-	Engine* DBMS;
+	//Evaluators take in the parsed tree and call the appropriate functions
+	class Evaluator{
 
-	//pointer to queryHandler that is using it
-	//this is for loading queries from a file
-	QueryHandler* queryHandle;
+		//holds the query views, maps from name to the table created
+		map<string, Table*> views;
 
-public:
-	//constructor
-	Evaluator(Engine* dbms, QueryHandler* queryHandle);
+		//pointer to engine that it will be calling
+		Engine* DBMS;
 
-	//function for evaluating a tree
-	Table* Evaluate(EvaluationTree* tree);
-};
+		//pointer to queryHandler that is using it
+		//this is for loading queries from a file
+		QueryHandler* queryHandle;
+
+	public:
+		//constructor
+		Evaluator(Engine* dbms, QueryHandler* queryHandle);
+
+		//function for evaluating a tree
+		Table* Evaluate(EvaluationTree* tree);
+	};
+}
 
 #endif

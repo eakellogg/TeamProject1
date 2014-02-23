@@ -1,3 +1,4 @@
+
 #include "Lexer.h"
 
 using namespace std;
@@ -27,7 +28,7 @@ TokenStream lex(string input) {
 				lex_identifier(input, ts);
 			}
 			break;
-			//check for close then create table
+		//check for close then create table
 		case 'C':
 			if (!find_symbol(input, front, ts, CLOSE)) {
 				if (!find_symbol(input, front, ts, CREATE_TABLE)) {
@@ -41,11 +42,11 @@ TokenStream lex(string input) {
 			}
 			break;
 		case 'E':
-			if (!find_symbol(input, front, ts, EXIT)) {
+			if (!find_end_symbol(input, front, ts, EXIT)) {
 				lex_identifier(input, ts);
 			}
 			break;
-			//check for insert then integer
+		//check for insert then integer
 		case 'I':
 			if (!find_symbol(input, front, ts, INSERT)) {
 				if (!find_int(input, front, ts)) {
@@ -68,7 +69,7 @@ TokenStream lex(string input) {
 				lex_identifier(input, ts);
 			}
 			break;
-			//check for set then show
+		//check for set then show
 		case 'S':
 			if (!find_symbol(input, front, ts, SET)) {
 				if (!find_symbol(input, front, ts, SHOW)) {
@@ -81,17 +82,17 @@ TokenStream lex(string input) {
 				lex_identifier(input, ts);
 			}
 			break;
-			//check for values from, then values from relation, then varchar
+		//check for values from relation, then values from, then varchar
 		case 'V':
-			if (!find_symbol(input, front, ts, VALUES_FROM)) {
-				if (!find_symbol(input, front, ts, VALUES_FROM_RELATION)) {
+			if (!find_symbol(input, front, ts, VALUES_FROM_RELATION)) {
+				if (!find_symbol(input, front, ts, VALUES_FROM)) {
 					if (!find_varchar(input, front, ts)) {
 						lex_identifier(input, ts);
 					}
 				}
 			}
 			break;
-			//check for where then write
+		//check for where then write
 		case 'W':
 			if (!find_symbol(input, front, ts, WHERE)) {
 				if (!find_symbol(input, front, ts, WRITE)) {
@@ -106,19 +107,27 @@ TokenStream lex(string input) {
 			find_symbol(input, front, ts, UNION);
 			break;
 		case '-':
-			find_symbol(input, front, ts, DIFFERENCE);                //need to check if its for a negative number
+			if (isdigit(input.at(front + 1))) {
+				find_int_literal(input, front, ts);
+			}
+			else {
+				find_symbol(input, front, ts, DIFFERENCE);
+			}
 			break;
 		case '*':
 			find_symbol(input, front, ts, PRODUCT);
 			break;
+		//if it is '==' then add a symbol token, if it's only '=' then its the assignment operator
 		case '=':
 			if (!find_equals(input, front, ts)) {
-				//error("'=' is an invalid entry");                        //--------------------------
+				ts.addToken(Token(OPERATOR, ASSIGNMENT));
+				input.erase(front, ASSIGNMENT.size());
 			}
 			break;
 		case '!':
 			if (!find_notEquals(input, front, ts)) {
-				//error("'!' is an invalid entry");                        //------------------------
+				input.erase(front, front + 1);
+				throw("'!' is an invalid entry");	//------------------------ I don't have a catch block in here
 			}
 			break;
 		case '<':
@@ -129,19 +138,21 @@ TokenStream lex(string input) {
 			break;
 		case '|':
 			if (!find_or(input, front, ts)) {
-				//error("'|' is an invalid entry");                        //-------------------------
+				input.erase(front, front + 1);
+				throw("'|' is an invalid entry");	//-------------------------	samesies ^^
 			}
 			break;
 		case '&':
 			if (!find_and(input, front, ts)) {
-				//error("'&' is an invalid entry");                        //-------------------------
+				input.erase(front, front + 1);
+				throw("'&' is an invalid entry");	//------------------------- samesies ^
 			}
 			break;
 		case '(':
 			find_symbol(input, front, ts, OPEN_PAREN);
 			break;
 		case ')':
-			find_symbol(input, front, ts, CLOSE_PAREN);
+			find_end_symbol(input, front, ts, CLOSE_PAREN);
 			break;
 		case ',':
 			find_symbol(input, front, ts, COMMA);
@@ -156,13 +167,16 @@ TokenStream lex(string input) {
 			else if (isdigit(curr)) {
 				find_int_literal(input, front, ts);
 			}
+			else {
+				input.erase(front, front + 1);
+				throw("invalid input");
+			}
 			//have and error check here? I'm not sure what other characters there are, but still
 			break;
 		}
 	}
-	return ts;                                //how to do this correctly????
+	return ts;	
 }
-
 
 bool find_symbol(string& input, size_t& position, TokenStream& ts, string symbol_name) {
 	if (symbol_name == input.substr(position, symbol_name.size())) {
@@ -182,6 +196,19 @@ bool find_symbol(string& input, size_t& position, TokenStream& ts, string symbol
 	}
 }
 
+//This function does not check if the next char is an underscore, which could cause failure for symbols at the end of the line
+bool find_end_symbol(string& input, size_t& position, TokenStream& ts, string symbol_name) {
+	if (symbol_name == input.substr(position, symbol_name.size())) {
+		size_t next = position + symbol_name.size();
+		ts.addToken(Token(SYMBOL, symbol_name));
+		input.erase(position, symbol_name.size());
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 bool find_int(string& input, size_t& position, TokenStream& ts) {
 	if (INTEGER == input.substr(position, INTEGER.size())) {
 		ts.addToken(Token(TYPE, INT_LITERAL));
@@ -194,7 +221,7 @@ bool find_int(string& input, size_t& position, TokenStream& ts) {
 }
 
 
-//so the value will be "VARCHAR(20)" or comprable string                                //----------------------------
+//so the value will be "VARCHAR(20)" or comprable string	//----------------------------
 bool find_varchar(string& input, size_t& position, TokenStream& ts) {
 
 	if (VAR_CHAR == input.substr(position, VAR_CHAR.size())) {
@@ -211,7 +238,7 @@ bool find_varchar(string& input, size_t& position, TokenStream& ts) {
 				curr_pos = open_p + 1;
 			}
 			if (value.size() <= VAR_CHAR.size()) {
-				//no digits inside the parenthesis found                                                //is this check needed?
+				//no digits inside the parenthesis found	//is this check needed?
 				return false;
 			}
 			else {
@@ -312,16 +339,16 @@ bool find_string_literal(string& input, size_t& position, TokenStream& ts) {
 		//shouldn't happen because this function is only called if the current char is "
 		return false;
 	}
-	size_t curr_pos = position + 1;                //to account for the "
+	size_t curr_pos = position + 1;	//to account for the "
 	size_t end_quot = input.find('"', curr_pos);
 	if (end_quot == string::npos) {
 		//no ending quotation mark found
 		return false;
 	}
 	else {
-		size_t string_length = end_quot - curr_pos;                                                //check that this is correct
+		size_t string_length = end_quot - curr_pos;	//check that this is correct
 		string value = input.substr(curr_pos, string_length);
-		size_t space_used = end_quot - position + 1;                                //may need to have a + 1 or -1 to do correctly
+		size_t space_used = end_quot - position + 1;	//may need to have a + 1 or -1 to do correctly
 		ts.addToken(Token(STRING_LITERAL, value));
 		input.erase(position, space_used);
 		return true;
@@ -333,6 +360,11 @@ void find_int_literal(string& input, size_t& position, TokenStream& ts) {
 	//this could probably be fixed fairly easily
 	size_t curr_pos = position;
 	string value;
+
+	//pull in the first char, - or digit
+	value += input.at(curr_pos);
+	++curr_pos;
+
 	while (isdigit(input.at(curr_pos))) {
 		value += input.at(curr_pos);
 		++curr_pos;

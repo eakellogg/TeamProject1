@@ -2,8 +2,12 @@
 #include "Table.h"
 #include "Lexer.h"
 #include "EvaluationTree.h"
-typedef ConditionTree::Node Node;
+#include "ConditionTree.h"
+
 using namespace std;
+
+typedef ConditionTree::Node Node;
+
 
 
 //Will return TRUE or FALSE
@@ -57,7 +61,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			else
 				return make_tuple(STRING_LITERAL, TRUE);
 		}
-		else if (value == GREATER_THAN)
+		else if (value == LESS_THAN)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -93,7 +97,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			// something went wrong, return failure
 			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == LESS_THAN)
+		else if (value == GREATER_THAN)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -129,7 +133,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			// something went wrong, return failure
 			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == GREATER_EQUAL)
+		else if (value == LESS_EQUAL)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -165,7 +169,7 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			// something went wrong, return failure
 			else return make_tuple(PARSE_FAILURE, UNKNOWN);
 		}
-		else if (value == LESS_EQUAL)
+		else if (value == GREATER_EQUAL)
 		{
 			vector < Node* > children = n->getChildern();
 			ConditionTree::Node* leftChild = children[0];
@@ -251,7 +255,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 	}
 		else if (type == VARIABLE)
 		{
-		//	cout << "got inside of variable " << endl;
 			Attribute* attribute = getVariable(value);
 			string newType;
 			string newValue;
@@ -276,7 +279,6 @@ tuple<string, string> Table::NodeEval(ConditionTree::Node* n){
 			return make_tuple(newType, newValue);
 		}
 		else return make_tuple(PARSE_FAILURE, UNKNOWN);
-	//cout << "Problem shouldn't have gotten here " << endl;
 }
 
 
@@ -293,3 +295,4 @@ int Table::compareStringInts(string lv, string rv)
 	else
 		return 0;
 }
+

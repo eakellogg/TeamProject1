@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+using namespace std;
+
 // rename a given table and return a new table with the result
 Table* Engine::rename(Table* oldTable, vector<string> attributes) {
 
