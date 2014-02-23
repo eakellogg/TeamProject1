@@ -470,7 +470,6 @@ namespace TableTester
 			for (int i = 0; i < tblb->getColumnTitles().size(); i++) {
 				Assert::AreEqual(tblc->getColumnTitles()[i + tblb->getColumnTitles().size()], tblb->getColumnTitles()[i]);
 			}
-			Assert::AreEqual(tblc->getColumnTitles()[tblc->getColumnTitles().size() - 1], tbla->getTableName() + tblb->getTableName());
 
 			// verify that new table has correctly merged column types
 			for (int i = 0; i < tbla->getColumnTypes().size(); i++) {
@@ -479,9 +478,6 @@ namespace TableTester
 			for (int i = 0; i < tblb->getColumnTitles().size(); i++) {
 				Assert::AreEqual(tblc->getColumnTypes()[i + tblb->getColumnTypes().size()], tblb->getColumnTypes()[i]);
 			}
-
-			string identifierType = "int";
-			Assert::AreEqual(tblc->getColumnTypes()[tblc->getColumnTypes().size() - 1], identifierType);
 
 			// need to check new table and ensure equality where it's needed - hardcoded values are what is expected
 			map<string, vector<Attribute*>> tblcData = tblc->getData();
@@ -494,7 +490,6 @@ namespace TableTester
 			Assert::IsTrue(rowa[3]->getValue() == "Jacob Zerr");
 			Assert::IsTrue(rowa[4]->getValue() == "San Antonio");
 			Assert::IsTrue(rowa[5]->getValue() == "Maryland");
-			Assert::IsTrue(rowa[6]->getValue() == "0000000000");
 			it++;
 
 			vector<Attribute*> rowb = it->second;
@@ -504,7 +499,6 @@ namespace TableTester
 			Assert::IsTrue(rowb[3]->getValue() == "Zach Brown");
 			Assert::IsTrue(rowb[4]->getValue() == "College Station");
 			Assert::IsTrue(rowb[5]->getValue() == "Texas");
-			Assert::IsTrue(rowb[6]->getValue() == "0000000001");
 			it++;
 
 			vector<Attribute*> rowc = it->second;
@@ -514,7 +508,6 @@ namespace TableTester
 			Assert::IsTrue(rowc[3]->getValue() == "Jacob Zerr");
 			Assert::IsTrue(rowc[4]->getValue() == "San Antonio");
 			Assert::IsTrue(rowc[5]->getValue() == "Maryland");
-			Assert::IsTrue(rowc[6]->getValue() == "0000000002");
 			it++;
 
 			vector<Attribute*> rowd = it->second;
@@ -524,7 +517,6 @@ namespace TableTester
 			Assert::IsTrue(rowd[3]->getValue() == "Zach Brown");
 			Assert::IsTrue(rowd[4]->getValue() == "College Station");
 			Assert::IsTrue(rowd[5]->getValue() == "Texas");
-			Assert::IsTrue(rowd[6]->getValue() == "0000000003");
 		}
 
 		//************************************************************************************************************
