@@ -129,8 +129,6 @@ int main()
 			cout << left << setw(width) << "DELETE SENTENCE" << "Deletes the sentence with the given id #.\n";
 			cout << left << setw(width) << "DELETE GUARD" << "Deletes record of the guard with the given id #.\n";
 			cout << left << setw(width) << "DELETE MEAL GROUP" << "Deletes a meal group.\n";
-
-			
 			//set difference
 			//cross product
 
