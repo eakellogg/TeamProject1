@@ -89,7 +89,11 @@ int main()
 
 		string command;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		getline(cin, command);
+=======
+		getline (cin, command);
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 		getline (cin, command);
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
@@ -109,7 +113,11 @@ int main()
 			cout << left << setw(width) << "EXIT" << "Logs out of Prison-Manager.\n";
 			cout << endl;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";	//insert into
+=======
+			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";								//insert into
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";								//insert into
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
@@ -119,7 +127,11 @@ int main()
 			cout << left << setw(width) << "ADD MEAL GROUP" << "Adds a new meal group.\n";
 			cout << endl;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";	//update
+=======
+			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";									//update
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";									//update
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
@@ -130,7 +142,11 @@ int main()
 			//list prisoners
 			//list guards
 <<<<<<< HEAD
+<<<<<<< HEAD
 			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";	//select
+=======
+			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";								//select
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";								//select
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
@@ -142,9 +158,15 @@ int main()
 			//list sentences of a given security level??? I think it's better with prisoners by security level
 			//show all sentences by length ?
 <<<<<<< HEAD
+<<<<<<< HEAD
 			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";	//project
 			cout << endl;
 			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";	//delete
+=======
+			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";		//project
+			cout << endl;
+			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";			//delete
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";		//project
 			cout << endl;
@@ -155,7 +177,11 @@ int main()
 			cout << left << setw(width) << "DELETE MEAL GROUP" << "Deletes a meal group.\n";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 			
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
@@ -233,17 +259,23 @@ int main()
 		}
 		else if (command == "SHOW SECURITY LEVEL") {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 			// prisoners -> project : id, first name, last name, cell block, security level
 			//update security level -> 0
 			// guards
 			//update security level -> 1
 =======
+=======
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 			
 			// prisoners -> project : id, first name, last name, cell block, security level
 				//update security level -> 0
 			// guards
 				//update security level -> 1
+<<<<<<< HEAD
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
+=======
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 			// union of guards and prisoners with the specified security level
 			// rename security level (0=prisoner, 1=guard
@@ -251,7 +283,11 @@ int main()
 		else if (command == "SHOW CELL BLOCK") {
 			//projection - so for each prisoner show: id, first and last name, cell block, cell number, security level (basically everything except birthday stuff)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 =======
 			
 >>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
