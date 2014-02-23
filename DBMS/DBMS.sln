@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBMSTester", "DBMSTester\DB
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit Testing", "Unit Testing\Unit Testing.vcxproj", "{B6EF5645-F7C7-4099-A63D-C4175886174D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FAKE_DBMS", "FAKE_DBMS\FAKE_DBMS.vcxproj", "{E5910E4A-C027-4C7A-BE42-1180DA9AFAA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,10 @@ Global
 		{B6EF5645-F7C7-4099-A63D-C4175886174D}.Debug|Win32.Build.0 = Debug|Win32
 		{B6EF5645-F7C7-4099-A63D-C4175886174D}.Release|Win32.ActiveCfg = Release|Win32
 		{B6EF5645-F7C7-4099-A63D-C4175886174D}.Release|Win32.Build.0 = Release|Win32
+		{E5910E4A-C027-4C7A-BE42-1180DA9AFAA3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E5910E4A-C027-4C7A-BE42-1180DA9AFAA3}.Debug|Win32.Build.0 = Debug|Win32
+		{E5910E4A-C027-4C7A-BE42-1180DA9AFAA3}.Release|Win32.ActiveCfg = Release|Win32
+		{E5910E4A-C027-4C7A-BE42-1180DA9AFAA3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,12 +4,15 @@
 #include "Parser.h"
 #include "Constants.h"
 #include "DBMS.h"
+#include "FAKE_DBMS.h"
 
 using namespace std;
 
 int main()
 {
-	DBMS dbms;
+	//DBMS dbms;
+	Fake_DBMS dbms;
+
 
 	bool hasPrisonerFile = true;
 	bool hasSentenceFile = true;
