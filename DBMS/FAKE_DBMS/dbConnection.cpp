@@ -50,13 +50,9 @@ void DBConnection::cmdLineInterface()
 void DBConnection::executeCommand(string command)
 {
 
-	cout << "About to lex " << command << endl;
 	vector<Token> tokens = lexInputLine(command);
-	cout << "Finished lexing " << endl;
 
-	cout << "Parsing command " << endl;
 	par.command(tokens);
-	cout << "Finished parsing command " << endl;
 }
 
 Table DBConnection::getTempTable(const string& tableName)

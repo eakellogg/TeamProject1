@@ -1,11 +1,7 @@
-
-
-
 #include "fakelexer.h"
 #include "Token.h"
 
 using namespace std;
-using namespace FAKE_DBMS;
 
 bool isNumLiteral(string s){
 	for (int i = 0; i < s.size(); i++)
@@ -14,7 +10,7 @@ bool isNumLiteral(string s){
 	return true;
 }
 
-//distinguishes a sequence of character between a keyword, numeric literal, and an unknown, then creates appropriate FAKE_DBMS::Token 
+//distinguishes a sequence of character between a keyword, numeric literal, and an unknown, then creates appropriate FAKE_DBMS::Token
 void makeCommVarTok(vector<FAKE_DBMS::Token> & afterRetVecter, string in){
 	if (in == "project" || in == "rename" || in == "select" || in == "JOIN" || in == "SHOW" || in == "DELETE" ||
 		in == "FROM" || in == "INSERT" || in == "INTO" || in == "UPDATE" || in == "CREATE" || in == "TABLE" ||
@@ -44,7 +40,7 @@ void makeCommVarTok(vector<FAKE_DBMS::Token> & afterRetVecter, string in){
 //lex the possibly nested protion of a query
 vector<FAKE_DBMS::Token> afterAssignQueryLex(string line){
 	vector<FAKE_DBMS::Token> afterRetVecter;
-	vector<FAKE_DBMS::Token> emptyRetVecter; //this is returned on bad input. The parser then recognizes this. 
+	vector<FAKE_DBMS::Token> emptyRetVecter; //this is returned on bad input. The parser then recognizes this.
 
 	string curString = ""; //contents of FAKE_DBMS::Token accumulate on this
 	int stringPos = 0; //current position in string
@@ -157,6 +153,22 @@ vector<FAKE_DBMS::Token> afterAssignQueryLex(string line){
 			}
 			else {
 				cout << "ERROR when parsing a >" << endl;
+				return emptyRetVecter;
+			}
+			stringPos++; //skip over next char since we have accounted for it
+		}
+
+		else if (curChar == '!'){
+			makeCommVarTok(afterRetVecter, curString);
+			curString = "";
+			//can be !=
+			if (line[stringPos + 1] == '='){
+				FAKE_DBMS::Token greatEqTok(FAKE_DBMS::Token::tokenType::SYMBOL);
+				greatEqTok.content = "!=";
+				afterRetVecter.push_back(greatEqTok);
+			}
+			else {
+				cout << "ERROR when parsing a !" << endl;
 				return emptyRetVecter;
 			}
 			stringPos++; //skip over next char since we have accounted for it
@@ -385,6 +397,22 @@ vector<FAKE_DBMS::Token> commandLex(string line){
 			stringPos++; //skip over next char since we have accounted for it
 		}
 
+		else if (curChar == '!'){
+			makeCommVarTok(retRow, curString);
+			curString = "";
+			//can be !=
+			if (line[stringPos + 1] == '='){
+				FAKE_DBMS::Token greatEqTok(FAKE_DBMS::Token::tokenType::SYMBOL);
+				greatEqTok.content = "!=";
+				retRow.push_back(greatEqTok);
+			}
+			else {
+				cout << "ERROR when parsing a !" << endl;
+				break;
+			}
+			stringPos++; //skip over next char since we have accounted for it
+		}
+
 		else if (curChar == '='){
 			makeCommVarTok(retRow, curString);
 			curString = "";
@@ -419,16 +447,16 @@ vector<vector<FAKE_DBMS::Token> > lexFile(string fileName){
 		if (line.find("<-") != std::string::npos){
 			lexedRow = queryLex(line);
 			for (int i = 0; i < lexedRow.size(); i++){
-				cout << "'" << lexedRow[i].content << "' ";
+				//cout << "'" << lexedRow[i].content << "' ";
 			}
-			cout << endl << endl;
+			//cout << endl << endl;
 		}
 		else{
 			lexedRow = commandLex(line);
 			for (int i = 0; i < lexedRow.size(); i++){
-				cout << "'" << lexedRow[i].content << "' ";
+				//cout << "'" << lexedRow[i].content << "' ";
 			}
-			cout << endl << endl;
+			//cout << endl << endl;
 		}
 		lexedInput.push_back(lexedRow);
 	}
@@ -437,23 +465,30 @@ vector<vector<FAKE_DBMS::Token> > lexFile(string fileName){
 
 //lex a single command or query
 vector<FAKE_DBMS::Token> lexInputLine(string inputLine){
-	
 	vector<FAKE_DBMS::Token> lexedInput;
 
 	if (inputLine.find("<-") != std::string::npos){
 		lexedInput = queryLex(inputLine);
 		for (int i = 0; i < lexedInput.size(); i++){
-			cout << "'" << lexedInput[i].content << "' ";
+			//cout << "'" << lexedInput[i].content << "' ";
 		}
-		cout << endl << endl;
+		//cout << endl << endl;
 	}
 	else{
 		lexedInput = commandLex(inputLine);
 		for (int i = 0; i < lexedInput.size(); i++){
-			cout << "'" << lexedInput[i].content << "' ";
+			//cout << "'" << lexedInput[i].content << "' ";
 		}
-		cout << endl << endl;
+		//cout << endl << endl;
 	}
+
 	return lexedInput;
 }
 
+/*
+int main(){
+lexFile("parser_milestone_good_inputs.txt");
+int n;
+cin >> n;
+}
+*/

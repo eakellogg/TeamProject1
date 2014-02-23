@@ -23,15 +23,19 @@ using namespace std;
 
 		connection.executeCommand(query);
 
+
+
 		TokenStream ts  = lex(query);
 
 		Token t = ts.getToken();
 
 		Table realTable;
-		if (t.getType() == IDENTIFIER )
+		if (t.getType() == IDENTIFIER  )
 		{
 			FAKE_DBMS::Table fooTable = connection.getTempTable( t.getValue() );
-			realTable = convertTable(fooTable, t.getValue());
+
+			if ( fooTable.data.size() != 0 )
+				realTable = convertTable(fooTable, t.getValue());
 
 		}
 	
@@ -52,9 +56,11 @@ using namespace std;
 		vector< string > columTypes;
 
 		unsigned int numRows = oldData.size();
+		unsigned int numColumns = oldData[0].size();
+
 
 		//Find the types of the columns using the first row of the old table
-		for (unsigned int i = 0; i < numRows; i++) 
+		for (unsigned int i = 0; i < numColumns; i++) 
 		{
 			fake_att entry = oldData[0][i];
 			if (entry.numData = -999) //Their key for it being a string type
@@ -66,10 +72,8 @@ using namespace std;
 				columTypes.push_back(INT_LITERAL);
 		}
 		
+		
 		Table newTable(tableName, keyNames, columTypes, columnTitles);
-
-
-		unsigned int numColumns = oldData[0].size();
 		for (unsigned int i = 0; i < numRows; i++) //For every row
 		{
 
@@ -100,6 +104,5 @@ using namespace std;
 
 		}
 		
-
 		return newTable;
 	}

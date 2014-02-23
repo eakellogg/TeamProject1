@@ -2,13 +2,14 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Token.h"
+
 
 using namespace std;
 
 namespace FAKE_DBMS{
-
 	struct Datum;
-	class Token;
+
 	struct Table;
 	class Database;
 	class ConditionNode;
@@ -25,7 +26,7 @@ namespace FAKE_DBMS{
 
 		// Will parse input into a condition tree.
 		ConditionNode* condition(vector<Token>&);
-		// Called from  condition to make a condition tree.
+		// Called from condition to make a condition tree.
 		ConjunctionNode* conjunction(vector<Token>&);
 		// Called from within comparision as subproblem in making condition tree.
 		ComparisonNode* comparison(vector<Token>&);
@@ -50,9 +51,9 @@ namespace FAKE_DBMS{
 		// Returns the naturalJoin of the two tables from the atomExpressions seperated by a JOIN
 		Table naturalJoin(vector<Token>&);
 
-		// Puts the results of a query into a tempTable map 
+		// Puts the results of a query into a tempTable map
 		void query(vector<Token>&);
-		// Calls the Database*'s open in order to open a file and make the corresponding table. 
+		// Calls the Database*'s open in order to open a file and make the corresponding table.
 		void open(vector<Token>&);
 		// Calls the Database*'s close in order to save the changes to a databse file.
 		void close(vector<Token>&);
@@ -78,6 +79,13 @@ namespace FAKE_DBMS{
 		//this simply saves the current state of a relation in a .db file so it can be reconstructed later
 		void closeRelationFile(const std::string& relationName);
 
+		// to test if a literal is a string or int
+		bool isNum(string input);
+
+		// for debugging
+		void printTokenList(vector<Token>& tokens);
+
+
 	public:
 		//Constructors.
 		Parser();
@@ -93,6 +101,4 @@ namespace FAKE_DBMS{
 		// Querys are treated as seperate command.
 		void command(vector<Token>&);
 	};
-
-
 };

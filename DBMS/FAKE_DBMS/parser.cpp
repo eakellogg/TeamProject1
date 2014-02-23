@@ -1,11 +1,11 @@
 #pragma once
-
 #include "parser.h"
 #include "conditionTree.h"
 #include "fakelexer.h"
 #include "rdbms.h"
 #include <sstream> //for turning string to int
-#include <fstream>	//for file I/O
+#include <fstream> //for file I/O
+#include <iostream>
 
 using namespace std;
 using namespace FAKE_DBMS;
@@ -29,7 +29,6 @@ Table Parser::getTempTable(const string& tableName)
 
 void Parser::openRelationFile(const string& relationName)
 {
-	
 	vector<Token> tokens;
 	string command;
 	ifstream relationFile(relationName + ".db");
@@ -38,8 +37,6 @@ void Parser::openRelationFile(const string& relationName)
 		tokens = lexInputLine(command);
 		Parser::command(tokens);
 	}
-	
-	
 }
 
 void Parser::writeRelationToFile(const string& relationName)
@@ -56,9 +53,9 @@ void Parser::closeRelationFile(const string& relationName)
 	//need to get types of Datum's in table to construct CREATE command
 	if (t.data.size() > 0)
 	{
-		 typeSample = t.data[0];
+		typeSample = t.data[0];
 	}
-	else 
+	else
 	{
 		cout << "No data to save. Save failed." << endl;
 		return;
@@ -152,22 +149,20 @@ vector<string> Parser::attributeList(vector<Token>& tokens)
 {
 	vector<string> attributes;
 	vector<Token>::iterator iter = tokens.begin();
+
 	while (true)
 	{
 		attributes.push_back(iter->content);
 
-		// Skipping the , if there is one. 
-		if ((iter + 1) != tokens.end())
+		if ((iter + 1) == tokens.end())
 		{
-			if ((iter + 1)->type == Token::COMMA)
-			{
-				iter = iter + 2;
-			}
+			break;
 		}
 		else{
-			return attributes;
+			iter = iter + 2;
 		}
 	}
+	return attributes;
 }
 
 vector<string> Parser::typedAttributeList(vector<Token>& tokens)
@@ -178,28 +173,34 @@ vector<string> Parser::typedAttributeList(vector<Token>& tokens)
 	{
 		attributes.push_back(iter->content);
 
-		if (iter+2 != tokens.end())
+		if ((iter + 1)->content.compare("INTEGER") == 0)
 		{
-			if ((iter + 1)->content.compare("VARCAR") == 0)
+			if ((iter + 2) == tokens.end())
 			{
-				iter = iter + 6;
+				break;
 			}
 			else{
-				if ((iter + 1)->content.compare("INTEGER") == 0)
-				{
-					iter = iter + 3;
-				}
+				iter = iter + 3;
 			}
 		}
-		else{
-			return attributes;
+		else if ((iter + 1)->content.compare("VARCHAR") == 0)
+		{
+			if ((iter + 5) == tokens.end())
+			{
+				break;
+			}
+			else{
+				iter = iter + 6;
+			}
 		}
 	}
+
+	return attributes;
 }
 
 ComparisonNode* Parser::comparison(vector<Token>& tokens)
 {
-	if (tokens.size() == 3 && (tokens[0].type == Token::VARIABLE || tokens[0].type == Token::LITERAL) )
+	if (tokens.size() == 3 && (tokens[0].type == Token::VARIABLE || tokens[0].type == Token::LITERAL))
 	{
 		LeafNode* leftNode;
 		if (tokens[0].type == Token::VARIABLE)
@@ -207,16 +208,19 @@ ComparisonNode* Parser::comparison(vector<Token>& tokens)
 			leftNode = new VariableNode(tokens[0].content);
 		}
 		else{
-			if (isdigit(tokens[0].content[0]))
+			if (tokens[0].content[0] == '\"')
 			{
+				tokens[0].content.erase(tokens[0].content.begin());
+				tokens[0].content.pop_back();
+				cout << "1" << tokens[0].content << "\n";
+				leftNode = new LiteralNode(tokens[0].content);
+			}
+			else{
 				istringstream buffer(tokens[0].content);
 				int numContent;
 				buffer >> numContent;
 
 				leftNode = new LiteralNode(numContent);
-			}
-			else{
-				leftNode = new LiteralNode(tokens[0].content);
 			}
 		}
 
@@ -252,16 +256,18 @@ ComparisonNode* Parser::comparison(vector<Token>& tokens)
 			rightNode = new VariableNode(tokens[2].content);
 		}
 		else{
-			if (isdigit(tokens[2].content[0]))
+			if (tokens[2].content[0] == '\"')
 			{
+				tokens[2].content.erase(tokens[2].content.begin());
+				tokens[2].content.pop_back();
+				rightNode = new LiteralNode(tokens[2].content);
+			}
+			else{
 				istringstream buffer(tokens[2].content);
 				int numContent;
 				buffer >> numContent;
 
 				rightNode = new LiteralNode(numContent);
-			}
-			else{
-				rightNode = new LiteralNode(tokens[2].content);
 			}
 		}
 
@@ -338,7 +344,7 @@ ConditionNode* Parser::condition(vector<Token>& tokens)
 			subset.clear();
 		}
 		else{
-			subset.push_back(*iter); 
+			subset.push_back(*iter);
 		}
 		iter++;
 	}
@@ -352,27 +358,27 @@ ConditionNode* Parser::condition(vector<Token>& tokens)
 Table Parser::expression(vector<Token>& tokens)
 {
 	vector<Token>::iterator iter = tokens.begin();
-	
+
 	if (iter->type == Token::KEYWORD)
 	{
 		string keyWord = iter->content;
-		if (keyWord.compare("select"))
+		if (keyWord.compare("select") == 0)
 		{
 			tokens.erase(iter);
 			return selection(tokens);
 		}
-		else if (keyWord.compare("project"))
+		else if (keyWord.compare("project") == 0)
 		{
 			tokens.erase(iter);
 			return projection(tokens);
 		}
-		else if (keyWord.compare("rename"))
+		else if (keyWord.compare("rename") == 0)
 		{
 			tokens.erase(iter);
 			return renaming(tokens);
 		}
 	}
-	
+
 	int parenDepth = 0;
 	while (iter != tokens.end())
 	{
@@ -428,7 +434,7 @@ Table Parser::atomExpression(vector<Token>& tokens)
 	else{
 		if (tokens.size() == 1)
 		{
-			map<string,Table>::iterator curTableIt = tempTables.find(tokens[0].content);
+			map<string, Table>::iterator curTableIt = tempTables.find(tokens[0].content);
 			if (curTableIt != tempTables.end())
 			{
 				return curTableIt->second;
@@ -444,7 +450,7 @@ Table Parser::selection(vector<Token>& tokens)
 {
 	vector<Token>::iterator iter = tokens.begin();
 	iter++;
-	
+
 	int parenDepth = 1;
 	vector<Token> condTokens;
 	while (true)
@@ -457,7 +463,7 @@ Table Parser::selection(vector<Token>& tokens)
 		{
 			parenDepth--;
 		}
-		
+
 		if (parenDepth == 0)
 		{
 			iter++;
@@ -469,7 +475,7 @@ Table Parser::selection(vector<Token>& tokens)
 			iter++;
 		}
 	}
-	
+
 	vector<Token> atomTokens;
 	while (iter != tokens.end())
 	{
@@ -480,15 +486,14 @@ Table Parser::selection(vector<Token>& tokens)
 	ConditionNode* conditionTree = condition(condTokens);
 	Table selectedTable = atomExpression(atomTokens);
 
-	//return selectFromTable 
-	return selectedTable; //removing error not finished.
+	return selectedTable.selectFromTable(selectedTable, *conditionTree);
 }
 
 Table Parser::projection(vector<Token>& tokens)
 {
-	vector<Token>::iterator iter = tokens.begin();	
+	vector<Token>::iterator iter = tokens.begin();
 	iter++;
-	
+
 	int parenDepth = 1;
 	vector<Token> atribTokens;
 	while (true)
@@ -531,7 +536,7 @@ Table Parser::renaming(vector<Token>& tokens)
 {
 	vector<Token>::iterator iter = tokens.begin();
 	iter++;
-	
+
 	int parenDepth = 1;
 	vector<Token> atribTokens;
 	while (true)
@@ -567,8 +572,8 @@ Table Parser::renaming(vector<Token>& tokens)
 	vector<string> atribNames = attributeList(atribTokens);
 	Table selectedTable = atomExpression(atomTokens);
 
-	// return projectFromTable 
-	return selectedTable; //removing error not finished.
+	// return projectFromTable
+	return selectedTable.renameAttributes(atribNames);
 }
 
 Table Parser::myUnion(vector<Token>& tokens)
@@ -587,13 +592,13 @@ Table Parser::myUnion(vector<Token>& tokens)
 		{
 			parenDepth--;
 		}
-	
+
 		atom1Tokens.push_back(*iter);
 		iter++;
-	}while (parenDepth != 0);
+	} while (parenDepth != 0);
 
 	iter++;
-	
+
 	vector<Token> atom2Tokens;
 	while (iter != tokens.end())
 	{
@@ -659,13 +664,13 @@ Table Parser::product(vector<Token>& tokens)
 		{
 			parenDepth--;
 		}
-		
+
 		atom1Tokens.push_back(*iter);
 		iter++;
 	} while (parenDepth != 0);
-	
+
 	iter++;
-	
+
 	vector<Token> atom2Tokens;
 	while (iter != tokens.end())
 	{
@@ -695,7 +700,7 @@ Table Parser::naturalJoin(vector<Token>& tokens)
 		{
 			parenDepth--;
 		}
-		
+
 		atom1Tokens.push_back(*iter);
 		iter++;
 	} while (parenDepth != 0);
@@ -720,7 +725,7 @@ void Parser::query(vector<Token>& tokens)
 {
 	vector<Token>::iterator iter = tokens.begin();
 	string queryTableName = iter->content;
-	
+
 	vector<Token> exprTokens;
 	iter = iter + 2;
 	while (iter != tokens.end())
@@ -730,24 +735,23 @@ void Parser::query(vector<Token>& tokens)
 	}
 
 	Table resultTable = expression(exprTokens);
+
+
 	tempTables.insert(pair<string, Table>(queryTableName, resultTable));
 }
 
-// Needs to be finished
 void Parser::open(vector<Token>& tokens)
 {
 	string tableName = tokens[1].content;
 	openRelationFile(tableName);
 }
 
-// Needs to be finished
 void Parser::close(vector<Token>& tokens)
 {
 	string tableName = tokens[1].content;
 	closeRelationFile(tableName);
 }
 
-// Needs to be finished
 void Parser::write(vector<Token>& tokens)
 {
 	string tableName = tokens[1].content;
@@ -757,7 +761,7 @@ void Parser::write(vector<Token>& tokens)
 void Parser::show(vector<Token>& tokens)
 {
 	vector<Token> atomExprTokens;
-	vector<Token>::iterator iter = tokens.begin() + 2;
+	vector<Token>::iterator iter = tokens.begin() + 1;
 	while (iter != tokens.end())
 	{
 		atomExprTokens.push_back(*iter);
@@ -771,29 +775,28 @@ void Parser::show(vector<Token>& tokens)
 void Parser::create(vector<Token>& tokens)
 {
 	vector<Token>::iterator iter = tokens.begin();
-	/*
-	if ((iter->content.compare("CREATE") != 0) && ((iter + 1)->content.compare("TABLE") != 0) && ((iter + 3)->type != Token::OPENPAREN))
-	{
-		// error
-	}
-	*/
 	string tableName = (iter + 2)->content;
 
+	int depth = 1;
 	iter = iter + 4;
 	vector<Token> typedAtribTokens;
-	while (iter->type != Token::CLOSEPAREN)
+	while (depth != 0)
 	{
+		if (iter->type == Token::OPENPAREN)
+		{
+			depth++;
+		}
+		else if (iter->type == Token::CLOSEPAREN)
+		{
+			depth--;
+		}
+
 		typedAtribTokens.push_back(*iter);
 		iter++;
 	}
+	typedAtribTokens.pop_back(); // removes trailing closeparen
 
-	/*
-	if (((iter + 1)->content.compare("PRIMARY") != 0) && ((iter + 2)->content.compare("KEY") != 0) && ((iter + 3)->type != Token::OPENPAREN))
-	{
-		// error
-	}
-	*/
-	iter = iter + 4;
+	iter = iter + 3;
 	vector<Token> atribTokens;
 	while (iter->type != Token::CLOSEPAREN)
 	{
@@ -801,9 +804,21 @@ void Parser::create(vector<Token>& tokens)
 		iter++;
 	}
 
+	//printTokenList(typedAtribTokens);
+	//printTokenList(atribTokens);
+
 	vector<string> typedAtribs = typedAttributeList(typedAtribTokens);
 	vector<string> primaryKeys = attributeList(atribTokens);
+	/*
+	for (int i = 0; i < typedAtribs.size(); i++)
+	cout << typedAtribs[i] << " ";
+	cout << "\n";
 
+
+	for (int i = 0; i < primaryKeys.size(); i++)
+	cout << primaryKeys[i] << " ";
+	cout << "\n";
+	*/
 	rdbms->createTable(tableName, typedAtribs, primaryKeys);
 }
 
@@ -820,7 +835,13 @@ void Parser::update(vector<Token>& tokens)
 	{
 		varNames.push_back(iter->content);
 		Datum newVal;
-		if (isdigit((iter + 2)->content[0]))
+		if ((iter + 2)->content[0] == '\"')
+		{
+			(iter + 2)->content.erase((iter + 2)->content.begin());
+			(iter + 2)->content.pop_back();
+			newVals.push_back(Datum((iter + 2)->content));
+		}
+		else
 		{
 			istringstream buffer((iter + 2)->content);
 			int numContent;
@@ -828,17 +849,13 @@ void Parser::update(vector<Token>& tokens)
 
 			newVals.push_back(Datum(numContent));
 		}
-		else
-		{
-			newVals.push_back(Datum((iter + 2)->content));
-		}
 
-		if ((iter + 3)->content.compare("WHERE"))
+		if ((iter + 3)->content.compare("WHERE") == 0)
 		{
 			iter = iter + 4;
 			break;
 		}
-		
+
 		iter = iter + 4;
 	}
 
@@ -856,6 +873,7 @@ void Parser::update(vector<Token>& tokens)
 
 void Parser::insert(vector<Token>& tokens)
 {
+	//printTokenList(tokens);
 	vector<Token>::iterator iter = tokens.begin();
 	string tableName = (iter + 2)->content;
 	iter = iter + 5;
@@ -866,16 +884,18 @@ void Parser::insert(vector<Token>& tokens)
 		vector<Datum> info;
 		while (iter != tokens.end())
 		{
-			if (isdigit(iter->content[0]))
+			if (iter->content[0] == '\"')
 			{
+				iter->content.erase(iter->content.begin());
+				iter->content.pop_back();
+				info.push_back(Datum(iter->content));
+			}
+			else{
 				istringstream buffer(iter->content);
 				int numContent;
 				buffer >> numContent;
-				
+
 				info.push_back(Datum(numContent));
-			}
-			else{
-				info.push_back(Datum(iter->content));
 			}
 			iter = iter + 2;
 		}
@@ -913,7 +933,7 @@ void Parser::myDelete(vector<Token>& tokens)
 
 void Parser::command(vector<Token>& tokens)
 {
-
+	//cout << "In Command";
 	if (tokens[0].content.compare("OPEN") == 0)
 	{
 		open(tokens);
@@ -924,21 +944,22 @@ void Parser::command(vector<Token>& tokens)
 	}
 	else if (tokens[0].content.compare("WRITE") == 0)
 	{
+		//cout << "\nIn Write \n";
 		write(tokens);
 	}
-	else if(tokens[0].content.compare("SHOW") == 0)
+	else if (tokens[0].content.compare("SHOW") == 0)
 	{
 		show(tokens);
 	}
-	else if(tokens[0].content.compare("CREATE") == 0)
+	else if (tokens[0].content.compare("CREATE") == 0)
 	{
 		create(tokens);
 	}
-	else if(tokens[0].content.compare("UPDATE") == 0)
+	else if (tokens[0].content.compare("UPDATE") == 0)
 	{
 		update(tokens);
 	}
-	else if(tokens[0].content.compare("INSERT") == 0)
+	else if (tokens[0].content.compare("INSERT") == 0)
 	{
 		insert(tokens);
 	}
@@ -951,3 +972,25 @@ void Parser::command(vector<Token>& tokens)
 		query(tokens);
 	}
 }
+
+bool Parser::isNum(string input)
+{
+	for (int i = 0; i < input.length(); i++)
+	{
+		if (!isdigit(input[i]))
+			return false;
+	}
+
+	return true;
+}
+
+void Parser::printTokenList(vector<Token>& tokens)
+{
+	cout << "\n";
+	for (int i = 0; i < tokens.size(); i++)
+	{
+		cout << tokens[i].content << " ";
+	}
+	cout << "\n";
+}
+
