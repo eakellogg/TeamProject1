@@ -60,7 +60,7 @@ int main()
 	{
 		hasGuardFile = false;
 		string newGuard = "CREATE TABLE guard (guardID INTEGER, firstName VARCHAR(20), lastName VARCHAR(20), cellBlock VARCHAR(1),";
-		newGuard += " cellNumber INTEGER, securityLevel INTEGER) PRIMARY KEY(guardID); ";
+		newGuard += " securityLevel INTEGER) PRIMARY KEY(guardID); ";
 		dbms.query(newGuard);
 	}
 
@@ -86,18 +86,53 @@ int main()
 		cout << "\n********************\n";
 
 		string command;
-		cin >> command;
+		getline (cin, command);
 
 		if (command == "HELP")
 		{
 			cout << "\n********************\n";
 			cout << "Commands:";
-			cout << "\n********************\n";
+			cout << "\n--------------------\n";
+
+			int width = 25;
 
 			//NEED TO DO:
 			//continue to summary commands in this format here
-			cout << "SAVE" << setw(16) << "" << "Saves any altered data.\n";
-			cout << "EXIT" << setw(16) << "" << "Logs out of Prison-Manager.\n";
+			//change all \n to endl ???
+			cout << left << setw(width) << "SAVE" << "Saves any altered data.\n";
+			cout << left << setw(width) << "EXIT" << "Logs out of Prison-Manager.\n";
+			cout << endl;
+			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";								//insert into
+			cout << left << setw(width) << "ADD SENTENCE" << "Adds a new sentence.\n";
+			cout << left << setw(width) << "ADD SENTENCE RECORD" << "Adds a new sentence record.\n";
+			cout << left << setw(width) << "ADD GUARD" << "Adds a new guard.\n";
+			cout << left << setw(width) << "ADD MEAL GROUP" << "Adds a new meal group.\n";
+			cout << endl;
+			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";									//update
+			cout << left << setw(width) << "UPDATE GUARD" << "Update a guard's record.\n";
+			cout << left << setw(width) << "UPDATE SENTENCE RECORD" << "Update a sentence record.\n";
+			cout << left << setw(width) << "UPDATE SENTENCE" << "Update a sentence.\n";
+			cout << endl;
+			//list prisoners
+			//list guards
+			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";								//select
+			cout << left << setw(width) << "LOOK UP SENTENCE" << "Search for a sentence by id #.\n";
+			cout << left << setw(width) << "LOOK UP SENTENCE RECORD" << "Show the sentence record for a prisoner.\n";
+			cout << left << setw(width) << "LOOK UP GUARD" << "Search for a guard by id #.\n";
+			cout << left << setw(width) << "SHOW MEAL GROUP" << "Shows the details of a meal group.\n";	//will then ask for meal group id
+			cout << left << setw(width) << "SHOW SECURITY LEVEL" << "Shows prisoners and guards with a given security level\n";	//select, project, update, rename, and union
+			//list sentences of a given security level??? I think it's better with prisoners by security level
+			//show all sentences by length ?
+			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";		//project
+			cout << endl;
+			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";			//delete
+			cout << left << setw(width) << "DELETE SENTENCE" << "Deletes the sentence with the given id #.\n";
+			cout << left << setw(width) << "DELETE GUARD" << "Deletes record of the guard with the given id #.\n";
+			cout << left << setw(width) << "DELETE MEAL GROUP" << "Deletes a meal group.\n";
+
+			
+			//set difference
+			//cross product
 
 			cout << "********************\n";
 		}
@@ -105,7 +140,7 @@ int main()
 		//NEED TO DO:
 		//FILL IN ALL DATA OPTIONS HERE
 
-		else if(command == "SAVE"){
+		else if (command == "SAVE" || command == "save" || command == "Save"){
 			hasPrisonerFile = true;
 			hasSentenceFile = true;
 			hasSentenceRecordFile = true;
@@ -122,9 +157,76 @@ int main()
 			cout << "Saved.";
 			cout << "\n********************\n";
 		}
-
-		else if (command == "EXIT"){
+		else if (command == "EXIT" || command == "exit" || command == "Exit"){
 			goOn = false;
+		}
+		else if (command == "ADD PRISONER") {
+
+		}
+		else if (command == "ADD SENTENCE RECORD") {
+
+		}
+		else if (command == "ADD SENTENCE") {
+			//also add it to sentence record (prisoner id and sentence id)
+		}
+		else if (command == "ADD GUARD") {
+
+		}
+		else if (command == "ADD MEAL GROUP") {
+
+		}
+		else if (command == "UPDATE PRISONER") {
+
+		}
+		else if (command == "UPDATE GUARD") {
+
+		}
+		else if (command == "UPDATE SENTENCE RECORD") {
+
+		}
+		else if (command == "SENTENCE") {
+
+		}
+		else if (command == "LOOK UP PRISONER") {
+
+		}
+		else if (command == "LOOK UP SENTENCE RECORD") {
+			//find all entries in sentence record that match the given prisoner id number
+			//take the sentence id number from those entries and show all of those sentences (from the sentence table)
+		}
+		else if (command == "LOOK UP SENTENCE") {
+
+		}
+		else if (command == "LOOK UP GUARD") {
+
+		}
+		else if (command == "SHOW MEAL GROUP") {
+
+		}
+		else if (command == "SHOW SECURITY LEVEL") {
+			
+			// prisoners -> project : id, first name, last name, cell block, security level
+				//update security level -> 0
+			// guards
+				//update security level -> 1
+			// union of guards and prisoners with the specified security level
+			// rename security level (0=prisoner, 1=guard
+		}
+		else if (command == "SHOW CELL BLOCK") {
+			//projection - so for each prisoner show: id, first and last name, cell block, cell number, security level (basically everything except birthday stuff)
+			
+		}
+		else if (command == "DELETE PRISONER") {
+			//delete their corresponding sentences and sentence record
+		}
+		else if (command == "DELETE SENTENCE") {
+
+		}
+		else if (command == "DELETE GUARD") {
+
+		}
+		else if (command == "DELETE MEAL GROUP") {
+
 		}
 
 		else
