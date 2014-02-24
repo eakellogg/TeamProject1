@@ -15,13 +15,12 @@ Elizabeth Kellogg
 relational database management system
 
 ***************************
-Big points:
-- haven't tested with other teams DBMS yet
-- formatting needs to be consistent throughout
-- update prisoner crased when I tried to run it (I think possibly same problem as show cell block)
-- show cell block doesn't work
-- delete prisoner isn't done (but it's passable)
-- show security level isn't implemented fully
+- **haven't tested with other teams DBMS yet**
+- **formatting needs to be consistent throughout**
+- **update prisoner crased when I tried to run it (I think possibly same problem as show cell block)**
+- **show cell block doesn't work**
+- **delete prisoner isn't done (but it's passable)**
+- **show security level isn't implemented fully**
 ***************************
 
 
