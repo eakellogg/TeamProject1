@@ -16,12 +16,12 @@ relational database management system
 
 ***************************
 Big points:
--haven't tested with other teams DBMS yet
--formatting needs to be consistent throughout
--update prisoner crased when I tried to run it (I think possibly same problem as show cell block)
--show cell block doesn't work
--delete prisoner isn't done (but it's passable)
--show security level isn't implemented fully
+- haven't tested with other teams DBMS yet
+- formatting needs to be consistent throughout
+- update prisoner crased when I tried to run it (I think possibly same problem as show cell block)
+- show cell block doesn't work
+- delete prisoner isn't done (but it's passable)
+- show security level isn't implemented fully
 ***************************
 
 
@@ -37,7 +37,7 @@ I'm okay with whatever on this, but we just need to be consistent and either rem
 - Delete Prisoner - also want to add to it so that it will delete the corresponding sentences and sentence records
 - Should there be an update sentence command? 
 - Show Cell Block doesn't currently work
-- need to figure out why after some requests it says **Enter command** **Not valid, try again** **Enter command**
+- need to figure out why after some requests it says "Enter command" "Not valid, try again" "Enter command"
 (just try out a couple commands, you'll see what I mean)
 - output for show sentence record is kinda messy because it outputs tables for several queries along the way
 - double check naming convention throughout.  I got points off of my individual assignment b/c I wasn't consistent.
