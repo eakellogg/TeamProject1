@@ -405,7 +405,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 
 						//pass in the table, values, and types to engine
 						DBMS->insertInto(insertTable, literalValues, literalTypes);
-						insertTable->printTable();
+						//insertTable->printTable();
 						//return nothing
 						return NULL;
 					}

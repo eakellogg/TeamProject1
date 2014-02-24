@@ -6,12 +6,16 @@
 #include "Parser.h"
 #include "Constants.h"
 #include "DBMS.h"
+#include "FAKE_DBMS.h"
+#include <sstream>
 
 using namespace std;
 
 int main()
 {
 	DBMS dbms;
+
+	//Fake_DBMS dbms;
 
 	bool hasPrisonerFile = true;
 	bool hasSentenceFile = true;
@@ -87,8 +91,15 @@ int main()
 		cout << "Please enter a command, for a list of commands enter HELP.";
 		cout << "\n********************\n";
 
+
+		cin.clear();
 		string command;
 		getline (cin, command);
+
+		if (command == "")
+		{
+			getline(cin, command);
+		}
 
 		if (command == "HELP")
 		{
