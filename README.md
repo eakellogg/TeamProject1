@@ -21,7 +21,6 @@ relational database management system
 - **show cell block doesn't work**
 - **delete prisoner isn't done (but it's passable)**
 - **show security level isn't implemented fully**
-***************************
 
 
 -in update meal group (And other similar ones) should it say number instead of integer?
