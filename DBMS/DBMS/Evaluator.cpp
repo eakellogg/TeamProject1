@@ -334,7 +334,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					//return nothing, table will be printed
 					EvaluationTree expressionTree = EvaluationTree(child);
 					Table* expressionTable = Evaluate(&expressionTree);
-	
+
 					if (expressionTable != NULL)
 					{
 						DBMS->show(expressionTable);
