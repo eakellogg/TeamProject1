@@ -13,9 +13,9 @@ using namespace std;
 
 int main()
 {
-	//DBMS dbms;
+	DBMS dbms;
 
-	Fake_DBMS dbms;
+	//Fake_DBMS dbms;
 
 	bool hasPrisonerFile = true;
 	bool hasSentenceFile = true;
@@ -466,7 +466,7 @@ int main()
 
 			cin >> block; 
 
-			string escortQuery = "escort" + block + " <- (select (cellBlock == \"" + block + "\") prisoner) * (select (cellBlock == \"" + block + "\") guard);"; 
+			string escortQuery = "escort <- (select (cellBlock == \"" + block + "\") prisoner) * (select (cellBlock == \"" + block + "\") guard);"; 
 			dbms.query(escortQuery); 
 			string showCommand = "SHOW escort"; 
 			dbms.query(showCommand); 
@@ -486,23 +486,39 @@ int main()
 			cout << "\nEnter the security level:" << endl;
 			cin >> security;
 
-			string selectPrisoners = "selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
+			string selectPrisoners = "Selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
+	
 			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
-			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) selected_prisoner;";
-			string updatedPrisoners = "UPADATE secure_prisoner SET securityLevel = 0 where securityLevel != 0;";
-			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 where securityLevel != 1;";
-			string prisonersAndGuards = "total_security_level <- secure_guard + secure_prisoner;";
-			string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
+	
+			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) Selected_prisoner;";
+		
+			string updatedPrisoners = "UPDATE secure_prisoner SET securityLevel = 0 WHERE securityLevel != 0;";
+		
+			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 WHERE securityLevel != 1;";
+	
+			string prisonersAndGuards = "total_security_level <- (rename (ID, firstName, lastName, cellBlock, isGuard) secure_guard) + (rename (ID, firstName, lastName, cellBlock, isGuard) secure_prisoner);";
+			//cout << "6";
+			//string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
+			//string allSecurityLevel = "A <- secure_guard + secure_prisoner;";
+			//cout << "7";
 
 			dbms.query(selectPrisoners);
+		
 			dbms.query(selectGuards);
+		
 			dbms.query(shortenedPrisoners);
+		
 			dbms.query(updatedPrisoners);
+	
 			dbms.query(updatedGuards);
+	
 			dbms.query(prisonersAndGuards);
-			dbms.query(allSecurityLevel);
-			dbms.query("SHOW security_level;");
+		
+			//dbms.query(allSecurityLevel);
+	
+			dbms.query("SHOW total_security_level;");
 
+	
 			// select prisoners with that security level and guards with (at least??) that security level
 			// prisoners -> project : id, first name, last name, cell block, security level
 				//update security level -> 0
