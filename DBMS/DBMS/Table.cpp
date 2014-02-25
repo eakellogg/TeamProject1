@@ -89,7 +89,6 @@ using namespace std;
 	void Table::renameColumn(int column, string name) {
 		try {
 			for (int i = 0; i < keyName.size(); i++) {
-				cout << "!" << columnTitles[column] << " " << keyName[i] << " ";
 				if (columnTitles[column] == keyName[i]) {
 					cout << name << endl;
 					keyName[i] = name;
