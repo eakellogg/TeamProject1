@@ -489,7 +489,6 @@ int main()
 			cin >> security;
 
 			string selectPrisoners = "Selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
-<<<<<<< HEAD
 	
 			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
 	
@@ -500,18 +499,6 @@ int main()
 			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 WHERE securityLevel != 1;";
 	
 			string prisonersAndGuards = "total_security_level <- (rename (ID, firstName, lastName, cellBlock, isGuard) secure_guard) + (rename (ID, firstName, lastName, cellBlock, isGuard) secure_prisoner);";
-			//cout << "6";
-			//string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
-			//string allSecurityLevel = "A <- secure_guard + secure_prisoner;";
-			//cout << "7";
-=======
-			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
-			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) Selected_prisoner;";
-			string updatedPrisoners = "UPDATE secure_prisoner SET securityLevel = 0 where securityLevel != 0;";
-			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 where securityLevel != 1;";
-			string prisonersAndGuards = "total_security_level <- secure_guard + secure_prisoner;";
-			string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
->>>>>>> 5fd8cdb620136fcd11d2f782d5150e0e8a8888b8
 
 			dbms.query(selectPrisoners);
 		
@@ -525,18 +512,9 @@ int main()
 	
 			dbms.query(prisonersAndGuards);
 		
-			//dbms.query(allSecurityLevel);
 	
 			dbms.query("SHOW total_security_level;");
 
-	
-			// select prisoners with that security level and guards with (at least??) that security level
-			// prisoners -> project : id, first name, last name, cell block, security level
-				//update security level -> 0
-			// guards
-				//update security level -> 1																		
-			// union of guards and prisoners with the specified security level
-			// rename security level (0=prisoner, 1=guard
 		}
 		else if (command == "SHOW CELL BLOCK") {
 			//projection - so for each prisoner show: id, first and last name, cell number, security level (basically everything except birthday stuff and cell block)
