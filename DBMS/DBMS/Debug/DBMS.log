@@ -1,0 +1,37 @@
+﻿Build started 2/24/2014 11:28:48 PM.
+     1>Project "H:\FUCKTHISSHIT\TeamProject1\DBMS\DBMS\DBMS.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DBMSQueryHandler.cpp Evaluator.cpp Parser.cpp
+         Parser.cpp
+         Evaluator.cpp
+     1>h:\fuckthisshit\teamproject1\dbms\dbms\evaluator.cpp(380): warning C4018: '<' : signed/unsigned mismatch
+     1>h:\fuckthisshit\teamproject1\dbms\dbms\evaluator.cpp(416): warning C4018: '<' : signed/unsigned mismatch
+         DBMSQueryHandler.cpp
+         Generating Code...
+     1>h:\fuckthisshit\teamproject1\dbms\dbms\evaluator.cpp(499): warning C4715: 'std::Evaluator::Evaluate' : not all control paths return a value
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"H:\FUCKTHISSHIT\TeamProject1\DBMS\Debug\DBMS.lib" /NOLOGO Debug\DBMS.obj
+         Debug\DBMSQueryHandler.obj
+         Debug\Evaluator.obj
+         Debug\lexer.obj
+         Debug\Parser.obj
+         Debug\ParserEvaluationTree.obj
+         Debug\EngineRename.obj
+         Debug\EnginesetDifference.obj
+         Debug\EnginesetUnion.obj
+         Debug\TableConditionTree.obj
+         Debug\EngineCrossProduct.obj
+         Debug\EngineDelete.obj
+         Debug\Engine.obj
+         Debug\EngineProjection.obj
+         Debug\EngineSelection.obj
+         Debug\EngineUpdate.obj
+         Debug\EngineNaturalJoin.obj
+         Debug\Table.obj
+         Debug\TableConditionEval.obj
+         DBMS.vcxproj -> H:\FUCKTHISSHIT\TeamProject1\DBMS\Debug\DBMS.lib
+     1>Done Building Project "H:\FUCKTHISSHIT\TeamProject1\DBMS\DBMS\DBMS.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:11.12

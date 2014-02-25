@@ -15,6 +15,8 @@ Table* QueryHandler::query(string query){
 	try {
 		TokenStream ts = (lex(query)); 
 		EvaluationTree* tree = parseQuery(ts);
+
+
 		Table* tablePointer = eval->Evaluate(tree);
 		return tablePointer;
 	}

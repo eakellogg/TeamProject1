@@ -1,7 +1,9 @@
 #include "fakelexer.h"
 #include "Token.h"
 
+
 using namespace std;
+using namespace FAKE_DBMS;
 
 bool isNumLiteral(string s){
 	for (int i = 0; i < s.size(); i++)
@@ -10,7 +12,7 @@ bool isNumLiteral(string s){
 	return true;
 }
 
-//distinguishes a sequence of character between a keyword, numeric literal, and an unknown, then creates appropriate FAKE_DBMS::Token
+//distinguishes a sequence of character between a keyword, numeric literal, and an unknown, then creates appropriate FAKE_DBMS::FAKE_DBMS::Token 
 void makeCommVarTok(vector<FAKE_DBMS::Token> & afterRetVecter, string in){
 	if (in == "project" || in == "rename" || in == "select" || in == "JOIN" || in == "SHOW" || in == "DELETE" ||
 		in == "FROM" || in == "INSERT" || in == "INTO" || in == "UPDATE" || in == "CREATE" || in == "TABLE" ||
@@ -22,6 +24,10 @@ void makeCommVarTok(vector<FAKE_DBMS::Token> & afterRetVecter, string in){
 	}
 	//make sure empty string is not lexed
 	else if (in == ""){
+		return;
+	}
+	//and that empty spaces are ignored
+	else if (in == " "){
 		return;
 	}
 	else if (isNumLiteral(in)){
@@ -40,13 +46,19 @@ void makeCommVarTok(vector<FAKE_DBMS::Token> & afterRetVecter, string in){
 //lex the possibly nested protion of a query
 vector<FAKE_DBMS::Token> afterAssignQueryLex(string line){
 	vector<FAKE_DBMS::Token> afterRetVecter;
-	vector<FAKE_DBMS::Token> emptyRetVecter; //this is returned on bad input. The parser then recognizes this.
+	vector<FAKE_DBMS::Token> emptyRetVecter; //this is returned on bad input. The parser then recognizes this. 
 
 	string curString = ""; //contents of FAKE_DBMS::Token accumulate on this
 	int stringPos = 0; //current position in string
 
 	while (stringPos <= line.size()){
 		char curChar = line[stringPos];
+
+
+		if (curChar == ' '){
+			makeCommVarTok(afterRetVecter, curString);
+			curString = "";
+		}
 
 		//needed to get the last FAKE_DBMS::Token in the string
 		if (stringPos == line.size()){
@@ -104,7 +116,7 @@ vector<FAKE_DBMS::Token> afterAssignQueryLex(string line){
 			makeCommVarTok(afterRetVecter, curString);
 			curString = "";
 			FAKE_DBMS::Token minusTok(FAKE_DBMS::Token::tokenType::SYMBOL);
-			minusTok.content = '+';
+			minusTok.content = '-';
 			afterRetVecter.push_back(minusTok);
 		}
 
@@ -112,7 +124,7 @@ vector<FAKE_DBMS::Token> afterAssignQueryLex(string line){
 			makeCommVarTok(afterRetVecter, curString);
 			curString = "";
 			FAKE_DBMS::Token prodTok(FAKE_DBMS::Token::tokenType::SYMBOL);
-			prodTok.content = '+';
+			prodTok.content = '*';
 			afterRetVecter.push_back(prodTok);
 		}
 
@@ -181,12 +193,17 @@ vector<FAKE_DBMS::Token> afterAssignQueryLex(string line){
 				FAKE_DBMS::Token eqTok(FAKE_DBMS::Token::tokenType::SYMBOL);
 				eqTok.content = "==";
 				afterRetVecter.push_back(eqTok);
+				stringPos++; //skip over next char since we have accounted for it
+			}
+			else if (line[stringPos + 1] != '='){
+				FAKE_DBMS::Token setEqTok(FAKE_DBMS::Token::tokenType::SYMBOL);
+				setEqTok.content = "=";
+				afterRetVecter.push_back(setEqTok);
 			}
 			else {
 				cout << "ERROR when parsing a =" << endl;
 				return emptyRetVecter;
 			}
-			stringPos++; //skip over next char since we have accounted for it
 		}
 
 		//if it is surrounded by quotes then it is a literal
@@ -343,7 +360,7 @@ vector<FAKE_DBMS::Token> commandLex(string line){
 			makeCommVarTok(retRow, curString);
 			curString = "";
 			FAKE_DBMS::Token minusTok(FAKE_DBMS::Token::tokenType::SYMBOL);
-			minusTok.content = '+';
+			minusTok.content = '-';
 			retRow.push_back(minusTok);
 		}
 
@@ -351,7 +368,7 @@ vector<FAKE_DBMS::Token> commandLex(string line){
 			makeCommVarTok(retRow, curString);
 			curString = "";
 			FAKE_DBMS::Token prodTok(FAKE_DBMS::Token::tokenType::SYMBOL);
-			prodTok.content = '+';
+			prodTok.content = '*';
 			retRow.push_back(prodTok);
 		}
 
@@ -420,12 +437,17 @@ vector<FAKE_DBMS::Token> commandLex(string line){
 				FAKE_DBMS::Token eqTok(FAKE_DBMS::Token::tokenType::SYMBOL);
 				eqTok.content = "==";
 				retRow.push_back(eqTok);
+				stringPos++; //skip over next char since we have accounted for it
+			}
+			else if (line[stringPos + 1] != '='){
+				FAKE_DBMS::Token setEqTok(FAKE_DBMS::Token::tokenType::SYMBOL);
+				setEqTok.content = "=";
+				retRow.push_back(setEqTok);
 			}
 			else {
 				cout << "ERROR when parsing a =" << endl;
 				break;
 			}
-			stringPos++; //skip over next char since we have accounted for it
 		}
 
 

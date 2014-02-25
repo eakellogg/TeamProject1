@@ -17,12 +17,16 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 {
 	try {
 		EvaluationTree::Node* root = tree->getRoot();
-
+	
 		//if the sql input is a query
+
 		if (root->getType() == QUERY){
+	
 			EvaluationTree::Node* leftChild = (*(root->getChildren()))[0];
 			EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
+
+	
 			//if the children are of the correct types
 			if (leftChild->getType() == RELATION_NAME)
 			{
@@ -32,7 +36,12 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					EvaluationTree expressionTree = EvaluationTree(rightChild);
 					Table* expressionTable = Evaluate(&expressionTree);
 					string* value = (string*)(leftChild->getValue());
+
+					map<string, Table*>::iterator it = views.find(*value);
+					if (it != views.end())
+						views.erase(it);
 					views.insert(make_pair(*value, expressionTable));
+	
 					return expressionTable;
 				}
 			}
@@ -47,14 +56,17 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 			//if the sql input is a selection expression
 			if (*value == SELECTION_EXPR)
 			{
+			
 				EvaluationTree::Node* leftChild = (*(root->getChildren()))[0];
 				EvaluationTree::Node* rightChild = (*(root->getChildren()))[1];
 
 				//if the children are of the correct types
 				if (leftChild->getType() == CONDITION_TREE)
 				{
+	
 					if (rightChild->getType() != PARSE_FAILURE)
 					{
+			
 						//pass a table pointer and condition tree to the engine function
 						//return resultant table
 						EvaluationTree expressionTree = EvaluationTree(rightChild);
@@ -321,6 +333,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 			//if the sql input is a show command
 			if (*value == SHOW)
 			{
+
 				EvaluationTree::Node* child = (*(root->getChildren()))[0];
 
 				//if the children are of the correct types
@@ -330,11 +343,15 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					//return nothing, table will be printed
 					EvaluationTree expressionTree = EvaluationTree(child);
 					Table* expressionTable = Evaluate(&expressionTree);
-	
 					if (expressionTable != NULL)
 					{
 						DBMS->show(expressionTable);
+
 						return NULL;
+					}
+					else
+					{
+						//map<string, Table*>::iterator it = views.find()
 					}
 				}
 				throw "Wrong values in SHOW";
@@ -405,7 +422,7 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 
 						//pass in the table, values, and types to engine
 						DBMS->insertInto(insertTable, literalValues, literalTypes);
-						insertTable->printTable();
+						//insertTable->printTable();
 						//return nothing
 						return NULL;
 					}
@@ -439,27 +456,35 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 			//if the sql input is an update command
 			if (*value == UPDATE)
 			{
+
 				EvaluationTree::Node* childTableName = (*(root->getChildren()))[0];
 				EvaluationTree::Node* childValuePairs = (*(root->getChildren()))[1];
 				EvaluationTree::Node* childCondTree = (*(root->getChildren()))[2];
-
+	
 				//if the children are of the correct types
 				if (childTableName->getType() == RELATION_NAME)
 				{
+
 					if (childValuePairs->getType() == ATTRIBUTE_VALUE_PAIR_LIST)
 					{
+			
 						if (childCondTree->getType() == CONDITION_TREE)
 						{
+				
 							//pass in table, values, and condition tree into engine
 							//return nothing
 							string* tableName = (string*)(childTableName->getValue());
 							Table* updateTable = DBMS->findTable(*tableName);
+							if (updateTable == NULL)
+								updateTable = views.find(*tableName)->second; 
 							vector<tuple<string, string>>* values = (vector<tuple<string, string>>*)(childValuePairs->getValue());
 							ConditionTree* condTree = (ConditionTree*)(childCondTree->getValue());
 							DBMS->update(updateTable, *values, *condTree);
+			
 							return NULL;
 						}
 					}
+				
 				}
 				throw("Wrong types in UPDATE");
 			}

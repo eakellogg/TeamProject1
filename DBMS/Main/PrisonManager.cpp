@@ -1,3 +1,5 @@
+//Important to note that security level is an int, cell block is a char
+
 #include "Engine.h"
 #include "Table.h"
 #include "TokenStream.h"
@@ -5,13 +7,15 @@
 #include "Constants.h"
 #include "DBMS.h"
 #include "FAKE_DBMS.h"
+#include <sstream>
 
 using namespace std;
 
 int main()
 {
-	//DBMS dbms;
-	Fake_DBMS dbms;
+	DBMS dbms;
+
+	//Fake_DBMS dbms;
 
 	bool hasPrisonerFile = true;
 	bool hasSentenceFile = true;
@@ -24,14 +28,14 @@ int main()
 	string sentenceRecordFile = "OPEN sentenceRecord";
 	string guardFile = "OPEN guard";
 	string mealGroupFile = "OPEN mealGroup";
-
+ 
 	dbms.query(prisonerFile);
 	Table prisoner = dbms.query("possPrisoner <- select (prisonerID != 0) prisoner");
 	if (prisoner.getTableName() == "EmptyTable")
 	{
 		hasPrisonerFile = false;
 		string newPrisoner = "CREATE TABLE prisoner";
-		newPrisoner += "(prisonerID INTEGER, firstName VARCHAR(20), lastName VARCHAR(20), birthMonth INTEGER, birthDay INTEGER,";
+		newPrisoner += "(prisonerID INTEGER, firstName VARCHAR(20), lastName VARCHAR(20), age INTEGER, birthMonth INTEGER, birthDay INTEGER,";
 		newPrisoner += " birthYear INTEGER, cellBlock VARCHAR(1), cellNumber INTEGER, securityLevel INTEGER) PRIMARY KEY(prisonerID); ";
 		dbms.query(newPrisoner);
 	}
@@ -87,16 +91,15 @@ int main()
 		cout << "Please enter a command, for a list of commands enter HELP.";
 		cout << "\n********************\n";
 
+
+		cin.clear();
 		string command;
-<<<<<<< HEAD
-<<<<<<< HEAD
-		getline(cin, command);
-=======
 		getline (cin, command);
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-		getline (cin, command);
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
+
+		if (command == "")
+		{
+			getline(cin, command);
+		}
 
 		if (command == "HELP")
 		{
@@ -111,90 +114,41 @@ int main()
 			//change all \n to endl ???
 			cout << left << setw(width) << "SAVE" << "Saves any altered data.\n";
 			cout << left << setw(width) << "EXIT" << "Logs out of Prison-Manager.\n";
+			cout << left << setw(width) << "LIST PRISONERS" << "Prints the records for all prisoners.\n";
+			cout << left << setw(width) << "LIST GUARDS" << "Prints the records for all guards.\n";
+			cout << left << setw(width) << "LIST MEAL GROUPS" << "Prints all of the meal groups.\n";
 			cout << endl;
-<<<<<<< HEAD
-<<<<<<< HEAD
-			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";	//insert into
-=======
 			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";								//insert into
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-			cout << left << setw(width) << "ADD PRISONER" << "Adds a new prisoner to the database.\n";								//insert into
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 			cout << left << setw(width) << "ADD SENTENCE" << "Adds a new sentence.\n";
-			cout << left << setw(width) << "ADD SENTENCE RECORD" << "Adds a new sentence record.\n";
 			cout << left << setw(width) << "ADD GUARD" << "Adds a new guard.\n";
 			cout << left << setw(width) << "ADD MEAL GROUP" << "Adds a new meal group.\n";
 			cout << endl;
-<<<<<<< HEAD
-<<<<<<< HEAD
-			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";	//update
-=======
 			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";									//update
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-			cout << left << setw(width) << "UPDATE PRISONER" << "Update a prisoner's record.\n";									//update
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 			cout << left << setw(width) << "UPDATE GUARD" << "Update a guard's record.\n";
-			cout << left << setw(width) << "UPDATE SENTENCE RECORD" << "Update a sentence record.\n";
-			cout << left << setw(width) << "UPDATE SENTENCE" << "Update a sentence.\n";
+			cout << left << setw(width) << "UPDATE MEAL GROUP" << "Update a meal group.\n";
 			cout << endl;
-			//list prisoners
-			//list guards
-<<<<<<< HEAD
-<<<<<<< HEAD
-			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";	//select
-=======
 			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";								//select
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-			cout << left << setw(width) << "LOOK UP PRISONER" << "Search for a prisoner by id #.\n";								//select
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
 			cout << left << setw(width) << "LOOK UP SENTENCE" << "Search for a sentence by id #.\n";
-			cout << left << setw(width) << "LOOK UP SENTENCE RECORD" << "Show the sentence record for a prisoner.\n";
 			cout << left << setw(width) << "LOOK UP GUARD" << "Search for a guard by id #.\n";
-			cout << left << setw(width) << "SHOW MEAL GROUP" << "Shows the details of a meal group.\n";	//will then ask for meal group id
-			cout << left << setw(width) << "SHOW SECURITY LEVEL" << "Shows prisoners and guards with a given security level\n";	//select, project, update, rename, and union
-			//list sentences of a given security level??? I think it's better with prisoners by security level
+			cout << left << setw(width) << "LOOK UP MINORS" << "Search for prisoners under 18 in a cell block.\n";
+			cout << left << setw(width) << "LOOK UP ESCORTS" << "Search for possible prisoner-guard combinations.\n";
+			cout << endl;
+			cout << left << setw(width) << "SHOW SENTENCE RECORD" << "Shows all of a prisoner's sentences.\n";						//uses all the things....
+			cout << left << setw(width) << "SHOW MEAL GROUP" << "Shows the details of a meal group.\n";	
+			cout << left << setw(width) << "SHOW SECURITY LEVEL" << "Shows prisoners and guards with a given security level\n";	//maybe have guards of that or higher?
 			//show all sentences by length ?
-<<<<<<< HEAD
-<<<<<<< HEAD
-			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";	//project
+			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block\n";		//project		//DOESNT WORK!!! TODO TO DO
 			cout << endl;
-			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";	//delete
-=======
-			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";		//project
-			cout << endl;
-			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";			//delete
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-			cout << left << setw(width) << "SHOW CELL BLOCK" << "Lists the names of the prisoners in a given cell block.\n";		//project
-			cout << endl;
-			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";			//delete
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
+			cout << left << setw(width) << "DELETE PRISONER" << "Deletes the record of a prisoner with the given id #.\n";			//delete	//not done
 			cout << left << setw(width) << "DELETE SENTENCE" << "Deletes the sentence with the given id #.\n";
 			cout << left << setw(width) << "DELETE GUARD" << "Deletes record of the guard with the given id #.\n";
 			cout << left << setw(width) << "DELETE MEAL GROUP" << "Deletes a meal group.\n";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-			
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-			
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-			//set difference
-			//cross product
-
 			cout << "********************\n";
 		}
 
-		//NEED TO DO:
-		//FILL IN ALL DATA OPTIONS HERE
 
-		else if (command == "SAVE" || command == "save" || command == "Save"){
+		else if (command == "SAVE"){
 			hasPrisonerFile = true;
 			hasSentenceFile = true;
 			hasSentenceRecordFile = true;
@@ -211,107 +165,417 @@ int main()
 			cout << "Saved.";
 			cout << "\n********************\n";
 		}
-		else if (command == "EXIT" || command == "exit" || command == "Exit"){
+		else if (command == "EXIT"){
 			goOn = false;
 		}
-		else if (command == "ADD PRISONER") {
-
+		else if (command == "LIST PRISONERS") {
+			dbms.query("SHOW prisoner;");
 		}
-		else if (command == "ADD SENTENCE RECORD") {
-
+		else if (command == "LIST GUARDS") {
+			dbms.query("SHOW guard;");
+		}
+		else if (command == "LIST MEAL GROUPS") {
+			dbms.query("SHOW mealGroup;");
+		}
+		else if (command == "LIST SENTENCE RECORD") {
+			dbms.query("SHOW sentenceRecord;");
+		}
+		else if (command == "ADD PRISONER") {
+			string pid;
+			string fname;
+			string lname;
+			string age;
+			string month;
+			string day;
+			string year;
+			string block;
+			string cell;
+			string security;
+			cout << "\nEnter the prisoner's first and last name (separated by a space)" << endl;
+			cin >> fname >> lname;
+			cout << "Enter the prisoner's ID number:" << endl;
+			cin >> pid;
+			cout << "Enter the prisoner's age:" << endl;
+			cin >> age;
+			cout << "Enter the prisoner's birthday in the following format: MM DD YYYY" << endl;
+			cin >> month >> day >> year;
+			cout << "Enter the prisoner's cell block and number (separated by a space)" << endl;
+			cin >> block >> cell;
+			cout << "Enter the prisoner's security level:" << endl;
+			cin >> security;
+			string addPrisoner = "INSERT INTO prisoner VALUES FROM (" + pid + ", \"" + fname +
+				"\", \"" + lname + "\", " + age + ", " + month + ", " + day + ", " + year + ", \"" + block +
+				"\", " + cell + ", " + security + ");";
+			dbms.query(addPrisoner);
 		}
 		else if (command == "ADD SENTENCE") {
-			//also add it to sentence record (prisoner id and sentence id)
+			//also adds it to sentence record (prisoner id and sentence id)
+			string prisonerId;
+			string sentenceId;
+			string length;
+			string startMonth;
+			string startDay;
+			string startYear;
+			string endMonth;
+			string endDay;
+			string endYear;
+			string security;
+			cout << "\nEnter the prisoner's ID number:" << endl;
+			cin >> prisonerId;
+			cout << "Enter the sentence ID number:" << endl;
+			cin >> sentenceId;
+			cout << "Enter the length of the sentence (in days)" << endl;
+			cin >> length;
+			cout << "Enter the starting date of the sentence in the following format: MM DD YYYY" << endl;
+			cin >> startMonth >> startDay >> startYear;
+			cout << "Enter the ending date of the sentence in the same format" << endl;
+			cin >> endMonth >> endDay >> endYear;
+			cout << "Enter the security level associated with the sentence" << endl;
+			cin >> security;
+			string addRecord = "INSERT INTO sentenceRecord VALUES FROM (" + prisonerId + ", " +
+				sentenceId + ");";
+			dbms.query(addRecord);
+			string addSentence = "INSERT INTO sentence VALUES FROM (" + sentenceId + ", " + length + ", " +
+				startMonth + ", " + startDay + ", " + startYear + ", " + endMonth + ", " +
+				endDay + ", " + endYear + ", " + security + ");";
+			dbms.query(addSentence);
 		}
 		else if (command == "ADD GUARD") {
-
+			string guardId;
+			string fname;
+			string lname;
+			string cellBlock;
+			string security;
+			cout << "\nEnter the guard's first and last name (separated by a space)" << endl;
+			cin >> fname >> lname;
+			cout << "Enter the guard's ID number:" << endl;
+			cin >> guardId;
+			cout << "Enter the guard's cell block:" << endl;
+			cin >> cellBlock;
+			cout << "Enter the guard's maximum security level:" << endl;
+			cin >> security;
+			string addGuard = "INSERT INTO guard VALUES FROM (" + guardId + ", \"" + fname + "\", \"" + 
+				lname + "\", \"" + cellBlock + "\", " + security + ");";
+			dbms.query(addGuard);
 		}
 		else if (command == "ADD MEAL GROUP") {
-
+			string mealgroupId;
+			string cellBlock;
+			string breakfastHour;
+			string lunchHour;
+			string dinnerHour;
+			cout << "\nEnter the meal group's ID number:" << endl;
+			cin >> mealgroupId;
+			cout << "Enter the corresponding cell block:" << endl;
+			cin >> cellBlock;
+			cout << "Enter the meal group's designated breakfast hour:" << endl;
+			cin >> breakfastHour;
+			cout << "Enter the meal group's designated lunch hour:" << endl;
+			cin >> lunchHour;
+			cout << "Enter the meal group's designated dinner hour:" << endl;
+			cin >> dinnerHour;
+			string addMealGroup = "INSERT INTO mealGroup VALUES FROM (" + mealgroupId + ", \"" +
+				cellBlock + "\", " + breakfastHour + ", " + lunchHour + ", " + dinnerHour + ");";
+			dbms.query(addMealGroup);
 		}
 		else if (command == "UPDATE PRISONER") {
+			cout << "\nWhat is the ID of the prisoner?" << endl;
 
+			string ID;
+			cin >> ID;
+
+			cout << "Would you like to change their 'CellBlock', 'CellNumber', or 'SecurityLevel'?" << endl;
+
+			string subCommand;
+			cin >> subCommand;
+
+			if (subCommand == "CellBlock"){
+				cout << "What would you like to change their cell block to? (One Letter)" << endl;
+
+				string block;
+				cin >> block;
+
+				string updateBlock = "UPDATE prisoner SET cellBlock = \"" + block + "\" WHERE prisonerID == " + ID + ";";
+				dbms.query(updateBlock);
+			}
+			else if (subCommand == "CellNumber"){
+				cout << "What would you like to change their cell number to? (Integer)" << endl;
+
+				string cellNum;
+				cin >> cellNum;
+
+				string updateCell = "UPDATE prisoner SET cellNumber = " + cellNum + " WHERE prisonerID == " + ID + ";";
+				dbms.query(updateCell);
+			}
+			else if (subCommand == "SecurityLevel"){
+				cout << "What would you like to change their security level to? (Integer)" << endl;
+
+				string securLevel;
+				cin >> securLevel;
+
+				string updateSecurity = "UPDATE prisoner SET securityLevel = " + securLevel + " WHERE prisonerID == " + ID + ";";
+				dbms.query(updateSecurity);
+			}
+			else{
+				cout << "\n********************\n";
+				cout << "That was not a valid option.";
+				cout << "\n********************\n";
+			}
 		}
-		else if (command == "UPDATE GUARD") {
+		else if (command == "UPDATE GUARD") { 
+			cout << "\nWhat is the ID of the guard?" << endl;
 
+			string ID; 
+			cin >> ID; 
+
+			cout << "Would you like to change their 'CellBlock' or 'SecurityLevel'?" << endl;
+
+			string subCommand; 
+			cin >> subCommand; 
+
+			if (subCommand == "CellBlock"){ 
+				cout << "What would you like to change their cell block to? (One Letter)" << endl;
+
+				string block; 
+				cin >> block; 
+
+				string updateBlock = "UPDATE guard SET cellBlock = \"" + block + "\" WHERE guardID == " + ID + ";"; 
+				dbms.query(updateBlock); 
+			} 
+			else if (subCommand == "SecurityLevel"){ 
+
+				string securLevel; 
+				cin >> securLevel; 
+				string updateSecurity = "UPDATE guard SET securityLevel = " + securLevel + " WHERE guardID == " + ID + ";"; 
+				dbms.query(updateSecurity); 
+			} 
+			else{ 
+				cout << "\n********************\n"; 
+				cout << "That was not a valid option.";
+				cout << "\n********************\n";
+			}
 		}
-		else if (command == "UPDATE SENTENCE RECORD") {
+		else if (command == "UPDATE MEAL GROUP") { 
+			cout << "\nWhat is the ID of the meal group?" << endl;
 
-		}
-		else if (command == "SENTENCE") {
+			string ID; 
+			cin >> ID; 
+ 
+			cout << "Which cell block for the meal group?" << endl;
 
+			string block; 
+			cin >> block; 
+
+			cout << "Would you like to change their 'BreakfastHour', 'LunchHour', or 'DinnerHour'?" << endl;
+
+			string subCommand; 
+			cin >> subCommand; 
+
+			if (subCommand == "BreakfastHour"){ 
+				cout << "What would you like to change their breakfast hour to? (Integer)" << endl;
+
+				string breakfast; 
+				cin >> breakfast; 
+
+				string updateBreakfast = "UPDATE mealGroup SET breakfastHour = " + breakfast + " WHERE mealGroupID == " + ID + " && cellBlock == \"" + block + "\";";
+				dbms.query(updateBreakfast); 
+			} 
+			else if (subCommand == "LunchHour"){ 
+
+				string lunch; 
+				cin >> lunch; 
+
+				string updateLunch = "UPDATE mealGroup SET lunchHour = " + lunch + " WHERE mealGroupID == " + ID + " && cellBlock == \"" + block + "\";";
+				dbms.query(updateLunch); 
+			} 
+			else if (subCommand == "DinnerHour"){ 
+				cout << "What would you like to change their dinner hour to? (Integer)" << endl;
+
+				string dinner; 
+				cin >> dinner; 
+
+				string updateDinner = "UPDATE mealGroup SET dinnerHour = " + dinner + " WHERE mealGroupID == " + ID + " && cellBlock == \"" + block + "\";";
+				dbms.query(updateDinner); 
+			} 
+			else{ 
+				cout << "\n********************\n"; 
+				cout << "That was not a valid option."; 
+				cout << "\n********************\n"; 
+			} 
 		}
 		else if (command == "LOOK UP PRISONER") {
-
+			string prisonerId;
+			cout << "\nEnter the prisoner's ID number:" << endl;
+			cin >> prisonerId;
+			string selectPrisoner = "specific_prisoner <- select (prisonerID == " + prisonerId +
+				") prisoner;";
+			dbms.query(selectPrisoner);
+			dbms.query("SHOW specific_prisoner;");
 		}
-		else if (command == "LOOK UP SENTENCE RECORD") {
+		else if (command == "SHOW SENTENCE RECORD") {
 			//find all entries in sentence record that match the given prisoner id number
 			//take the sentence id number from those entries and show all of those sentences (from the sentence table)
+			string prisonerId;
+			cout << "\nEnter the prisoner's ID number:" << endl;
+			cin >> prisonerId;
+			string first_query = "prisoners_sentences <- rename (prisoner, sID) (select (prisonerID == " + 
+				prisonerId + ") sentenceRecord);";
+			string second_query = "all_sentences <- prisoners_sentences * sentence;";
+			string third_query = "desired_sentences <- select (sID == sentenceID) all_sentences;";
+			string fourth_query = "sentences_for_" + prisonerId + " <- project (sentenceID, sentenceLength," +
+				" startMonth, startDay, startYear, endMonth, endDay, endYear, securityLevel) desired_sentences;";
+			string final_query = "SHOW sentences_for_" + prisonerId + ";";
+			dbms.query(first_query);
+			dbms.query(second_query);
+			dbms.query(third_query);
+			dbms.query(fourth_query);
+			dbms.query(final_query);
 		}
 		else if (command == "LOOK UP SENTENCE") {
-
+			string sentenceId;
+			cout << "\nEnter the sentece ID number:" << endl;
+			cin >> sentenceId;
+			string selectSentence = "specific_sentence <- select (sentenceID == " + sentenceId +
+				") sentence;";
+			dbms.query(selectSentence);
+			dbms.query("SHOW specific_sentence;");
 		}
 		else if (command == "LOOK UP GUARD") {
-
+			string guardId;
+			cout << "\nEnter the guard's ID number:" << endl;
+			cin >> guardId;
+			string selectGuard = "specific_guard <- select (guardID == " + guardId + ") guard;";
+			dbms.query(selectGuard);
+			dbms.query("SHOW specific_guard;");
 		}
-		else if (command == "SHOW MEAL GROUP") {
+		else if (command == "LOOK UP MINORS") {
+			cout << "\nList the minors for which cell block?" << endl;
 
+			string block;
+			cin >> block;
+
+			string escortQuery = "minor <- (select (cellBlock == \"" + block + "\") prisoner) - (select (age >= 18) prisoner);";
+			dbms.query(escortQuery);
+			string showCommand = "SHOW minor"; 
+			dbms.query(showCommand); 
+		}
+		else if (command == "LOOK UP ESCORTS"){ 
+			cout << "\nList possible escort pairings for which cell block?" << endl;
+
+			string block; 
+
+			cin >> block; 
+
+			string escortQuery = "escort <- (select (cellBlock == \"" + block + "\") prisoner) * (select (cellBlock == \"" + block + "\") guard);"; 
+			dbms.query(escortQuery); 
+			string showCommand = "SHOW escort"; 
+			dbms.query(showCommand); 
+		} 
+		else if (command == "SHOW MEAL GROUP") {
+			string mealGroupId;
+			cout << "\nEnter the meal group ID number:" << endl;
+			cin >> mealGroupId;
+			string selectMealGroup = "specific_meal_group <- select (mealGroupID == " + 
+				mealGroupId + ") mealGroup;";
+			dbms.query(selectMealGroup);
+			dbms.query("SHOW specific_meal_group;");
 		}
 		else if (command == "SHOW SECURITY LEVEL") {
-<<<<<<< HEAD
-<<<<<<< HEAD
+			//make names better, shorten lines of code
+			string security;
+			cout << "\nEnter the security level:" << endl;
+			cin >> security;
 
-			// prisoners -> project : id, first name, last name, cell block, security level
-			//update security level -> 0
-			// guards
-			//update security level -> 1
-=======
-=======
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-			
+			string selectPrisoners = "Selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
+	
+			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
+	
+			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) Selected_prisoner;";
+		
+			string updatedPrisoners = "UPDATE secure_prisoner SET securityLevel = 0 WHERE securityLevel != 0;";
+		
+			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 WHERE securityLevel != 1;";
+	
+			string prisonersAndGuards = "total_security_level <- (rename (ID, firstName, lastName, cellBlock, isGuard) secure_guard) + (rename (ID, firstName, lastName, cellBlock, isGuard) secure_prisoner);";
+			//cout << "6";
+			//string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
+			//string allSecurityLevel = "A <- secure_guard + secure_prisoner;";
+			//cout << "7";
+
+			dbms.query(selectPrisoners);
+		
+			dbms.query(selectGuards);
+		
+			dbms.query(shortenedPrisoners);
+		
+			dbms.query(updatedPrisoners);
+	
+			dbms.query(updatedGuards);
+	
+			dbms.query(prisonersAndGuards);
+		
+			//dbms.query(allSecurityLevel);
+	
+			dbms.query("SHOW total_security_level;");
+
+	
+			// select prisoners with that security level and guards with (at least??) that security level
 			// prisoners -> project : id, first name, last name, cell block, security level
 				//update security level -> 0
 			// guards
-				//update security level -> 1
-<<<<<<< HEAD
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
+				//update security level -> 1																		
 			// union of guards and prisoners with the specified security level
 			// rename security level (0=prisoner, 1=guard
 		}
 		else if (command == "SHOW CELL BLOCK") {
-			//projection - so for each prisoner show: id, first and last name, cell block, cell number, security level (basically everything except birthday stuff)
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-			
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
-=======
-			
->>>>>>> 93899b692f798ce48ce261df951e157e346d8c44
+			//projection - so for each prisoner show: id, first and last name, cell number, security level (basically everything except birthday stuff and cell block)
+			string block;
+			cout << "\nEnter the cell block:" << endl;
+			cin >> block;
+			string selectCellBlock = "specific_cell_block <- select (cellBlock == \"" + block + 
+				"\") prisoner;";
+			string specificCellBlock = "cell_block <- project (prisonerID, firstName, lastName, cellBlock, cellNumber, securityLevel) specific_cell_block;";
+			dbms.query(selectCellBlock);
+			dbms.query(specificCellBlock);
+			dbms.query("SHOW cell_block;");
 		}
 		else if (command == "DELETE PRISONER") {
 			//delete their corresponding sentences and sentence record
+			string prisonerId;
+			cout << "\nEnter the prisoner's ID number:" << endl;
+			cin >> prisonerId;
+			string deletePrisoner = "DELETE FROM prisoner WHERE (prisonerID == " + prisonerId + ");";
+			dbms.query(deletePrisoner);
+			//delete sentences and records																				//NOT DONE --------   TODO TO DO
 		}
 		else if (command == "DELETE SENTENCE") {
-
+			string sentenceId;
+			cout << "\nEnter the sentence ID number:" << endl;
+			cin >> sentenceId;
+			string deleteSentence = "DELETE FROM sentence WHERE (sentenceID == " + sentenceId + ");";
+			dbms.query(deleteSentence);
 		}
 		else if (command == "DELETE GUARD") {
-
+			string guardId;
+			cout << "\nEnter the guards's ID number:" << endl;
+			cin >> guardId;
+			string deleteGuard = "DELETE FROM guard WHERE (guardID == " + guardId + ");";
+			dbms.query(deleteGuard);
 		}
 		else if (command == "DELETE MEAL GROUP") {
-
+			string mealGroupId;
+			cout << "\nEnter the meal group ID number:" << endl;
+			cin >> mealGroupId;
+			string deleteMealGroup = "DELETE FROM mealGroup WHERE (mealGroupID == " + mealGroupId + ");";
+			dbms.query(deleteMealGroup);
 		}
-
 		else
 		{
 			cout << "\n********************\n";
-			cout << "Not a valid command try again, try again.";
+			cout << "Not a valid command, try again.";
 			cout << "\n********************\n";
 		}
-	}
+	} 
 
 	cout << "\n********************\nDo you want to save? (Y or N)\n********************\n";
 	char ans;

@@ -11,12 +11,14 @@ typedef ConditionTree::Node Node;
 // parse a query, return an evaluation tree pointer
 EvaluationTree* parseQuery(TokenStream& ts){
 
+
 	EvaluationTree::Node* leftChild = parseRelationName(ts);
 	EvaluationTree::Node* root;
 
 	// if leftChild is a relation
 	if (leftChild->getType() == RELATION_NAME)
 	{
+
 		Token token = ts.getToken();
 		
 		// if token is not an arrow
@@ -81,6 +83,7 @@ EvaluationTree::Node* parseRelationName(TokenStream& ts){
 	EvaluationTree::Node* result;
 	Token t = ts.getToken();
 	
+
 	// if the token is an identifier
 	if ( t.getType() == IDENTIFIER ){
 		
