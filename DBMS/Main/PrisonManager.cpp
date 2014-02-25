@@ -343,6 +343,7 @@ int main()
 				dbms.query(updateBlock); 
 			} 
 			else if (subCommand == "SecurityLevel"){ 
+				cout << "What would you like to change their security level to? (Number)" << endl;
 
 				string securLevel; 
 				cin >> securLevel; 
@@ -381,6 +382,7 @@ int main()
 				dbms.query(updateBreakfast); 
 			} 
 			else if (subCommand == "LunchHour"){ 
+				cout << "What would you like to change their lunch hour to? (Integer)" << endl;
 
 				string lunch; 
 				cin >> lunch; 
@@ -433,7 +435,7 @@ int main()
 		}
 		else if (command == "LOOK UP SENTENCE") {
 			string sentenceId;
-			cout << "\nEnter the sentece ID number:" << endl;
+			cout << "\nEnter the sentence ID number:" << endl;
 			cin >> sentenceId;
 			string selectSentence = "specific_sentence <- select (sentenceID == " + sentenceId +
 				") sentence;";
@@ -487,6 +489,7 @@ int main()
 			cin >> security;
 
 			string selectPrisoners = "Selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
+<<<<<<< HEAD
 	
 			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
 	
@@ -501,6 +504,14 @@ int main()
 			//string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
 			//string allSecurityLevel = "A <- secure_guard + secure_prisoner;";
 			//cout << "7";
+=======
+			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
+			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) Selected_prisoner;";
+			string updatedPrisoners = "UPDATE secure_prisoner SET securityLevel = 0 where securityLevel != 0;";
+			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 where securityLevel != 1;";
+			string prisonersAndGuards = "total_security_level <- secure_guard + secure_prisoner;";
+			string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
+>>>>>>> 5fd8cdb620136fcd11d2f782d5150e0e8a8888b8
 
 			dbms.query(selectPrisoners);
 		
