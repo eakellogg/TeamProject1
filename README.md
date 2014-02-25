@@ -22,7 +22,7 @@ relational database management system
 - **delete prisoner isn't done (but it's passable)**
 - **show security level isn't implemented fully**
 
-
+- in show meal group, if you give it a phony id number, it should say "not a valid id" or something instead of printing an empty table
 -in update meal group (And other similar ones) should it say number instead of integer?
 May be more clear to users that way
 -Should we change the /n to endl ? Or does it really matter?
