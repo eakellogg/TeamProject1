@@ -35,7 +35,7 @@ int main()
 	{
 		hasPrisonerFile = false;
 		string newPrisoner = "CREATE TABLE prisoner";
-		newPrisoner += "(prisonerID INTEGER, firstName VARCHAR(20), lastName VARCHAR(20), birthMonth INTEGER, birthDay INTEGER,";
+		newPrisoner += "(prisonerID INTEGER, firstName VARCHAR(20), lastName VARCHAR(20), age INTEGER, birthMonth INTEGER, birthDay INTEGER,";
 		newPrisoner += " birthYear INTEGER, cellBlock VARCHAR(1), cellNumber INTEGER, securityLevel INTEGER) PRIMARY KEY(prisonerID); ";
 		dbms.query(newPrisoner);
 	}
@@ -184,6 +184,7 @@ int main()
 			string pid;
 			string fname;
 			string lname;
+			string age;
 			string month;
 			string day;
 			string year;
@@ -194,6 +195,8 @@ int main()
 			cin >> fname >> lname;
 			cout << "Enter the prisoner's ID number:" << endl;
 			cin >> pid;
+			cout << "Enter the prisoner's age:" << endl;
+			cin >> age;
 			cout << "Enter the prisoner's birthday in the following format: MM DD YYYY" << endl;
 			cin >> month >> day >> year;
 			cout << "Enter the prisoner's cell block and number (separated by a space)" << endl;
@@ -201,7 +204,7 @@ int main()
 			cout << "Enter the prisoner's security level:" << endl;
 			cin >> security;
 			string addPrisoner = "INSERT INTO prisoner VALUES FROM (" + pid + ", \"" + fname +
-				"\", \"" + lname + "\", " + month + ", " + day + ", " + year + ", \"" + block +
+				"\", \"" + lname + "\", " + age + ", " + month + ", " + day + ", " + year + ", \"" + block +
 				"\", " + cell + ", " + security + ");";
 			dbms.query(addPrisoner);
 		}
@@ -451,7 +454,7 @@ int main()
 			string block;
 			cin >> block;
 
-			string escortQuery = "minor" + block + " <- (select (cellBlock == \"" + block + "\") prisoner) - (select (age >= 18) prisoner);";
+			string escortQuery = "minor <- (select (cellBlock == \"" + block + "\") prisoner) - (select (age >= 18) prisoner);";
 			dbms.query(escortQuery);
 			string showCommand = "SHOW minor"; 
 			dbms.query(showCommand); 
