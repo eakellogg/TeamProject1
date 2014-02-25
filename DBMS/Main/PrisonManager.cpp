@@ -340,6 +340,7 @@ int main()
 				dbms.query(updateBlock); 
 			} 
 			else if (subCommand == "SecurityLevel"){ 
+				cout << "What would you like to change their security level to? (Number)" << endl;
 
 				string securLevel; 
 				cin >> securLevel; 
@@ -378,6 +379,7 @@ int main()
 				dbms.query(updateBreakfast); 
 			} 
 			else if (subCommand == "LunchHour"){ 
+				cout << "What would you like to change their lunch hour to? (Integer)" << endl;
 
 				string lunch; 
 				cin >> lunch; 
@@ -430,7 +432,7 @@ int main()
 		}
 		else if (command == "LOOK UP SENTENCE") {
 			string sentenceId;
-			cout << "\nEnter the sentece ID number:" << endl;
+			cout << "\nEnter the sentence ID number:" << endl;
 			cin >> sentenceId;
 			string selectSentence = "specific_sentence <- select (sentenceID == " + sentenceId +
 				") sentence;";
@@ -462,7 +464,7 @@ int main()
 			string block; 
 			cin >> block; 
 
-			string escortQuery = "escort" + block + " <- (select (cellBlock == \"" + block + "\") prisoner) * (select (cellBlock == \"" + block + "\") guard);"; 
+			string escortQuery = "escort <- (select (cellBlock == \"" + block + "\") prisoner) * (select (cellBlock == \"" + block + "\") guard);"; 
 			dbms.query(escortQuery); 
 			string showCommand = "SHOW escort"; 
 			dbms.query(showCommand); 
@@ -482,10 +484,10 @@ int main()
 			cout << "\nEnter the security level:" << endl;
 			cin >> security;
 
-			string selectPrisoners = "selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
+			string selectPrisoners = "Selected_prisoner <- select (securityLevel == " + security + ") prisoner;";
 			string selectGuards = "secure_guard <- select (securityLevel >= " + security + ") guard;";
-			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) selected_prisoner;";
-			string updatedPrisoners = "UPADATE secure_prisoner SET securityLevel = 0 where securityLevel != 0;";
+			string shortenedPrisoners = "secure_prisoner <- project (prisonerID, firstName, lastName, cellBlock, securityLevel) Selected_prisoner;";
+			string updatedPrisoners = "UPDATE secure_prisoner SET securityLevel = 0 where securityLevel != 0;";
 			string updatedGuards = "UPDATE secure_guard SET securityLevel = 1 where securityLevel != 1;";
 			string prisonersAndGuards = "total_security_level <- secure_guard + secure_prisoner;";
 			string allSecurityLevel = "security_level <- rename (ID, firstName, lastName, cellBlock, isGuard) total_security_level;";
