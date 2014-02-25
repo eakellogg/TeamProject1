@@ -32,6 +32,10 @@ Table* Evaluator::Evaluate(EvaluationTree* tree)
 					EvaluationTree expressionTree = EvaluationTree(rightChild);
 					Table* expressionTable = Evaluate(&expressionTree);
 					string* value = (string*)(leftChild->getValue());
+
+					map<string, Table*>::iterator it = views.find(*value);
+					if (it != views.end())
+						views.erase(it);
 					views.insert(make_pair(*value, expressionTable));
 					return expressionTable;
 				}

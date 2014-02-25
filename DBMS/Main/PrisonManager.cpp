@@ -13,9 +13,9 @@ using namespace std;
 
 int main()
 {
-	DBMS dbms;
+	//DBMS dbms;
 
-	//Fake_DBMS dbms;
+	Fake_DBMS dbms;
 
 	bool hasPrisonerFile = true;
 	bool hasSentenceFile = true;
@@ -177,6 +177,9 @@ int main()
 		else if (command == "LIST MEAL GROUPS") {
 			dbms.query("SHOW mealGroup;");
 		}
+		else if (command == "LIST SENTENCE RECORD") {
+			dbms.query("SHOW sentenceRecord;");
+		}
 		else if (command == "ADD PRISONER") {
 			string pid;
 			string fname;
@@ -293,7 +296,7 @@ int main()
 				dbms.query(updateBlock);
 			}
 			else if (subCommand == "CellNumber"){
-				cout << "What would you like to change their cell number to? (Integer)";
+				cout << "What would you like to change their cell number to? (Integer)" << endl;
 
 				string cellNum;
 				cin >> cellNum;
@@ -457,6 +460,7 @@ int main()
 			cout << "\nList possible escort pairings for which cell block?" << endl;
 
 			string block; 
+
 			cin >> block; 
 
 			string escortQuery = "escort" + block + " <- (select (cellBlock == \"" + block + "\") prisoner) * (select (cellBlock == \"" + block + "\") guard);"; 
